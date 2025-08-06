@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Verify Your Account - Railway System</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    </head>
+    <body class="bg-light">
+
+        <div class="container-fluid vh-9 d-flex align-items-center justify-content-center mt-5 mb-4">
+            <div class="row justify-content-center w-100">
+                <div class="col-md-6 col-lg-5 col-xl-4">
+                    <div class="card shadow-lg border-0 rounded-4">
+                        <!-- Header -->
+                        <div class="card-header bg-danger text-white text-center py-4 border-0 rounded-top-4">
+                            <div class="mb-3">
+                                <div class="bg-white bg-opacity-25 rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                                    <i class="bi bi-shield-check display-4 text-white"></i>
+                                </div>
+                            </div>
+                            <h3 class="mb-2">Verify Your Account</h3>
+                            <p class="mb-0 opacity-75">Enter the 5-digit code sent to your email</p>
+                        </div>
+
+                        <!-- Body -->
+                        <div class="card-body p-4">
+                            <div class="text-center mb-4">
+                                <p class="text-muted">We've sent a verification code to:</p>
+                                <p class="fw-bold text-danger" id="emailDisplay">user@example.com</p>
+                            </div>
+
+                            <form id="verificationForm">
+                                <!-- Code Input Fields -->
+                                <div class="d-flex justify-content-center gap-3 mb-4">
+                                    <input type="text" class="form-control text-center fw-bold fs-4 text-danger border-2 border-danger" 
+                                           maxlength="1" id="code1" style="width: 60px; height: 60px;" required>
+                                    <input type="text" class="form-control text-center fw-bold fs-4 text-danger border-2 border-danger" 
+                                           maxlength="1" id="code2" style="width: 60px; height: 60px;" required>
+                                    <input type="text" class="form-control text-center fw-bold fs-4 text-danger border-2 border-danger" 
+                                           maxlength="1" id="code3" style="width: 60px; height: 60px;" required>
+                                    <input type="text" class="form-control text-center fw-bold fs-4 text-danger border-2 border-danger" 
+                                           maxlength="1" id="code4" style="width: 60px; height: 60px;" required>
+                                    <input type="text" class="form-control text-center fw-bold fs-4 text-danger border-2 border-danger" 
+                                           maxlength="1" id="code5" style="width: 60px; height: 60px;" required>
+                                </div>
+
+                                <!-- Verify Button -->
+                                <div class="d-grid mb-3">
+                                    <button type="submit" class="btn btn-danger btn-lg py-3" id="verifyBtn" onclick="adminVerifyAccount();" disabled>
+                                        <i class="bi bi-check-circle me-2"></i>Verify Account
+                                    </button>
+                                </div>
+
+                                <!-- Loading State -->
+                                <div class="d-grid mb-3 d-none" id="loadingState">
+                                    <button class="btn btn-danger btn-lg py-3" type="button" disabled>
+                                        <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+                                        Verifying...
+                                    </button>
+                                </div>
+                            </form>
+
+                            <!-- Resend Section -->
+                            <div class="text-center">
+                                <p class="text-muted mb-2">Didn't receive the code?</p>
+                                <button type="button" class="btn btn-outline-danger" id="resendBtn">
+                                    <i class="bi bi-arrow-clockwise me-2"></i>Resend Code
+                                </button>
+                            </div>
+
+                            <!-- Resend Disabled State -->
+                            <div class="text-center d-none" id="resendDisabled">
+                                <p class="text-muted mb-2">Didn't receive the code?</p>
+                                <button type="button" class="btn btn-outline-secondary" disabled>
+                                    <i class="bi bi-clock me-2"></i>Resend in <span id="resendTimer">60</span>s
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Footer -->
+                        <div class="card-footer bg-light text-center border-0 rounded-bottom-4">
+                            <div class="d-flex justify-content-center gap-3">
+                                <button type="button" class="btn btn-outline-secondary" onclick="goBack()">
+                                    <i class="bi bi-arrow-left me-2"></i>Back
+                                </button>
+                                <button type="button" class="btn btn-outline-danger" onclick="changeEmail()">
+                                    <i class="bi bi-envelope me-2"></i>Change Email
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Success Message (Hidden by default) -->
+                    <div class="alert alert-success mt-3 d-none" id="successAlert">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-check-circle-fill me-3 fs-4"></i>
+                            <div>
+                                <h6 class="mb-1">Account Verified Successfully!</h6>
+                                <p class="mb-0">Redirecting to your dashboard...</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Error Message (Hidden by default) -->
+                    <div class="alert alert-danger mt-3 d-none" id="errorAlert">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-exclamation-triangle-fill me-3 fs-4"></i>
+                            <div>
+                                <h6 class="mb-1">Verification Failed</h6>
+                                <p class="mb-0" id="errorMessage">Invalid verification code. Please try again.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Help Modal -->
+        <div class="modal fade" id="helpModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title">
+                            <i class="bi bi-question-circle me-2"></i>Need Help?
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <div class="card border-danger">
+                                    <div class="card-body">
+                                        <h6 class="text-danger"><i class="bi bi-envelope me-2"></i>Check Your Email</h6>
+                                        <p class="mb-0 small">Look for an email from "Railway System" in your inbox or spam folder.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="card border-danger">
+                                    <div class="card-body">
+                                        <h6 class="text-danger"><i class="bi bi-clock me-2"></i>Code Expiry</h6>
+                                        <p class="mb-0 small">Verification codes expire after 5 minutes for security reasons.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="card border-danger">
+                                    <div class="card-body">
+                                        <h6 class="text-danger"><i class="bi bi-arrow-clockwise me-2"></i>Resend Code</h6>
+                                        <p class="mb-0 small">You can request a new code after 60 seconds if you don't receive it.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-danger" onclick="contactSupport()">Contact Support</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Help Button (Floating) -->
+        <button type="button" class="btn btn-danger rounded-circle position-fixed bottom-0 end-0 m-4" 
+                style="width: 60px; height: 60px; z-index: 1000;" data-bs-toggle="modal" data-bs-target="#helpModal">
+            <i class="bi bi-question-lg"></i>
+        </button>
+
+        
+        <script src="../assets/js/admin-verify-account.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+            // Auto-focus and navigation between inputs
+            const inputs = document.querySelectorAll('input[id^="code"]');
+            let timer = 300; // 5 minutes in seconds
+            let resendTimer = 60; // 1 minute for resend
+            let timerInterval;
+            let resendInterval;
+
+            // Initialize
+            document.addEventListener('DOMContentLoaded', function () {
+                // Focus first input
+                inputs[0].focus();
+
+                // Add input event listeners
+                inputs.forEach((input, index) => {
+                    input.addEventListener('input', function (e) {
+                        // Only allow numbers
+                        this.value = this.value.replace(/[^0-9]/g, '');
+
+                        // Move to next input if current is filled
+                        if (this.value.length === 1 && index < inputs.length - 1) {
+                            inputs[index + 1].focus();
+                        }
+
+                        // Check if all inputs are filled
+                        checkAllInputsFilled();
+                    });
+
+                    input.addEventListener('keydown', function (e) {
+                        // Move to previous input on backspace if current is empty
+                        if (e.key === 'Backspace' && this.value === '' && index > 0) {
+                            inputs[index - 1].focus();
+                            e.preventDefault();
+                        }
+                    });
+
+                    input.addEventListener('paste', function (e) {
+                        e.preventDefault();
+                        const paste = (e.clipboardData || window.clipboardData).getData('text');
+                        const numbers = paste.replace(/[^0-9]/g, '').slice(0, 5);
+
+                        // Fill inputs with pasted numbers
+                        for (let i = 0; i < numbers.length && i < inputs.length; i++) {
+                            inputs[i].value = numbers[i];
+                        }
+
+                        // Focus appropriate input
+                        if (numbers.length < inputs.length) {
+                            inputs[numbers.length].focus();
+                        }
+
+                        checkAllInputsFilled();
+                    });
+                });
+
+                // Initial check
+                checkAllInputsFilled();
+            });
+
+            function checkAllInputsFilled() {
+                const allFilled = Array.from(inputs).every(input => input.value.length === 1);
+                const verifyBtn = document.getElementById('verifyBtn');
+                
+                if (allFilled) {
+                    verifyBtn.disabled = false;
+                    verifyBtn.classList.remove('btn-secondary');
+                    verifyBtn.classList.add('btn-danger');
+                } else {
+                    verifyBtn.disabled = true;
+                    verifyBtn.classList.remove('btn-danger');
+                    verifyBtn.classList.add('btn-secondary');
+                }
+            }
+
+            function startResendTimer() {
+                document.getElementById('resendBtn').parentElement.classList.add('d-none');
+                document.getElementById('resendDisabled').classList.remove('d-none');
+
+                resendInterval = setInterval(function () {
+                    document.getElementById('resendTimer').textContent = resendTimer;
+
+                    if (resendTimer <= 0) {
+                        clearInterval(resendInterval);
+                        document.getElementById('resendBtn').parentElement.classList.remove('d-none');
+                        document.getElementById('resendDisabled').classList.add('d-none');
+                        resendTimer = 60;
+                    }
+                    resendTimer--;
+                }, 1000);
+            }
+
+            // Form submission
+            document.getElementById('verificationForm').addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                const code = Array.from(inputs).map(input => input.value).join('');
+
+                if (code.length !== 5) {
+                    showError('Please enter all 5 digits');
+                    return;
+                }
+
+                // Show loading state
+                document.getElementById('verifyBtn').classList.add('d-none');
+                document.getElementById('loadingState').classList.remove('d-none');
+
+                // Simulate API call
+                setTimeout(() => {
+                    // Hide loading state
+                    document.getElementById('verifyBtn').classList.remove('d-none');
+                    document.getElementById('loadingState').classList.add('d-none');
+
+                    // Simulate verification (replace with actual API call)
+                    if (code === '12345') {
+                        showSuccess();
+                    } else {
+                        showError('Invalid verification code. Please try again.');
+                        clearInputs();
+                    }
+                }, 2000);
+            });
+
+            // Resend code
+            document.getElementById('resendBtn').addEventListener('click', function () {
+                // Start resend cooldown
+                startResendTimer();
+
+                // Clear inputs
+                clearInputs();
+
+                // Show success message
+                showTemporaryMessage('New verification code sent to your email!', 'success');
+
+                // Re-enable inputs if they were disabled
+                inputs.forEach(input => {
+                    input.disabled = false;
+                    input.classList.remove('border-secondary');
+                    input.classList.add('border-danger');
+                });
+            });
+
+            function clearInputs() {
+                inputs.forEach(input => {
+                    input.value = '';
+                });
+                inputs[0].focus();
+                checkAllInputsFilled();
+            }
+
+            function showSuccess() {
+                document.getElementById('successAlert').classList.remove('d-none');
+                document.getElementById('errorAlert').classList.add('d-none');
+
+                // Simulate redirect
+                setTimeout(() => {
+                    alert('Redirecting to dashboard...');
+                    // window.location.href = 'dashboard.html';
+                }, 2000);
+            }
+
+            function showError(message) {
+                document.getElementById('errorMessage').textContent = message;
+                document.getElementById('errorAlert').classList.remove('d-none');
+                document.getElementById('successAlert').classList.add('d-none');
+
+                // Auto-hide after 5 seconds
+                setTimeout(() => {
+                    document.getElementById('errorAlert').classList.add('d-none');
+                }, 5000);
+            }
+
+            function showTemporaryMessage(message, type) {
+                const alertClass = type === 'success' ? 'alert-success' : 'alert-info';
+                const icon = type === 'success' ? 'check-circle-fill' : 'info-circle-fill';
+
+                const tempAlert = document.createElement('div');
+                tempAlert.className = `alert ${alertClass} mt-3`;
+                tempAlert.innerHTML = `
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-${icon} me-3 fs-4"></i>
+                        <p class="mb-0">${message}</p>
+                    </div>
+                `;
+
+                document.querySelector('.col-md-6').appendChild(tempAlert);
+
+                setTimeout(() => {
+                    tempAlert.remove();
+                }, 3000);
+            }
+
+            function goBack() {
+                if (confirm('Are you sure you want to go back? You will need to verify your account later.')) {
+                    alert('Going back...');
+                    // window.history.back();
+                }
+            }
+
+            function changeEmail() {
+                if (confirm('Do you want to change your email address? This will redirect you to the registration page.')) {
+                    alert('Redirecting to change email...');
+                    // window.location.href = 'register.html';
+                }
+            }
+
+            function contactSupport() {
+                alert('Opening email client to contact support...');
+                // window.open('mailto:support@railwaysystem.com?subject=Verification Help Request', '_blank');
+            }
+       
+        
+        </script>
+    </body>
+</html>

@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Train Management</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
+
+        <style>
+            body {
+                background: #f8f9fa;
+                margin: 0;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                min-height: 100vh;
+            }
+
+            /* Custom styles for the offcanvas sidebar */
+            .offcanvas-start {
+                background: linear-gradient(180deg, #dc3545 0%, #c82333 100%);
+                color: white;
+                width: 250px;
+            }
+
+            .offcanvas-header {
+                border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+                padding: 1rem 1.5rem;
+            }
+
+            .offcanvas-title {
+                color: white;
+            }
+
+            .offcanvas .nav-link {
+                color: white;
+                padding: 0.75rem 1.5rem;
+                display: flex;
+                align-items: center;
+                transition: background-color 0.3s ease;
+            }
+
+            .offcanvas .nav-link.active,
+            .offcanvas .nav-link:hover {
+                background-color: rgba(255, 255, 255, 0.2);
+                border-radius: 5px;
+            }
+
+            .offcanvas .nav-link i {
+                margin-right: 0.75rem;
+            }
+
+            .content {
+                padding: 1.5rem;
+            }
+
+            .header-gradient {
+                background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+                color: white;
+                padding: 1.5rem 0;
+                margin-bottom: 2rem;
+                border-radius: 15px;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            }
+
+            .stat-card {
+                border-radius: 15px;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+                transition: transform 0.3s ease;
+            }
+
+            .stat-card:hover {
+                transform: translateY(-5px);
+            }
+
+            .stat-card.bg-danger {
+                background: linear-gradient(135deg, #dc3545 0%, #c82333 100%) !important;
+            }
+
+            .stat-card.border-danger {
+                background: #ffffff;
+                border: 2px solid #dc3545 !important;
+            }
+
+            .table-container {
+                background: white;
+                border-radius: 15px;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+                overflow: hidden;
+            }
+
+            .table th {
+                background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+                color: white;
+                border: none;
+                font-weight: 500;
+                padding: 15px;
+            }
+
+            .table td {
+                padding: 15px;
+                vertical-align: middle;
+                border-color: #f8f9fa;
+            }
+
+            .table tbody tr:hover {
+                background-color: rgba(220, 53, 69, 0.05);
+            }
+
+            .btn-danger {
+                background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+                border: none;
+                border-radius: 8px;
+                padding: 10px 20px;
+                font-weight: 500;
+                transition: all 0.3s ease;
+            }
+
+            .btn-danger:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+            }
+
+            .btn-outline-danger {
+                border: 2px solid #dc3545;
+                border-radius: 8px;
+                padding: 8px 16px;
+                font-weight: 500;
+                transition: all 0.3s ease;
+            }
+
+            .btn-outline-danger:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 15px rgba(220, 53, 69, 0.2);
+            }
+
+            .modal-header {
+                background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+                color: white;
+                border-bottom: none;
+            }
+
+            .modal-content {
+                border-radius: 15px;
+                border: none;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            }
+
+            .form-control:focus {
+                border-color: #dc3545;
+                box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+            }
+
+            .form-select:focus {
+                border-color: #dc3545;
+                box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+            }
+
+            .badge {
+                border-radius: 20px;
+                font-weight: 500;
+                padding: 8px 12px;
+            }
+
+            .search-box {
+                background: white;
+                border-radius: 25px;
+                border: 2px solid #dc3545;
+                padding: 10px 20px;
+                outline: none;
+                transition: all 0.3s ease;
+            }
+
+            .search-box:focus {
+                box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+            }
+
+            /* Styles for the hamburger button */
+            .hamburger-button {
+                background-color: white;
+                color: #dc3545;
+                border: 2px solid #dc3545;
+                padding: 0.5rem 0.75rem;
+                border-radius: 8px;
+                font-size: 1.5rem;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.3s ease;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                position: relative;
+                overflow: hidden;
+            }
+
+            .hamburger-button:hover {
+                background-color: #dc3545;
+                color: white;
+                transform: scale(1.05);
+            }
+
+            .hamburger-button:active {
+                transform: scale(0.95);
+            }
+
+            /* Animated hamburger icon */
+            .hamburger-icon {
+                display: flex;
+                flex-direction: column;
+                width: 20px;
+                height: 20px;
+                justify-content: space-between;
+                transition: all 0.3s ease;
+            }
+
+            .hamburger-icon span {
+                display: block;
+                height: 2px;
+                width: 100%;
+                background-color: currentColor;
+                border-radius: 2px;
+                transition: all 0.3s ease;
+            }
+
+            .hamburger-button.active .hamburger-icon span:nth-child(1) {
+                transform: rotate(45deg) translate(6px, 6px);
+            }
+
+            .hamburger-button.active .hamburger-icon span:nth-child(2) {
+                opacity: 0;
+            }
+
+            .hamburger-button.active .hamburger-icon span:nth-child(3) {
+                transform: rotate(-45deg) translate(6px, -6px);
+            }
+
+            /* Remove custom large screen behavior to let Bootstrap handle it naturally */
+            .btn-close-white {
+                filter: invert(1) grayscale(100%) brightness(200%);
+            }
+
+            /* Sidebar animation enhancements */
+            .offcanvas-start {
+                transition: transform 0.3s ease-in-out;
+            }
+
+            .nav-link {
+                position: relative;
+                overflow: hidden;
+            }
+
+            .nav-link::before {
+                content: '';
+                position: absolute;
+                left: -100%;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+                transition: left 0.5s;
+            }
+
+            .nav-link:hover::before {
+                left: 100%;
+            }
+
+            /* Notification styles */
+            .notification {
+                animation: slideInRight 0.3s ease-out;
+            }
+
+            @keyframes slideInRight {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+
+            /* Enhanced table animations */
+            .table tbody tr {
+                transition: all 0.3s ease;
+            }
+
+            .table tbody tr:hover {
+                background-color: rgba(220, 53, 69, 0.05);
+                transform: translateX(5px);
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            }
+
+            /* Loading state for buttons */
+            .btn-loading {
+                position: relative;
+                color: transparent !important;
+            }
+
+            .btn-loading::after {
+                content: '';
+                position: absolute;
+                width: 16px;
+                height: 16px;
+                top: 50%;
+                left: 50%;
+                margin-left: -8px;
+                margin-top: -8px;
+                border: 2px solid #ffffff;
+                border-radius: 50%;
+                border-top-color: transparent;
+                animation: spin 1s linear infinite;
+            }
+
+            @keyframes spin {
+                to {
+                    transform: rotate(360deg);
+                }
+            }
+        </style>
+    </head>
+    <body  >
+        <!-- Main Content -->
+        <div class="content" >
+            <!-- Hamburger Menu Button -->
+            <button class="hamburger-button mb-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSidebar" aria-controls="offcanvasSidebar">
+                <i class="bi bi-list"></i>
+            </button>
+
+            <!-- Dashboard Page -->
+
+        </div>
+        <!-- Offcanvas Sidebar -->
+        <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasSidebar" aria-labelledby="offcanvasSidebarLabel">
+            <div class="offcanvas-header">
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-train-front display-6 text-white me-2"></i>
+                    <h5 class="offcanvas-title" id="offcanvasSidebarLabel">RailOps</h5>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+
+
+
+
+            <div class="offcanvas-body d-flex flex-column">
+                <div class="d-flex flex-column align-items-center mb-4">
+                    <p class="text-white-50 small">Management System</p>
+                </div>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="" >
+                            <i class="bi bi-speedometer2"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="add-train.html" >
+                            <i class="bi bi-train"></i> Trains
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="add-route.html" >
+                            <i class="bi bi-diagram-3"></i> Routes
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="add-route.html">
+                            <i class="bi bi-people"></i> Staff
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="add-route.html" >
+                            <i class="bi bi-gear"></i> Settings
+                        </a>
+                    </li>
+
+
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="add-train.html" >
+                            <i class="bi bi-gear"></i>Train Coaches
+                        </a>
+                    </li>
+                    <li class="nav-item mt-auto">
+                        <a class="nav-link" href="#" onclick="logout()">
+                            <i class="bi bi-box-arrow-right"></i> Logout
+                        </a>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+
+
+
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+        <script>
+                            function showPage(pageName) {
+                                // Hide all pages
+                                document.querySelectorAll('.page').forEach(page => {
+                                    page.classList.remove('active');
+                                });
+
+                                // Show selected page
+                                document.getElementById(pageName).classList.add('active');
+
+                                // Update active nav link
+                                document.querySelectorAll('.nav-link').forEach(link => {
+                                    link.classList.remove('active');
+                                });
+                                event.target.classList.add('active');
+
+                                // Close sidebar on mobile
+                                const offcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('offcanvasSidebar'));
+                                if (offcanvas && window.innerWidth < 992) {
+                                    offcanvas.hide();
+                                }
+
+                                // Update current page
+                                currentPage = pageName;
+
+                                // Update URL (optional - for browser history)
+                                history.pushState({page: pageName}, '', `#${pageName}`);
+
+                                // Load page-specific data
+                                loadPageData(pageName);
+                            }
+
+                            // Load data based on current page
+                            function loadPageData(pageName) {
+                                switch (pageName) {
+                                    case 'trains':
+                                        renderTrainsTable();
+                                        updateStatistics();
+                                        break;
+                                    case 'routes':
+                                        console.log('Loading routes data...');
+                                        break;
+                                    case 'staff':
+                                        console.log('Loading staff data...');
+                                        break;
+                                    case 'settings':
+                                        console.log('Loading settings...');
+                                        break;
+                                    case 'coaches':
+                                        renderCoachesTable();
+                                        break;
+                                    default:
+                                        console.log('Loading dashboard data...');
+                                }
+                            }
+        </script>
+
+    </body>
+</html>

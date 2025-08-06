@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Train Management</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
+
+  <style>
+    body {
+      background: #f8f9fa;
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+    }
+    
+    /* Custom styles for the offcanvas sidebar */
+    .offcanvas-start {
+      background: linear-gradient(180deg, #dc3545 0%, #c82333 100%);
+      color: white;
+      width: 250px;
+    }
+
+    .offcanvas-header {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 1rem 1.5rem;
+    }
+
+    .offcanvas-title {
+      color: white;
+    }
+
+    .offcanvas .nav-link {
+      color: white;
+      padding: 0.75rem 1.5rem;
+      display: flex;
+      align-items: center;
+      transition: background-color 0.3s ease;
+    }
+
+    .offcanvas .nav-link.active,
+    .offcanvas .nav-link:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+      border-radius: 5px;
+    }
+
+    .offcanvas .nav-link i {
+      margin-right: 0.75rem;
+    }
+
+    .content {
+      padding: 1.5rem;
+    }
+
+    .header-gradient {
+      background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+      color: white;
+      padding: 1.5rem 0;
+      margin-bottom: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    
+    .stat-card {
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+    
+    .stat-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .stat-card.bg-danger {
+      background: linear-gradient(135deg, #dc3545 0%, #c82333 100%) !important;
+    }
+    
+    .stat-card.border-danger {
+      background: #ffffff;
+      border: 2px solid #dc3545 !important;
+    }
+    
+    .table-container {
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+    
+    .table th {
+      background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+      color: white;
+      border: none;
+      font-weight: 500;
+      padding: 15px;
+    }
+    
+    .table td {
+      padding: 15px;
+      vertical-align: middle;
+      border-color: #f8f9fa;
+    }
+    
+    .table tbody tr:hover {
+      background-color: rgba(220, 53, 69, 0.05);
+    }
+    
+    .btn-danger {
+      background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+      border: none;
+      border-radius: 8px;
+      padding: 10px 20px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-danger:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+    }
+    
+    .btn-outline-danger {
+      border: 2px solid #dc3545;
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-outline-danger:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(220, 53, 69, 0.2);
+    }
+    
+    .modal-header {
+      background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+      color: white;
+      border-bottom: none;
+    }
+    
+    .modal-content {
+      border-radius: 15px;
+      border: none;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+    
+    .form-control:focus {
+      border-color: #dc3545;
+      box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+    }
+    
+    .form-select:focus {
+      border-color: #dc3545;
+      box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+    }
+    
+    .badge {
+      border-radius: 20px;
+      font-weight: 500;
+      padding: 8px 12px;
+    }
+    
+    .search-box {
+      background: white;
+      border-radius: 25px;
+      border: 2px solid #dc3545;
+      padding: 10px 20px;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+    
+    .search-box:focus {
+      box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+    }
+
+    /* Styles for the hamburger button */
+    .hamburger-button {
+      background-color: white;
+      color: #dc3545;
+      border: 2px solid #dc3545;
+      padding: 0.5rem 0.75rem;
+      border-radius: 8px;
+      font-size: 1.5rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hamburger-button:hover {
+      background-color: #dc3545;
+      color: white;
+      transform: scale(1.05);
+    }
+
+    .hamburger-button:active {
+      transform: scale(0.95);
+    }
+
+    /* Animated hamburger icon */
+    .hamburger-icon {
+      display: flex;
+      flex-direction: column;
+      width: 20px;
+      height: 20px;
+      justify-content: space-between;
+      transition: all 0.3s ease;
+    }
+
+    .hamburger-icon span {
+      display: block;
+      height: 2px;
+      width: 100%;
+      background-color: currentColor;
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+
+    .hamburger-button.active .hamburger-icon span:nth-child(1) {
+      transform: rotate(45deg) translate(6px, 6px);
+    }
+
+    .hamburger-button.active .hamburger-icon span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .hamburger-button.active .hamburger-icon span:nth-child(3) {
+      transform: rotate(-45deg) translate(6px, -6px);
+    }
+
+    /* Remove custom large screen behavior to let Bootstrap handle it naturally */
+    .btn-close-white {
+      filter: invert(1) grayscale(100%) brightness(200%);
+    }
+
+    /* Sidebar animation enhancements */
+    .offcanvas-start {
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .nav-link {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .nav-link::before {
+      content: '';
+      position: absolute;
+      left: -100%;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+      transition: left 0.5s;
+    }
+
+    .nav-link:hover::before {
+      left: 100%;
+    }
+
+    /* Notification styles */
+    .notification {
+      animation: slideInRight 0.3s ease-out;
+    }
+
+    @keyframes slideInRight {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    /* Enhanced table animations */
+    .table tbody tr {
+      transition: all 0.3s ease;
+    }
+
+    .table tbody tr:hover {
+      background-color: rgba(220, 53, 69, 0.05);
+      transform: translateX(5px);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    /* Loading state for buttons */
+    .btn-loading {
+      position: relative;
+      color: transparent !important;
+    }
+
+    .btn-loading::after {
+      content: '';
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      top: 50%;
+      left: 50%;
+      margin-left: -8px;
+      margin-top: -8px;
+      border: 2px solid #ffffff;
+      border-radius: 50%;
+      border-top-color: transparent;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+</head>
+<body>
+    <!-- Offcanvas Sidebar -->
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasSidebar" aria-labelledby="offcanvasSidebarLabel">
+        <div class="offcanvas-header">
+            <div class="d-flex align-items-center">
+                <i class="bi bi-train-front display-6 text-white me-2"></i>
+        <h5 class="offcanvas-title" id="offcanvasSidebarLabel">RailOps</h5>
+      </div>
+      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body d-flex flex-column">
+      <div class="d-flex flex-column align-items-center mb-4">
+        <p class="text-white-50 small">Management System</p>
+      </div>
+      <ul class="nav flex-column">
+        <li class="nav-item">
+          <a class="nav-link active" href="#" onclick="setActiveNav(this)">
+            <i class="bi bi-speedometer2"></i> Dashboard
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="setActiveNav(this); loadTrains()">
+            <i class="bi bi-train"></i> Trains
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="setActiveNav(this); loadRoutes()">
+            <i class="bi bi-diagram-3"></i> Routes
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="setActiveNav(this); loadStaff()">
+            <i class="bi bi-people"></i> Staff
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="setActiveNav(this); loadSettings()">
+            <i class="bi bi-gear"></i> Settings
+          </a>
+        </li>
+        <li class="nav-item mt-auto">
+          <a class="nav-link" href="#" onclick="logout()">
+            <i class="bi bi-box-arrow-right"></i> Logout
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="content">
+    <!-- Hamburger Menu Button -->
+    <button class="hamburger-button mb-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSidebar" aria-controls="offcanvasSidebar" id="hamburgerBtn">
+      <div class="hamburger-icon">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </button>
+
+    <!-- Header -->
+    <div class="header-gradient">
+      <div class="container-fluid">
+        <div class="d-flex align-items-center justify-content-between flex-wrap">
+          <div>
+            <h1 class="mb-1"><i class="bi bi-train-front me-3"></i>Train Management</h1>
+            <p class="mb-0 opacity-75">Manage your railway fleet efficiently</p>
+          </div>
+          <div class="d-flex align-items-center gap-3 flex-wrap mt-3 mt-lg-0">
+            <input type="text" class="search-box" placeholder="Search trains..." id="searchInput">
+            <button class="btn btn-light" data-bs-toggle="modal" data-bs-target="#addTrainModal">
+              <i class="bi bi-plus-lg me-2"></i>Add New Train
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="container-fluid px-4">
+      <div class="row g-4 mb-4">
+        <div class="col-md-3 col-sm-6">
+          <div class="card stat-card bg-danger text-white">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <h5 class="card-title">Total Trains</h5>
+                  <h2 class="mb-0" id="totalTrains">8</h2>
+                  <small class="opacity-75">+5 this month</small>
+                </div>
+                <i class="bi bi-train-front display-4 opacity-50"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div class="card stat-card border-danger">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <h5 class="card-title text-danger">Active Trains</h5>
+                  <h2 class="mb-0 text-danger" id="activeTrains">5</h2>
+                  <small class="text-danger">Currently running</small>
+                </div>
+                <i class="bi bi-play-circle display-4 text-danger opacity-50"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div class="card stat-card bg-danger text-white">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <h5 class="card-title">Under Maintenance</h5>
+                  <h2 class="mb-0" id="maintenanceTrains">1</h2>
+                  <small class="opacity-75">Scheduled repairs</small>
+                </div>
+                <i class="bi bi-tools display-4 opacity-50"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div class="card stat-card border-danger">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <h5 class="card-title text-danger">Out of Service</h5>
+                  <h2 class="mb-0 text-danger" id="outOfServiceTrains">1</h2>
+                  <small class="text-danger">Needs attention</small>
+                </div>
+                <i class="bi bi-exclamation-triangle display-4 text-danger opacity-50"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Trains Table -->
+      <div class="table-container">
+        <div class="card-header bg-transparent p-4 border-bottom">
+          <div class="d-flex justify-content-between align-items-center flex-wrap">
+            <h5 class="mb-0"><i class="bi bi-list me-2"></i>All Trains</h5>
+            <div class="d-flex gap-2 flex-wrap">
+              <select class="form-select" id="statusFilter" style="width: auto;">
+                <option value="">All Status</option>
+                <option value="Active">Active</option>
+                <option value="Maintenance">Maintenance</option>
+                <option value="Out of Service">Out of Service</option>
+              </select>
+              <select class="form-select" id="typeFilter" style="width: auto;">
+                <option value="">All Types</option>
+                <option value="Express">Express</option>
+                <option value="Passenger">Passenger</option>
+                <option value="Freight">Freight</option>
+                <option value="High-Speed">High-Speed</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-hover mb-0" id="trainsTable">
+            <thead>
+              <tr>
+                <th>Train Number</th>
+                <th>Train Name</th>
+                <th>Type</th>
+                <th>Speed (km/h)</th>
+                <th>Days of Travel</th>
+                <th>Total Coaches</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add/Edit Train Modal -->
+  <div class="modal fade" id="addTrainModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="bi bi-plus-circle me-2"></i>Add New Train</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form id="trainForm">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">Train Number</label>
+                <input type="text" class="form-control" id="trainNumber" placeholder="e.g., 12345" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Train Name</label>
+                <input type="text" class="form-control" id="trainName" placeholder="e.g., Rajdhani Express" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Train Type</label>
+                <select class="form-select" id="trainType" required>
+                  <option value="">Select Type</option>
+                  <option value="Express">Express</option>
+                  <option value="Passenger">Passenger</option>
+                  <option value="Freight">Freight</option>
+                  <option value="High-Speed">High-Speed</option>
+                  <option value="Local">Local</option>
+                  <option value="Intercity">Intercity</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Speed (km/h)</label>
+                <input type="number" class="form-control" id="trainSpeed" placeholder="e.g., 120" min="1" max="350" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Days of Travel</label>
+                <select class="form-select" id="daysOfTravel" required>
+                  <option value="">Select Days</option>
+                  <option value="Daily">Daily</option>
+                  <option value="Mon-Fri">Mon-Fri</option>
+                  <option value="Weekends">Weekends</option>
+                  <option value="Mon,Wed,Fri">Mon,Wed,Fri</option>
+                  <option value="Tue,Thu,Sat">Tue,Thu,Sat</option>
+                  <option value="Alternate Days">Alternate Days</option>
+                  <option value="Weekly">Weekly</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Total Coaches</label>
+                <input type="number" class="form-control" id="totalCoaches" placeholder="e.g., 24" min="1" max="50" required>
+              </div>
+              <div class="col-12">
+                <label class="form-label">Status</label>
+                <select class="form-select" id="trainStatus" required>
+                  <option value="">Select Status</option>
+                  <option value="Active">Active</option>
+                  <option value="Maintenance">Under Maintenance</option>
+                  <option value="Out of Service">Out of Service</option>
+                  <option value="Scheduled">Scheduled</option>
+                </select>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-danger" onclick="saveTrain()">Save Train</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Sample train data
+    let trains = [
+      {
+        id: 1,
+        trainNumber: "12001",
+        trainName: "Shatabdi Express",
+        trainType: "Express",
+        speed: 130,
+        daysOfTravel: "Daily",
+        totalCoaches: 20,
+        status: "Active"
+      },
+      {
+        id: 2,
+        trainNumber: "12002",
+        trainName: "Rajdhani Express",
+        trainType: "Express",
+        speed: 140,
+        daysOfTravel: "Daily",
+        totalCoaches: 22,
+        status: "Active"
+      },
+      {
+        id: 3,
+        trainNumber: "15001",
+        trainName: "Passenger Local",
+        trainType: "Passenger",
+        speed: 80,
+        daysOfTravel: "Mon-Fri",
+        totalCoaches: 12,
+        status: "Active"
+      },
+      {
+        id: 4,
+        trainNumber: "18001",
+        trainName: "Freight Express",
+        trainType: "Freight",
+        speed: 60,
+        daysOfTravel: "Daily",
+        totalCoaches: 40,
+        status: "Active"
+      },
+      {
+        id: 5,
+        trainNumber: "22001",
+        trainName: "Vande Bharat",
+        trainType: "High-Speed",
+        speed: 180,
+        daysOfTravel: "Daily",
+        totalCoaches: 16,
+        status: "Active"
+      },
+      {
+        id: 6,
+        trainNumber: "11001",
+        trainName: "Mail Express",
+        trainType: "Express",
+        speed: 110,
+        daysOfTravel: "Alternate Days",
+        totalCoaches: 18,
+        status: "Maintenance"
+      },
+      {
+        id: 7,
+        trainNumber: "16001",
+        trainName: "Intercity Express",
+        trainType: "Intercity",
+        speed: 95,
+        daysOfTravel: "Daily",
+        totalCoaches: 14,
+        status: "Active"
+      },
+      {
+        id: 8,
+        trainNumber: "13001",
+        trainName: "Suburban Local",
+        trainType: "Local",
+        speed: 70,
+        daysOfTravel: "Daily",
+        totalCoaches: 9,
+        status: "Out of Service"
+      }
+    ];
+
+    let editingTrainId = null;
+
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', function() {
+      renderTrainsTable();
+      updateStatistics();
+      setupEventListeners();
+      initializeSidebar();
+    });
+
+    function initializeSidebar() {
+      const offcanvasElement = document.getElementById('offcanvasSidebar');
+      const hamburgerBtn = document.getElementById('hamburgerBtn');
+      
+      // Add event listeners for offcanvas events
+      offcanvasElement.addEventListener('show.bs.offcanvas', function () {
+        hamburgerBtn.classList.add('active');
+      });
+      
+      offcanvasElement.addEventListener('hide.bs.offcanvas', function () {
+        hamburgerBtn.classList.remove('active');
+      });
+    }
+
+    function setupEventListeners() {
+      // Search functionality
+      document.getElementById('searchInput').addEventListener('input', function() {
+        renderTrainsTable();
+      });
+
+      // Filter functionality
+      document.getElementById('statusFilter').addEventListener('change', function() {
+        renderTrainsTable();
+      });
+
+      document.getElementById('typeFilter').addEventListener('change', function() {
+        renderTrainsTable();
+      });
+
+      // Keyboard shortcuts
+      document.addEventListener('keydown', function(e) {
+        // Ctrl + M to toggle sidebar
+        if (e.ctrlKey && e.key === 'm') {
+          e.preventDefault();
+          const offcanvas = new bootstrap.Offcanvas(document.getElementById('offcanvasSidebar'));
+          offcanvas.toggle();
+        }
+        
+        // Escape to close sidebar
+        if (e.key === 'Escape') {
+          const offcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('offcanvasSidebar'));
+          if (offcanvas) {
+            offcanvas.hide();
+          }
+        }
+      });
+    }
+
+    function setActiveNav(element) {
+      // Remove active class from all nav links
+      document.querySelectorAll('.offcanvas .nav-link').forEach(link => {
+        link.classList.remove('active');
+      });
+      // Add active class to clicked link
+      element.classList.add('active');
+      
+      // Close offcanvas on mobile after selection
+      const offcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('offcanvasSidebar'));
+      if (offcanvas && window.innerWidth < 992) {
+        offcanvas.hide();
+      }
+    }
+
+    function renderTrainsTable() {
+      const tbody = document.getElementById('trainsTable').querySelector('tbody');
+      const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+      const statusFilter = document.getElementById('statusFilter').value;
+      const typeFilter = document.getElementById('typeFilter').value;
+
+      // Filter trains
+      let filteredTrains = trains.filter(train => {
+        const matchesSearch = train.trainName.toLowerCase().includes(searchTerm) || 
+                               train.trainNumber.toLowerCase().includes(searchTerm);
+        const matchesStatus = !statusFilter || train.status === statusFilter;
+        const matchesType = !typeFilter || train.trainType === typeFilter;
+        
+        return matchesSearch && matchesStatus && matchesType;
+      });
+
+      tbody.innerHTML = '';
+
+      filteredTrains.forEach(train => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td><strong>${train.trainNumber}</strong></td>
+          <td>${train.trainName}</td>
+          <td><span class="badge bg-secondary">${train.trainType}</span></td>
+          <td>${train.speed} km/h</td>
+          <td>${train.daysOfTravel}</td>
+          <td>${train.totalCoaches}</td>
+          <td>${getStatusBadge(train.status)}</td>
+          <td>
+            <button class="btn btn-sm btn-outline-danger me-1" onclick="editTrain(${train.id})" title="Edit">
+              <i class="bi bi-pencil"></i>
+            </button>
+            <button class="btn btn-sm btn-danger" onclick="deleteTrain(${train.id})" title="Delete">
+              <i class="bi bi-trash"></i>
+            </button>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    function getStatusBadge(status) {
+      const statusClasses = {
+        'Active': 'bg-success',
+        'Maintenance': 'bg-warning',
+        'Out of Service': 'bg-danger',
+        'Scheduled': 'bg-info'
+      };
+      return `<span class="badge ${statusClasses[status] || 'bg-secondary'}">${status}</span>`;
+    }
+
+    function updateStatistics() {
+      const total = trains.length;
+      const active = trains.filter(t => t.status === 'Active').length;
+      const maintenance = trains.filter(t => t.status === 'Maintenance').length;
+      const outOfService = trains.filter(t => t.status === 'Out of Service').length;
+
+      document.getElementById('totalTrains').textContent = total;
+      document.getElementById('activeTrains').textContent = active;
+      document.getElementById('maintenanceTrains').textContent = maintenance;
+      document.getElementById('outOfServiceTrains').textContent = outOfService;
+    }
+
+    function saveTrain() {
+      const form = document.getElementById('trainForm');
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+
+      const trainData = {
+        trainNumber: document.getElementById('trainNumber').value,
+        trainName: document.getElementById('trainName').value,
+        trainType: document.getElementById('trainType').value,
+        speed: parseInt(document.getElementById('trainSpeed').value),
+        daysOfTravel: document.getElementById('daysOfTravel').value,
+        totalCoaches: parseInt(document.getElementById('totalCoaches').value),
+        status: document.getElementById('trainStatus').value
+      };
+
+      if (editingTrainId) {
+        // Update existing train
+        const index = trains.findIndex(t => t.id === editingTrainId);
+        trains[index] = { ...trains[index], ...trainData };
+        editingTrainId = null;
+      } else {
+        // Add new train
+        trainData.id = Math.max(...trains.map(t => t.id)) + 1;
+        trains.push(trainData);
+      }
+
+      // Reset form and close modal
+      form.reset();
+      const modal = bootstrap.Modal.getInstance(document.getElementById('addTrainModal'));
+      if (modal) modal.hide();
+      
+      // Update display
+      renderTrainsTable();
+      updateStatistics();
+      
+      // Show success message
+      showNotification('Train saved successfully!', 'success');
+    }
+
+    function editTrain(id) {
+      const train = trains.find(t => t.id === id);
+      if (!train) return;
+
+      editingTrainId = id;
+      
+      // Populate form
+      document.getElementById('trainNumber').value = train.trainNumber;
+      document.getElementById('trainName').value = train.trainName;
+      document.getElementById('trainType').value = train.trainType;
+      document.getElementById('trainSpeed').value = train.speed;
+      document.getElementById('daysOfTravel').value = train.daysOfTravel;
+      document.getElementById('totalCoaches').value = train.totalCoaches;
+      document.getElementById('trainStatus').value = train.status;
+
+      // Update modal title
+      document.querySelector('#addTrainModal .modal-title').innerHTML = '<i class="bi bi-pencil me-2"></i>Edit Train';
+      
+      // Show modal
+      const modal = new bootstrap.Modal(document.getElementById('addTrainModal'));
+      modal.show();
+    }
+
+    function deleteTrain(id) {
+      const train = trains.find(t => t.id === id);
+      if (!train) return;
+
+      if (confirm(`Are you sure you want to delete train "${train.trainName}" (${train.trainNumber})?`)) {
+        trains = trains.filter(t => t.id !== id);
+        renderTrainsTable();
+        updateStatistics();
+        showNotification('Train deleted successfully!', 'success');
+      }
+    }
+
+    function showNotification(message, type) {
+      // Create notification element
+      const notification = document.createElement('div');
+      notification.className = `alert alert-${type} alert-dismissible fade show position-fixed notification`;
+      notification.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+      notification.innerHTML = `
+        <div class="d-flex align-items-center">
+          <i class="bi bi-${type === 'success' ? 'check-circle' : 'exclamation-triangle'} me-2"></i>
+          ${message}
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      `;
+      
+      document.body.appendChild(notification);
+      
+      // Auto remove after 3 seconds
+      setTimeout(() => {
+        if (notification.parentNode) {
+          notification.remove();
+        }
+      }, 3000);
+    }
+
+    // Navigation functions
+    function loadTrains() {
+      showNotification('Loading trains...', 'info');
+      // Here you would typically load train data from an API
+    }
+
+    function loadRoutes() {
+      showNotification('Loading routes...', 'info');
+      // Here you would typically load route data from an API
+    }
+
+    function loadStaff() {
+      showNotification('Loading staff...', 'info');
+      // Here you would typically load staff data from an API
+    }
+
+    function loadSettings() {
+      showNotification('Loading settings...', 'info');
+      // Here you would typically load settings
+    }
+
+    function logout() {
+      if (confirm('Are you sure you want to logout?')) {
+        showNotification('Logging out...', 'info');
+        // Here you would typically handle logout
+        setTimeout(() => {
+          showNotification('Logged out successfully!', 'success');
+        }, 1000);
+      }
+    }
+
+    // Enhanced save function with loading state
+    function saveTrain() {
+      const form = document.getElementById('trainForm');
+      const saveBtn = document.querySelector('#addTrainModal .btn-danger');
+      
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+
+      // Show loading state
+      saveBtn.classList.add('btn-loading');
+      saveBtn.disabled = true;
+
+      // Simulate API call delay
+      setTimeout(() => {
+        const trainData = {
+          trainNumber: document.getElementById('trainNumber').value,
+          trainName: document.getElementById('trainName').value,
+          trainType: document.getElementById('trainType').value,
+          speed: parseInt(document.getElementById('trainSpeed').value),
+          daysOfTravel: document.getElementById('daysOfTravel').value,
+          totalCoaches: parseInt(document.getElementById('totalCoaches').value),
+          status: document.getElementById('trainStatus').value
+        };
+
+        if (editingTrainId) {
+          // Update existing train
+          const index = trains.findIndex(t => t.id === editingTrainId);
+          trains[index] = { ...trains[index], ...trainData };
+          editingTrainId = null;
+        } else {
+          // Add new train
+          trainData.id = Math.max(...trains.map(t => t.id)) + 1;
+          trains.push(trainData);
+        }
+
+        // Remove loading state
+        saveBtn.classList.remove('btn-loading');
+        saveBtn.disabled = false;
+
+        // Reset form and close modal
+        form.reset();
+        const modal = bootstrap.Modal.getInstance(document.getElementById('addTrainModal'));
+        if (modal) modal.hide();
+        
+        // Update display
+        renderTrainsTable();
+        updateStatistics();
+        
+        // Show success message
+        showNotification('Train saved successfully!', 'success');
+      }, 1000);
+    }
+
+    // Reset modal when closed
+    document.getElementById('addTrainModal').addEventListener('hidden.bs.modal', function() {
+      document.getElementById('trainForm').reset();
+      document.querySelector('#addTrainModal .modal-title').innerHTML = '<i class="bi bi-plus-circle me-2"></i>Add New Train';
+      editingTrainId = null;
+    });
+  </script>
+</body>
+</html>

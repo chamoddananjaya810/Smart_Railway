@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>Smart Railway - Admin Sign In</title>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet"/>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
+        <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
+    </head>
+    <body class="bg-light">
+        <div class="min-vh-100 d-flex align-items-center justify-content-center p-4">
+            <div class="card shadow-lg border-danger" style="max-width: 450px; width: 100%;">
+                <!-- Header -->
+                <div class="card-header bg-danger text-white text-center py-4 border-0">
+                    <div class="d-flex justify-content-center align-items-center mb-3">
+                        <div class="bg-white text-danger rounded-circle d-flex align-items-center justify-content-center" 
+                             style="width: 60px; height: 60px; font-size: 24px; font-weight: bold;">
+                            ST
+                        </div>
+                    </div>
+                    <h3 class="fw-bold mb-1">Smart Railway</h3>
+                    <p class="mb-0 opacity-75">Admin Sign In</p>
+                </div>
+
+                <div class="card-body p-4">
+                    <div id="alertArea" class="position-fixed top-0 end-0 mt-3 me-3 z-3" style="min-width: 350px;"></div>
+
+                    <!-- Alert Message -->
+                    <div class="alert alert-danger d-none" id="messageAlert">
+                        <i class="fas fa-exclamation-circle me-2"></i>
+                        <span id="messageText">Invalid credentials</span>
+                        <button type="button" class="btn-close float-end" onclick="document.getElementById('messageAlert').classList.add('d-none')"></button>
+                    </div>
+
+                    <form>
+                        <!-- Email -->
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold text-dark">
+                                <i class="fas fa-envelope text-danger me-2"></i>Email Address
+                            </label>
+                            <input 
+                                type="email" 
+                                class="form-control form-control-lg border-2" 
+                                id="email" 
+                                placeholder="Enter your email address"
+                                required
+                                >
+                        </div>
+
+                        <!-- Password -->
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold text-dark">
+                                <i class="fas fa-lock text-danger me-2"></i>Password
+                            </label>
+                            <div class="input-group">
+                                <input 
+                                    type="password" 
+                                    class="form-control form-control-lg border-2" 
+                                    id="password" 
+                                    placeholder="Enter your password"
+                                    required
+                                    >
+
+
+
+                                <button 
+                                    class="btn btn-outline-danger" 
+                                    type="button" 
+                                    id="passwordToggle"
+                                    onclick="togglePassword()"
+                                    >
+                                    <i class="fas fa-eye" id="toggleIcon"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Remember Me -->
+                        <div class="mb-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="rememberMe">
+                                <label class="form-check-label text-muted" for="rememberMe">
+                                    Remember me for 30 days
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Sign In Button -->
+                        <button 
+                            type="button"
+                            class="btn btn-danger btn-lg w-100 py-3 mb-4"
+                            onclick="adminSignIn();"
+                            >
+                            <i class="fas fa-sign-in-alt me-2"></i>Sign In
+                        </button>
+
+                        <!-- Forgot Password -->
+                        <div class="text-center mb-4">
+                            <button type="button" class="btn btn-link text-danger text-decoration-none p-0">
+                                <i class="fas fa-question-circle me-1"></i>Forgot your password?
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Footer -->
+                <div class="card-footer bg-light text-center py-4 border-0">
+                    <p class="text-muted mb-2">Need a new admin account?</p>
+                    <button type="button" class="btn btn-outline-danger">
+                        <i class="fas fa-user-plus me-2"></i>Request Access
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- JavaScript -->
+        <script>
+            function togglePassword() {
+                const passwordField = document.getElementById("password");
+                const icon = document.getElementById("toggleIcon");
+                if (passwordField.type === "password") {
+                    passwordField.type = "text";
+                    icon.classList.remove("fa-eye");
+                    icon.classList.add("fa-eye-slash");
+                } else {
+                    passwordField.type = "password";
+                    icon.classList.remove("fa-eye-slash");
+                    icon.classList.add("fa-eye");
+                }
+            }
+
+
+        </script>
+        
+
+        <script src="assets/js/admin-signin.js"></script>
+
+    </body>
+</html>

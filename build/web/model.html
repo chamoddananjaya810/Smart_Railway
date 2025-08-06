@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bootstrap 5.3 Message Boxes</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.1/font/bootstrap-icons.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <h1 class="text-center mb-5 display-4">
+                    <i class="bi bi-chat-square-text-fill text-primary me-3"></i>
+                    Bootstrap Message Boxes
+                </h1>
+
+                <!-- Trigger Buttons -->
+                <div class="row g-3 mb-5">
+                    <div class="col-md-3">
+                        <button type="button" class="btn btn-success w-100 btn-lg" onclick="showMessage('success')">
+                            <i class="bi bi-check-circle-fill me-2"></i>Success
+                        </button>
+                    </div>
+                    <div class="col-md-3">
+                        <button type="button" class="btn btn-danger w-100 btn-lg" onclick="showMessage('error')">
+                            <i class="bi bi-x-circle-fill me-2"></i>Error
+                        </button>
+                    </div>
+                    <div class="col-md-3">
+                        <button type="button" class="btn btn-warning w-100 btn-lg" onclick="showMessage('warning')">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i>Warning
+                        </button>
+                    </div>
+                    <div class="col-md-3">
+                        <button type="button" class="btn btn-info w-100 btn-lg" onclick="showMessage('info')">
+                            <i class="bi bi-info-circle-fill me-2"></i>Info
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Special Message Types -->
+                <div class="row g-3 mb-5">
+                    <div class="col-md-4">
+                        <button type="button" class="btn btn-primary w-100" onclick="showConfirm()">
+                            <i class="bi bi-question-circle-fill me-2"></i>Confirm Dialog
+                        </button>
+                    </div>
+                    <div class="col-md-4">
+                        <button type="button" class="btn btn-secondary w-100" onclick="showInput()">
+                            <i class="bi bi-pencil-square me-2"></i>Input Dialog
+                        </button>
+                    </div>
+                    <div class="col-md-4">
+                        <button type="button" class="btn btn-dark w-100" onclick="showLoading()">
+                            <i class="bi bi-arrow-clockwise me-2"></i>Loading
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Message Display Area -->
+                <div id="messageContainer" class="mb-4"></div>
+
+                <!-- Toast Container -->
+                <div class="toast-container position-fixed top-0 end-0 p-3">
+                    <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-header">
+                            <i id="toastIcon" class="bi bi-info-circle-fill text-primary me-2"></i>
+                            <strong id="toastTitle" class="me-auto">Notification</strong>
+                            <small class="text-muted">now</small>
+                            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                        <div id="toastBody" class="toast-body">
+                            Default toast message
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Demo Section -->
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="bi bi-gear-fill me-2"></i>Message Box Options</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <button type="button" class="btn btn-outline-success w-100" onclick="showToast('success', 'Success!', 'Operation completed successfully.')">
+                                    <i class="bi bi-bell me-2"></i>Success Toast
+                                </button>
+                            </div>
+                            <div class="col-md-6">
+                                <button type="button" class="btn btn-outline-danger w-100" onclick="showToast('error', 'Error!', 'Something went wrong.')">
+                                    <i class="bi bi-bell-slash me-2"></i>Error Toast
+                                </button>
+                            </div>
+                            <div class="col-md-6">
+                                <button type="button" class="btn btn-outline-warning w-100" onclick="showAlert()">
+                                    <i class="bi bi-exclamation-diamond me-2"></i>Auto-Hide Alert
+                                </button>
+                            </div>
+                            <div class="col-md-6">
+                                <button type="button" class="btn btn-outline-info w-100" onclick="showProgress()">
+                                    <i class="bi bi-hourglass-split me-2"></i>Progress Message
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Message Modal -->
+    <div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-success">
+                <div class="modal-body text-center p-5">
+                    <div class="mb-4">
+                        <i class="bi bi-check-circle-fill text-success" style="font-size: 4rem;"></i>
+                    </div>
+                    <h4 class="text-success mb-3">Success!</h4>
+                    <p class="mb-4">Your operation was completed successfully.</p>
+                    <button type="button" class="btn btn-success" data-bs-dismiss="modal">
+                        <i class="bi bi-check me-2"></i>OK
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Error Message Modal -->
+    <div class="modal fade" id="errorModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-danger">
+                <div class="modal-body text-center p-5">
+                    <div class="mb-4">
+                        <i class="bi bi-x-circle-fill text-danger" style="font-size: 4rem;"></i>
+                    </div>
+                    <h4 class="text-danger mb-3">Error!</h4>
+                    <p class="mb-4">An error occurred while processing your request.</p>
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                            <i class="bi bi-x me-2"></i>Cancel
+                        </button>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+                            <i class="bi bi-arrow-clockwise me-2"></i>Try Again
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Warning Message Modal -->
+    <div class="modal fade" id="warningModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-warning">
+                <div class="modal-body text-center p-5">
+                    <div class="mb-4">
+                        <i class="bi bi-exclamation-triangle-fill text-warning" style="font-size: 4rem;"></i>
+                    </div>
+                    <h4 class="text-warning mb-3">Warning!</h4>
+                    <p class="mb-4">This action cannot be undone. Are you sure you want to continue?</p>
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            <i class="bi bi-x me-2"></i>Cancel
+                        </button>
+                        <button type="button" class="btn btn-warning" data-bs-dismiss="modal">
+                            <i class="bi bi-check me-2"></i>Continue
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Info Message Modal -->
+    <div class="modal fade" id="infoModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-info">
+                <div class="modal-body text-center p-5">
+                    <div class="mb-4">
+                        <i class="bi bi-info-circle-fill text-info" style="font-size: 4rem;"></i>
+                    </div>
+                    <h4 class="text-info mb-3">Information</h4>
+                    <p class="mb-4">Your session will expire in 5 minutes. Please save your work.</p>
+                    <button type="button" class="btn btn-info" data-bs-dismiss="modal">
+                        <i class="bi bi-check me-2"></i>Understood
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirm Dialog Modal -->
+    <div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">
+                        <i class="bi bi-question-circle-fill me-2"></i>Confirm Action
+                    </h5>
+                </div>
+                <div class="modal-body">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-question-circle text-primary me-3" style="font-size: 2rem;"></i>
+                        <div>
+                            <p class="mb-0">Are you sure you want to delete this item?</p>
+                            <small class="text-muted">This action cannot be undone.</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x me-2"></i>No, Cancel
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="confirmAction()">
+                        <i class="bi bi-check me-2"></i>Yes, Delete
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Input Dialog Modal -->
+    <div class="modal fade" id="inputModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-secondary text-white">
+                    <h5 class="modal-title">
+                        <i class="bi bi-pencil-square me-2"></i>Input Required
+                    </h5>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="userInput" class="form-label">Please enter your name:</label>
+                            <input type="text" class="form-control" id="userInput" placeholder="Enter your name">
+                        </div>
+                        <div class="mb-3">
+                            <label for="userEmail" class="form-label">Email address:</label>
+                            <input type="email" class="form-control" id="userEmail" placeholder="Enter your email">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x me-2"></i>Cancel
+                    </button>
+                    <button type="button" class="btn btn-secondary" onclick="submitInput()">
+                        <i class="bi bi-check me-2"></i>Submit
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Modal -->
+    <div class="modal fade" id="loadingModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body text-center p-5">
+                    <div class="mb-4">
+                        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                    <h5>Processing...</h5>
+                    <p class="text-muted mb-4">Please wait while we process your request.</p>
+                    <div class="progress">
+                        <div id="loadingProgress" class="progress-bar progress-bar-striped progress-bar-animated" 
+                             role="progressbar" style="width: 0%"></div>
+                    </div>
+                    <small class="text-muted mt-2 d-block">This may take a few moments...</small>
+                </div>
+            </div>
+        </div>
+    </div>
+ <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <h1 class="text-center mb-5">JSON to Toast Integration Examples</h1>
+
+                <!-- Demo Buttons -->
+                <div class="row g-3 mb-5">
+                    <div class="col-md-3">
+                        <button type="button" class="btn btn-success w-100" onclick="simulateAjaxSuccess()">
+                            <i class="bi bi-cloud-check me-2"></i>AJAX Success
+                        </button>
+                    </div>
+                    <div class="col-md-3">
+                        <button type="button" class="btn btn-danger w-100" onclick="simulateAjaxError()">
+                            <i class="bi bi-cloud-x me-2"></i>AJAX Error
+                        </button>
+                    </div>
+                    <div class="col-md-3">
+                        <button type="button" class="btn btn-warning w-100" onclick="simulateValidation()">
+                            <i class="bi bi-exclamation-triangle me-2"></i>Validation
+                        </button>
+                    </div>
+                    <div class="col-md-3">
+                        <button type="button" class="btn btn-info w-100" onclick="simulateMultiple()">
+                            <i class="bi bi-list me-2"></i>Multiple Messages
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Code Examples -->
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="bi bi-code-slash me-2"></i>Integration Methods</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6>Method 1: Direct JSON Usage</h6>
+                                <pre class="bg-light p-3 rounded"><code>// Your existing approach
+document.getElementById("message").innerHTML = json.message;
+
+// Enhanced with toast
+showToast('success', 'Response', json.message);</code></pre>
+                            </div>
+                            <div class="col-md-6">
+                                <h6>Method 2: Full JSON Integration</h6>
+                                <pre class="bg-light p-3 rounded"><code>// Handle complete JSON response
+function handleResponse(json) {
+    showToast(json.type, json.title, json.message);
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live Examples -->
+                <div class="card mb-4">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0"><i class="bi bi-play-circle me-2"></i>Live Examples</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="jsonInput" class="form-label">Test JSON Input:</label>
+                            <textarea class="form-control" id="jsonInput" rows="4" placeholder='{"type": "success", "title": "Success!", "message": "Operation completed successfully"}'></textarea>
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="testJsonInput()">
+                            <i class="bi bi-send me-2"></i>Test JSON to Toast
+                        </button>
+                    </div>
+                </div>
+
+                <!-- AJAX Form Example -->
+                <div class="card mb-4">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0"><i class="bi bi-globe me-2"></i>AJAX Form Example</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="demoForm" onsubmit="handleFormSubmit(event)">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="name" class="form-label">Name</label>
+                                    <input type="text" class="form-control" id="name" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="email" required>
+                                </div>
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-info">
+                                        <i class="bi bi-send me-2"></i>Submit Form
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Message Display Area (Old Method) -->
+                <div class="card">
+                    <div class="card-header bg-secondary text-white">
+                        <h5 class="mb-0"><i class="bi bi-chat-square-text me-2"></i>Traditional Message Display</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="message" class="alert alert-info d-none" role="alert"></div>
+                        <button type="button" class="btn btn-outline-secondary" onclick="showTraditionalMessage()">
+                            <i class="bi bi-eye me-2"></i>Show Traditional Message
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container position-fixed top-0 end-0 p-3">
+        <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <i id="toastIcon" class="bi bi-info-circle-fill text-primary me-2"></i>
+                <strong id="toastTitle" class="me-auto">Notification</strong>
+                <small class="text-muted">now</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div id="toastBody" class="toast-body">
+                Default toast message
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function showToast(type, title, message) {
+            const toast = document.getElementById('liveToast');
+            const toastIcon = document.getElementById('toastIcon');
+            const toastTitle = document.getElementById('toastTitle');
+            const toastBody = document.getElementById('toastBody');
+            
+            // Set icon and styling based on type
+            const configs = {
+                success: { icon: 'bi-check-circle-fill', class: 'text-success' },
+                error: { icon: 'bi-x-circle-fill', class: 'text-danger' },
+                warning: { icon: 'bi-exclamation-triangle-fill', class: 'text-warning' },
+                info: { icon: 'bi-info-circle-fill', class: 'text-info' }
+            };
+            
+            const config = configs[type] || configs.info;
+            toastIcon.className = `bi ${config.icon} ${config.class} me-2`;
+            toastTitle.textContent = title;
+            toastBody.textContent = message;
+            
+            const bsToast = new bootstrap.Toast(toast);
+            bsToast.show();
+        }
+
+        // Method 1: Replace your existing approach
+        function handleJsonResponse(json) {
+            // Old way:
+            // document.getElementById("message").innerHTML = json.message;
+            
+            // New way with toast:
+            showToast(json.type || 'info', json.title || 'Response', json.message);
+        }
+
+        // Method 2: Enhanced JSON handler
+        function handleEnhancedJsonResponse(json) {
+            // Handle different response structures
+            if (json.status === 'success') {
+                showToast('success', json.title || 'Success!', json.message);
+            } else if (json.status === 'error') {
+                showToast('error', json.title || 'Error!', json.message);
+            } else {
+                showToast('info', json.title || 'Info', json.message);
+            }
+        }
+
+        // Method 3: AJAX Integration Example
+        function makeAjaxRequest(url, data, callback) {
+            // Simulated AJAX request
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(json => {
+                // Your existing line:
+                // document.getElementById("message").innerHTML = json.message;
+                
+                // Enhanced with toast:
+                showToast(json.type, json.title, json.message);
+                
+                if (callback) callback(json);
+            })
+            .catch(error => {
+                showToast('error', 'Request Failed', 'An error occurred while processing your request.');
+            });
+        }
+
+        // Method 4: Form submission with JSON response
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            
+            // Simulate form data
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value
+            };
+            
+            // Simulate server response
+            setTimeout(() => {
+                const json = {
+                    type: 'success',
+                    title: 'Form Submitted!',
+                    message: `Hello ${formData.name}! Your form has been submitted successfully.`
+                };
+                
+                // Call your enhanced handler
+                handleJsonResponse(json);
+                
+                // Reset form
+                document.getElementById('demoForm').reset();
+            }, 1000);
+        }
+
+        // Demo functions
+        function simulateAjaxSuccess() {
+            const json = {
+                type: 'success',
+                title: 'AJAX Success',
+                message: 'Data has been saved successfully to the server!'
+            };
+            handleJsonResponse(json);
+        }
+
+        function simulateAjaxError() {
+            const json = {
+                type: 'error',
+                title: 'AJAX Error',
+                message: 'Failed to connect to the server. Please try again.'
+            };
+            handleJsonResponse(json);
+        }
+
+        function simulateValidation() {
+            const json = {
+                type: 'warning',
+                title: 'Validation Warning',
+                message: 'Please check your input fields before submitting.'
+            };
+            handleJsonResponse(json);
+        }
+
+        function simulateMultiple() {
+            const messages = [
+                { type: 'info', title: 'Step 1', message: 'Processing started...' },
+                { type: 'warning', title: 'Step 2', message: 'Validating data...' },
+                { type: 'success', title: 'Complete', message: 'All steps completed successfully!' }
+            ];
+            
+            messages.forEach((json, index) => {
+                setTimeout(() => {
+                    handleJsonResponse(json);
+                }, index * 1500);
+            });
+        }
+
+        function testJsonInput() {
+            try {
+                const jsonText = document.getElementById('jsonInput').value;
+                const json = JSON.parse(jsonText);
+                handleJsonResponse(json);
+            } catch (error) {
+                showToast('error', 'Invalid JSON', 'Please enter valid JSON format.');
+            }
+        }
+
+        function showTraditionalMessage() {
+            const messageDiv = document.getElementById('message');
+            messageDiv.innerHTML = 'This is the traditional message display method.';
+            messageDiv.className = 'alert alert-primary';
+            messageDiv.classList.remove('d-none');
+            
+            // Also show as toast
+            showToast('info', 'Traditional Method', 'Message displayed in both traditional div and toast!');
+        }
+
+        // Real-world jQuery AJAX example (if you're using jQuery)
+        /*
+        $.ajax({
+            url: '/api/endpoint',
+            method: 'POST',
+            data: { key: 'value' },
+            success: function(json) {
+                // Replace this:
+                // $("#message").html(json.message);
+                
+                // With this:
+                showToast(json.type || 'success', json.title || 'Success', json.message);
+            },
+            error: function(xhr, status, error) {
+                showToast('error', 'Request Failed', 'An error occurred: ' + error);
+            }
+        });
+        */
+
+        // Real-world fetch example
+        /*
+        fetch('/api/endpoint', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ key: 'value' })
+        })
+        .then(response => response.json())
+        .then(json => {
+            // Replace this:
+            // document.getElementById("message").innerHTML = json.message;
+            
+            // With this:
+            showToast(json.type || 'success', json.title || 'Success', json.message);
+        })
+        .catch(error => {
+            showToast('error', 'Request Failed', 'Network error occurred');
+        });
+        */
+        // Show different message types
+        function showMessage(type) {
+            const modalId = type + 'Modal';
+            const modal = new bootstrap.Modal(document.getElementById(modalId));
+            modal.show();
+        }
+
+        // Show confirm dialog
+        function showConfirm() {
+            const modal = new bootstrap.Modal(document.getElementById('confirmModal'));
+            modal.show();
+        }
+
+        // Show input dialog
+        function showInput() {
+            const modal = new bootstrap.Modal(document.getElementById('inputModal'));
+            modal.show();
+        }
+
+        // Show loading dialog
+        function showLoading() {
+            const modal = new bootstrap.Modal(document.getElementById('loadingModal'));
+            modal.show();
+            
+            // Simulate loading progress
+            let progress = 0;
+            const progressBar = document.getElementById('loadingProgress');
+            const interval = setInterval(() => {
+                progress += Math.random() * 15;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        modal.hide();
+                        showToast('success', 'Complete!', 'Loading finished successfully!');
+                    }, 500);
+                }
+                progressBar.style.width = progress + '%';
+                progressBar.setAttribute('aria-valuenow', progress);
+            }, 200);
+        }
+
+        // Show toast notification
+        function showToast(type, title, message) {
+            const toast = document.getElementById('liveToast');
+            const toastIcon = document.getElementById('toastIcon');
+            const toastTitle = document.getElementById('toastTitle');
+            const toastBody = document.getElementById('toastBody');
+            
+            // Set icon and styling based on type
+            const configs = {
+                success: { icon: 'bi-check-circle-fill', class: 'text-success' },
+                error: { icon: 'bi-x-circle-fill', class: 'text-danger' },
+                warning: { icon: 'bi-exclamation-triangle-fill', class: 'text-warning' },
+                info: { icon: 'bi-info-circle-fill', class: 'text-info' }
+            };
+            
+            const config = configs[type] || configs.info;
+            toastIcon.className = `bi ${config.icon} ${config.class} me-2`;
+            toastTitle.textContent = title;
+            toastBody.textContent = message;
+            
+            const bsToast = new bootstrap.Toast(toast);
+            bsToast.show();
+        }
+
+        // Show auto-hide alert
+        function showAlert() {
+            const container = document.getElementById('messageContainer');
+            const alertHtml = `
+                <div class="alert alert-warning alert-dismissible fade show d-flex align-items-center" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    <div class="flex-grow-1">
+                        <strong>Auto-Hide Alert!</strong> This alert will disappear automatically in 5 seconds.
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            `;
+            container.innerHTML = alertHtml;
+            
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                const alert = container.querySelector('.alert');
+                if (alert) {
+                    const bsAlert = new bootstrap.Alert(alert);
+                    bsAlert.close();
+                }
+            }, 5000);
+        }
+
+        // Show progress message
+        function showProgress() {
+            const container = document.getElementById('messageContainer');
+            const progressHtml = `
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title">
+                            <i class="bi bi-hourglass-split me-2"></i>Processing...
+                        </h6>
+                        <div class="progress mb-2">
+                            <div id="demoProgress" class="progress-bar progress-bar-striped progress-bar-animated bg-info" 
+                                 role="progressbar" style="width: 0%"></div>
+                        </div>
+                        <small class="text-muted">Please wait while we process your request...</small>
+                    </div>
+                </div>
+            `;
+            container.innerHTML = progressHtml;
+            
+            // Animate progress
+            let progress = 0;
+            const progressBar = document.getElementById('demoProgress');
+            const interval = setInterval(() => {
+                progress += Math.random() * 10;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        container.innerHTML = `
+                            <div class="alert alert-success alert-dismissible fade show d-flex align-items-center" role="alert">
+                                <i class="bi bi-check-circle-fill me-2"></i>
+                                <div><strong>Complete!</strong> Processing finished successfully.</div>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        `;
+                    }, 500);
+                }
+                progressBar.style.width = progress + '%';
+            }, 150);
+        }
+
+        // Confirm action callback
+        function confirmAction() {
+            const modal = bootstrap.Modal.getInstance(document.getElementById('confirmModal'));
+            modal.hide();
+            
+            setTimeout(() => {
+                showToast('success', 'Deleted!', 'Item has been successfully deleted.');
+            }, 300);
+        }
+
+        // Submit input callback
+        function submitInput() {
+            const name = document.getElementById('userInput').value;
+            const email = document.getElementById('userEmail').value;
+            
+            if (name && email) {
+                const modal = bootstrap.Modal.getInstance(document.getElementById('inputModal'));
+                modal.hide();
+                
+                setTimeout(() => {
+                    showToast('success', 'Submitted!', `Hello ${name}! Your information has been saved.`);
+                }, 300);
+            } else {
+                showToast('error', 'Error!', 'Please fill in all required fields.');
+            }
+        }
+
+        // Initialize tooltips if any
+        document.addEventListener('DOMContentLoaded', function () {
+            // Auto-show a welcome message
+            setTimeout(() => {
+                showToast('info', 'Welcome!', 'Try clicking the buttons above to see different message types.');
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

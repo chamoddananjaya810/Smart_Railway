@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Smart Railway - Sign Up</title>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    </head>
+    <body class="bg-light">
+        <div class="min-vh-100 d-flex align-items-center justify-content-center p-4">
+            <div class="card shadow-lg border-danger" style="max-width: 600px; width: 100%;">
+                <!-- Header with brand -->
+                <div class="card-header bg-danger text-white text-center py-4 border-0">
+                    <div class="d-flex justify-content-center align-items-center mb-3">
+                        <div class="bg-white text-danger rounded-circle d-flex align-items-center justify-content-center" 
+                             style="width: 60px; height: 60px; font-size: 24px; font-weight: bold;">
+                            ST
+                        </div>
+                    </div>
+                    <h3 class="fw-bold mb-1">Smart Railway</h3>
+                    <p class="mb-0 opacity-75">Create your account to get started.</p>
+                </div>
+
+                <div class="card-body p-4">
+                    <!-- Alert Message -->
+                    <div class="alert alert-danger alert-dismissible fade show d-none" role="alert" id="errorAlert">
+                        <i class="fas fa-exclamation-circle me-2"></i>
+                        <span id="errorText"></span>
+                        <button type="button" class="btn-close" onclick="hideError()"></button>
+                    </div>
+
+                    <form>
+                        <p  id="message" class="text-danger"></p>
+                        <!-- Full Name and NIC -->
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label  class="form-label fw-semibold text-dark">
+                                    <i class="fas fa-user text-danger me-2"></i>Full Name
+                                </label>
+                                <input 
+                                    type="text" 
+                                    class="form-control" 
+                                    id="fullName" 
+                                    placeholder="Enter your full name"
+
+                                    >
+                                <div class="invalid-feedback">
+                                    Please provide your full name.
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label  class="form-label fw-semibold text-dark">
+                                    <i class="fas fa-id-card text-danger me-2"></i>NIC
+                                </label>
+                                <input 
+                                    type="text" 
+                                    class="form-control" 
+                                    id="nic" 
+
+                                    placeholder="Enter your NIC number"
+
+                                    >
+                                <div class="invalid-feedback">
+                                    Please provide your NIC number.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Email and Password -->
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label  class="form-label fw-semibold text-dark">
+                                    <i class="fas fa-envelope text-danger me-2"></i>Email Address
+                                </label>
+                                <input 
+                                    type="email" 
+                                    class="form-control" 
+                                    id="email" 
+
+                                    placeholder="Enter your email address"
+
+                                    >
+                                <div class="invalid-feedback">
+                                    Please provide a valid email address.
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label  class="form-label fw-semibold text-dark">
+                                    <i class="fas fa-lock text-danger me-2"></i>Password
+                                </label>
+                                <div class="input-group">
+                                    <input 
+                                        type="password" 
+                                        class="form-control" 
+                                        id="password" 
+
+                                        placeholder="Enter your password"
+
+                                        >
+                                    <button 
+                                        class="btn btn-outline-danger" 
+                                        type="button" 
+                                        onclick="togglePassword()"
+                                        id="passwordToggle"
+                                        >
+                                        <i class="fas fa-eye" id="toggleIcon"></i>
+                                    </button>
+                                </div>
+                                <div class="invalid-feedback">
+                                    Please provide a password.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Phone and Date of Birth -->
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label  class="form-label fw-semibold text-dark">
+                                    <i class="fas fa-phone text-danger me-2"></i>Phone
+                                </label>
+                                <input 
+                                    type="tel" 
+                                    class="form-control" 
+                                    id="phone" 
+
+                                    placeholder="Enter your phone number"
+                                    >
+                                <div class="invalid-feedback">
+                                    Please provide a valid phone number.
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label  class="form-label fw-semibold text-dark">
+                                    <i class="fas fa-calendar text-danger me-2"></i>Date of Birth
+                                </label>
+                                <input 
+                                    type="date" 
+                                    class="form-control" 
+                                    id="dateOfBirth" 
+
+                                    >
+                                <div class="invalid-feedback">
+                                    Please provide your date of birth.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Gender and Role -->
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label  class="form-label fw-semibold text-dark">
+                                    <i class="fas fa-venus-mars text-danger me-2"></i>Gender
+                                </label>
+                                <select class="form-select" id="gender">
+                                    <option value="">Choose your gender</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Please select your gender.
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label  class="form-label fw-semibold text-dark">
+                                    <i class="fas fa-user-tag text-danger me-2"></i>Role
+                                </label>
+                                <select class="form-select" id="role"  required>
+                                    <option value="">Choose your role</option>
+                                    <option value="user">User</option>
+                                    <option value="admin">Admin</option>
+                                    <option value="moderator">Moderator</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Please select your role.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Profile Picture -->
+                        <div class="mb-4">
+                            <label  class="form-label fw-semibold text-dark">
+                                <i class="fas fa-camera text-danger me-2"></i>Profile Picture
+                            </label>
+                            <input 
+                                type="file" 
+                                class="form-control" 
+                                id="profilePic" 
+
+                                accept="image/*"
+                                >
+                            <div class="form-text text-muted">
+                                Choose an image file for your profile picture (optional)
+                            </div>
+                            <div id="selectedFile" class="mt-2 text-danger fw-semibold d-none">
+                                <i class="fas fa-check-circle me-1"></i>
+                                <span id="fileName"></span>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button 
+type="button"
+                            class="btn btn-danger btn-lg w-100 py-3 mb-4"
+
+                            onclick="signUp();"
+                            >
+                            <span id="buttonText">
+                                <i class="fas fa-user-plus me-2"></i>Create Account
+                            </span>
+                            <span id="loadingSpinner" class="d-none">
+                                <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+                                Creating Account...
+                            </span>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Footer -->
+                <div class="card-footer bg-light text-center py-4 border-0">
+                    <p class="text-muted mb-2">Already have an account?</p>
+                    <button 
+                        type="button" 
+                        class="btn btn-outline-danger"
+                        onclick="handleSignIn()"
+                        >
+                        <i class="fas fa-sign-in-alt me-2"></i>Sign In
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bootstrap JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+        <script src="assets/js/sign-up.js"></script>
+    </body>
+</html>
