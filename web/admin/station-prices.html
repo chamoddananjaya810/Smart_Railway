@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Station Prices Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
+</head>
+<body class="bg-light"  onload="dashboard();">
+    <div id="dashboard"></div>
+    <!-- Header -->
+    <div class="bg-danger text-white py-4 mb-4">
+        <div class="container-fluid">
+            <div class="d-flex align-items-center justify-content-between flex-wrap">
+                <div>
+                    <h1 class="mb-1"><i class="bi bi-currency-dollar me-3"></i>Station Prices Management</h1>
+                    <p class="mb-0 opacity-75">Manage ticket pricing for different routes and classes</p>
+                </div>
+                <div class="d-flex align-items-center gap-3 flex-wrap mt-3 mt-lg-0">
+                    <input type="text" class="form-control" placeholder="Search routes..." id="searchInput" style="min-width: 250px;">
+                    <button class="btn btn-light" data-bs-toggle="modal" data-bs-target="#addPriceModal">
+                        <i class="bi bi-plus-lg me-2"></i>Add New Price
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="container-fluid px-4">
+        <div class="row g-4 mb-4">
+            <div class="col-md-3 col-sm-6">
+                <div class="card bg-danger text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5 class="card-title">Total Routes</h5>
+                                <h2 class="mb-0">24</h2>
+                                <small class="opacity-75">Active pricing</small>
+                            </div>
+                            <i class="bi bi-map display-4 opacity-50"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="card border-danger">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5 class="card-title text-danger">Avg First Class</h5>
+                                <h2 class="mb-0 text-danger">₹2,450</h2>
+                                <small class="text-danger">Per route</small>
+                            </div>
+                            <i class="bi bi-star-fill display-4 text-danger opacity-50"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="card bg-danger text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5 class="card-title">Avg Second Class</h5>
+                                <h2 class="mb-0">₹1,200</h2>
+                                <small class="opacity-75">Per route</small>
+                            </div>
+                            <i class="bi bi-award display-4 opacity-50"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="card border-danger">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5 class="card-title text-danger">Avg Third Class</h5>
+                                <h2 class="mb-0 text-danger">₹650</h2>
+                                <small class="text-danger">Per route</small>
+                            </div>
+                            <i class="bi bi-people display-4 text-danger opacity-50"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filters and Table -->
+        <div class="card">
+            <div class="card-header bg-transparent p-4 border-bottom">
+                <div class="d-flex justify-content-between align-items-center flex-wrap">
+                    <h5 class="mb-0"><i class="bi bi-list me-2"></i>Station Prices</h5>
+                    <div class="d-flex gap-2 flex-wrap">
+                        <select class="form-select" id="trainFilter" style="width: auto;">
+                            <option value="">All Trains</option>
+                            <option value="12345">12345 - Rajdhani Express</option>
+                            <option value="12346">12346 - Shatabdi Express</option>
+                            <option value="12347">12347 - Duronto Express</option>
+                        </select>
+                        <select class="form-select" id="routeFilter" style="width: auto;">
+                            <option value="">All Routes</option>
+                            <option value="Delhi-Mumbai">Delhi - Mumbai</option>
+                            <option value="Mumbai-Chennai">Mumbai - Chennai</option>
+                            <option value="Kolkata-Bangalore">Kolkata - Bangalore</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover mb-0" id="pricesTable">
+                    <thead>
+                        <tr>
+                            <th>Price ID</th>
+                            <th>Train</th>
+                            <th>From Station</th>
+                            <th>To Station</th>
+                            <th>First Class (₹)</th>
+                            <th>Second Class (₹)</th>
+                            <th>Third Class (₹)</th>
+                            <th>Distance (km)</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="badge bg-primary">001</span></td>
+                            <td>
+                                <div>
+                                    <strong>12345</strong>
+                                    <small class="text-muted d-block">Rajdhani Express</small>
+                                </div>
+                            </td>
+                            <td>
+                                <i class="bi bi-geo-alt text-success me-1"></i>
+                                New Delhi
+                            </td>
+                            <td>
+                                <i class="bi bi-geo-alt-fill text-danger me-1"></i>
+                                Mumbai Central
+                            </td>
+                            <td><span class="badge bg-warning text-dark">₹3,500</span></td>
+                            <td><span class="badge bg-info">₹1,800</span></td>
+                            <td><span class="badge bg-secondary">₹950</span></td>
+                            <td>1,384</td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-primary me-1" data-bs-toggle="modal" data-bs-target="#addPriceModal">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge bg-primary">002</span></td>
+                            <td>
+                                <div>
+                                    <strong>12346</strong>
+                                    <small class="text-muted d-block">Shatabdi Express</small>
+                                </div>
+                            </td>
+                            <td>
+                                <i class="bi bi-geo-alt text-success me-1"></i>
+                                New Delhi
+                            </td>
+                            <td>
+                                <i class="bi bi-geo-alt-fill text-danger me-1"></i>
+                                Chandigarh
+                            </td>
+                            <td><span class="badge bg-warning text-dark">₹1,200</span></td>
+                            <td><span class="badge bg-info">₹650</span></td>
+                            <td><span class="badge bg-secondary">₹350</span></td>
+                            <td>243</td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-primary me-1" data-bs-toggle="modal" data-bs-target="#addPriceModal">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge bg-primary">003</span></td>
+                            <td>
+                                <div>
+                                    <strong>12347</strong>
+                                    <small class="text-muted d-block">Duronto Express</small>
+                                </div>
+                            </td>
+                            <td>
+                                <i class="bi bi-geo-alt text-success me-1"></i>
+                                Mumbai Central
+                            </td>
+                            <td>
+                                <i class="bi bi-geo-alt-fill text-danger me-1"></i>
+                                Chennai Central
+                            </td>
+                            <td><span class="badge bg-warning text-dark">₹2,800</span></td>
+                            <td><span class="badge bg-info">₹1,450</span></td>
+                            <td><span class="badge bg-secondary">₹780</span></td>
+                            <td>1,279</td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-primary me-1" data-bs-toggle="modal" data-bs-target="#addPriceModal">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge bg-primary">004</span></td>
+                            <td>
+                                <div>
+                                    <strong>12348</strong>
+                                    <small class="text-muted d-block">Garib Rath</small>
+                                </div>
+                            </td>
+                            <td>
+                                <i class="bi bi-geo-alt text-success me-1"></i>
+                                Kolkata
+                            </td>
+                            <td>
+                                <i class="bi bi-geo-alt-fill text-danger me-1"></i>
+                                Bangalore
+                            </td>
+                            <td><span class="badge bg-warning text-dark">₹2,200</span></td>
+                            <td><span class="badge bg-info">₹1,100</span></td>
+                            <td><span class="badge bg-secondary">₹580</span></td>
+                            <td>1,871</td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-primary me-1" data-bs-toggle="modal" data-bs-target="#addPriceModal">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer bg-transparent">
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="text-muted">Showing 1-4 of 24 entries</span>
+                    <nav>
+                        <ul class="pagination pagination-sm mb-0">
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#">Previous</a>
+                            </li>
+                            <li class="page-item active">
+                                <a class="page-link" href="#">1</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">2</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">3</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Price Modal -->
+    <div class="modal fade" id="addPriceModal" tabindex="-1" aria-labelledby="addPriceModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">
+                        <i class="bi bi-plus-circle me-2"></i>Add/Edit Station Price
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Train</label>
+                            <select class="form-select" id="modalTrain" required>
+                                <option value="">Select Train</option>
+                                <option value="12345">12345 - Rajdhani Express</option>
+                                <option value="12346">12346 - Shatabdi Express</option>
+                                <option value="12347">12347 - Duronto Express</option>
+                                <option value="12348">12348 - Garib Rath</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Distance (km)</label>
+                            <input type="number" class="form-control" id="distance" placeholder="e.g., 1384" min="1">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">From Station</label>
+                            <select class="form-select" id="fromStation" required>
+                                <option value="">Select From Station</option>
+                                <option value="1">New Delhi</option>
+                                <option value="2">Mumbai Central</option>
+                                <option value="3">Chennai Central</option>
+                                <option value="4">Kolkata</option>
+                                <option value="5">Bangalore</option>
+                                <option value="6">Chandigarh</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">To Station</label>
+                            <select class="form-select" id="toStation" required>
+                                <option value="">Select To Station</option>
+                                <option value="1">New Delhi</option>
+                                <option value="2">Mumbai Central</option>
+                                <option value="3">Chennai Central</option>
+                                <option value="4">Kolkata</option>
+                                <option value="5">Bangalore</option>
+                                <option value="6">Chandigarh</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <h6 class="text-danger mb-3"><i class="bi bi-currency-rupee me-2"></i>Pricing Information</h6>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">First Class Price (₹)</label>
+                            <div class="input-group">
+                                <span class="input-group-text">₹</span>
+                                <input type="number" class="form-control" id="firstClassPrice" placeholder="3500" min="0" step="0.01" required>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Second Class Price (₹)</label>
+                            <div class="input-group">
+                                <span class="input-group-text">₹</span>
+                                <input type="number" class="form-control" id="secondClassPrice" placeholder="1800" min="0" step="0.01" required>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Third Class Price (₹)</label>
+                            <div class="input-group">
+                                <span class="input-group-text">₹</span>
+                                <input type="number" class="form-control" id="thirdClassPrice" placeholder="950" min="0" step="0.01" required>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="alert alert-info">
+                                <i class="bi bi-info-circle me-2"></i>
+                                <strong>Tip:</strong> Pricing should reflect distance, train type, and service quality. First class typically costs 2-3x second class, and second class costs 1.5-2x third class.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger">Save Price</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

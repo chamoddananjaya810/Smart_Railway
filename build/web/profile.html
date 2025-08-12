@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Profile - Railway Booking System</title>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    </head>
+    <body class="bg-light">
+        <!-- Navbar (same as your existing navbar) -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-danger fixed-top shadow">
+            <div class="container-fluid">
+                <!-- Brand -->
+                <a class="navbar-brand fw-bold d-flex align-items-center" href="/">
+                    <i class="fas fa-train me-2 fs-4"></i>
+                    <span class="d-none d-sm-inline">Railway Booking</span>
+                </a>
+
+                <!-- Mobile Toggle Button -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Navigation Menu -->
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link fw-semibold" href="/">
+                                <i class="fas fa-home me-1"></i>Home
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link fw-semibold" href="/booking">
+                                <i class="fas fa-ticket-alt me-1"></i>Booking
+                            </a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle fw-semibold" href="#" id="servicesDropdown" 
+                               role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-cogs me-1"></i>Services
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="servicesDropdown">
+                                <li><a class="dropdown-item" href="/services/tickets">
+                                        <i class="fas fa-ticket-alt me-2"></i>Ticket Services
+                                    </a></li>
+                                <li><a class="dropdown-item" href="/services/reservations">
+                                        <i class="fas fa-calendar-check me-2"></i>Reservations
+                                    </a></li>
+                                <li><a class="dropdown-item" href="/services/refunds">
+                                        <i class="fas fa-money-bill-wave me-2"></i>Refunds
+                                    </a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="/services/support">
+                                        <i class="fas fa-headset me-2"></i>Customer Support
+                                    </a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link fw-semibold" href="/schedule">
+                                <i class="fas fa-clock me-1"></i>Schedule
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link fw-semibold" href="/contact">
+                                <i class="fas fa-envelope me-1"></i>Contact
+                            </a>
+                        </li>
+                    </ul>
+
+                    <!-- Right Side Items -->
+                    <div class="d-flex align-items-center">
+                        <!-- Theme Toggle -->
+                        <button class="btn btn-outline-light btn-sm me-2" id="themeToggle" title="Toggle theme">
+                            <i class="fas fa-moon" id="themeIcon"></i>
+                        </button>
+
+                        <!-- Notifications -->
+                        <div class="dropdown me-2">
+                            <button class="btn btn-outline-light btn-sm position-relative" type="button" 
+                                    data-bs-toggle="dropdown" aria-expanded="false" title="Notifications">
+                                <i class="fas fa-bell"></i>
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning">
+                                    3
+                                    <span class="visually-hidden">unread messages</span>
+                                </span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><h6 class="dropdown-header">Notifications</h6></li>
+                                <li><a class="dropdown-item" href="#">
+                                        <small class="text-muted">5 min ago</small><br>
+                                        Your booking is confirmed
+                                    </a></li>
+                                <li><a class="dropdown-item" href="#">
+                                        <small class="text-muted">1 hour ago</small><br>
+                                        Train schedule updated
+                                    </a></li>
+                                <li><a class="dropdown-item" href="#">
+                                        <small class="text-muted">2 hours ago</small><br>
+                                        Payment successful
+                                    </a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item text-center" href="/notifications">View all</a></li>
+                            </ul>
+                        </div>
+
+                        <!-- User Account Dropdown -->
+                        <div class="dropdown me-2 d-none d-lg-block">
+                            <button class="btn btn-outline-light btn-sm" type="button" 
+                                    data-bs-toggle="dropdown" aria-expanded="false" title="Account">
+                                <i class="fas fa-user-circle"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><h6 class="dropdown-header">My Account</h6></li>
+                                <li><a class="dropdown-item active" href="/profile">
+                                        <i class="fas fa-user me-2"></i>Profile
+                                    </a></li>
+                                <li><a class="dropdown-item" href="/bookings">
+                                        <i class="fas fa-list me-2"></i>My Bookings
+                                    </a></li>
+                                <li><a class="dropdown-item" href="/settings">
+                                        <i class="fas fa-cog me-2"></i>Settings
+                                    </a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="/logout">
+                                        <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                    </a></li>
+                            </ul>
+                        </div>
+
+                        <!-- Login/Register Buttons -->
+                        <a href="/login" class="btn btn-outline-light btn-sm me-2">
+                            <i class="fas fa-sign-in-alt me-1"></i>Login
+                        </a>
+                        <a href="/register" class="btn btn-light btn-sm text-danger fw-semibold">
+                            <i class="fas fa-user-plus me-1"></i>Register
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Content spacer -->
+        <div class="mt-5 pt-3"></div>
+
+        <!-- Hero Section -->
+        <div class="bg-danger text-white py-4 mb-4">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-8">
+                        <h1 class="h3 fw-bold mb-2">
+                            <i class="fas fa-user me-3"></i>My Profile
+                        </h1>
+                        <p class="mb-0">Manage your personal information and account settings</p>
+                    </div>
+                    <div class="col-lg-4 text-end d-none d-lg-block">
+                        <i class="fas fa-user-cog display-4 opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="container mb-5">
+            <div class="row g-4">
+                <!-- Profile Picture Section -->
+                <div class="col-lg-4">
+                    <div class="card shadow-sm border-0 h-100">
+                        <div class="card-header bg-danger text-white py-3">
+                            <h5 class="mb-0 fw-semibold">
+                                <i class="fas fa-camera me-2"></i>Profile Picture
+                            </h5>
+                        </div>
+                        <div class="card-body text-center p-4">
+                            <div class="position-relative d-inline-block mb-3">
+                                <img src="https://via.placeholder.com/150x150/dc3545/ffffff?text=User" 
+                                     alt="Profile Picture" 
+                                     class="rounded-circle border border-3 border-danger" 
+                                     width="150" 
+                                     height="150"
+                                     id="profileImage">
+                                <button class="btn btn-danger btn-sm rounded-circle position-absolute bottom-0 end-0 p-2" 
+                                        type="button" 
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#profilePicModal">
+                                    <i class="fas fa-camera"></i>
+                                </button>
+                            </div>
+                            <h5 class="fw-semibold mb-1" id="displayFullName">John Doe</h5>
+                            <p class="text-muted mb-3" id="displayRole">Passenger</p>
+                            <button class="btn btn-outline-danger btn-sm" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#profilePicModal">
+                                <i class="fas fa-upload me-2"></i>Change Picture
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Quick Stats -->
+                    >
+                </div>
+
+                <!-- Profile Form -->
+                <div class="col-lg-8">
+                    <div class="card shadow-sm border-0">
+                        <div class="card-header bg-danger text-white py-3">
+                            <h5 class="mb-0 fw-semibold">
+                                <i class="fas fa-edit me-2"></i>Personal Information
+                            </h5>
+                        </div>
+                        <div class="card-body p-4">
+                            <form id="profileForm">
+                                <div class="row g-3">
+                                    <!-- NIC -->
+                                    <div class="col-md-6">
+                                        <label for="nic" class="form-label fw-semibold">
+                                            <i class="fas fa-id-card text-danger me-2"></i>NIC Number *
+                                        </label>
+                                        <input type="text" class="form-control form-control-lg" id="nic" 
+                                               placeholder="Enter your NIC number" value="199012345678" required>
+                                        <div class="invalid-feedback">
+                                            Please provide a valid NIC number.
+                                        </div>
+                                    </div>
+
+                                    <!-- Email -->
+                                    <div class="col-md-6">
+                                        <label for="email" class="form-label fw-semibold">
+                                            <i class="fas fa-envelope text-danger me-2"></i>Email Address *
+                                        </label>
+                                        <input type="email" class="form-control form-control-lg" id="email" 
+                                               placeholder="Enter your email" value="john.doe@email.com" required>
+                                        <div class="invalid-feedback">
+                                            Please provide a valid email address.
+                                        </div>
+                                    </div>
+
+                                    <!-- Full Name -->
+                                    <div class="col-12">
+                                        <label for="fullName" class="form-label fw-semibold">
+                                            <i class="fas fa-user text-danger me-2"></i>Full Name *
+                                        </label>
+                                        <input type="text" class="form-control form-control-lg" id="fullName" 
+                                               placeholder="Enter your full name" value="John Doe" required>
+                                        <div class="invalid-feedback">
+                                            Please provide your full name.
+                                        </div>
+                                    </div>
+
+                                    <!-- Password -->
+                                    <div class="col-md-6">
+                                        <label for="password" class="form-label fw-semibold">
+                                            <i class="fas fa-lock text-danger me-2"></i>New Password
+                                        </label>
+                                        <div class="input-group">
+                                            <input type="password" class="form-control form-control-lg" id="password" 
+                                                   placeholder="Enter new password">
+                                            <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </div>
+                                        <div class="form-text">
+                                            <i class="fas fa-info-circle me-1"></i>
+                                            Leave blank to keep current password
+                                        </div>
+                                    </div>
+
+                                    <!-- Confirm Password -->
+                                    <div class="col-md-6">
+                                        <label for="confirmPassword" class="form-label fw-semibold">
+                                            <i class="fas fa-lock text-danger me-2"></i>Confirm Password
+                                        </label>
+                                        <div class="input-group">
+                                            <input type="password" class="form-control form-control-lg" id="confirmPassword" 
+                                                   placeholder="Confirm new password">
+                                            <button class="btn btn-outline-secondary" type="button" id="toggleConfirmPassword">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </div>
+                                        <div class="invalid-feedback">
+                                            Passwords do not match.
+                                        </div>
+                                    </div>
+
+                                    <!-- Phone -->
+                                    <div class="col-md-6">
+                                        <label for="phone" class="form-label fw-semibold">
+                                            <i class="fas fa-phone text-danger me-2"></i>Phone Number *
+                                        </label>
+                                        <input type="tel" class="form-control form-control-lg" id="phone" 
+                                               placeholder="Enter your phone number" value="+1 (555) 123-4567" required>
+                                        <div class="invalid-feedback">
+                                            Please provide a valid phone number.
+                                        </div>
+                                    </div>
+
+                                    <!-- Date of Birth -->
+                                    <div class="col-md-6">
+                                        <label for="dateOfBirth" class="form-label fw-semibold">
+                                            <i class="fas fa-calendar text-danger me-2"></i>Date of Birth *
+                                        </label>
+                                        <input type="date" class="form-control form-control-lg" id="dateOfBirth" 
+                                               value="1990-05-15" required>
+                                        <div class="invalid-feedback">
+                                            Please provide your date of birth.
+                                        </div>
+                                    </div>
+
+                                    <!-- Role -->
+                                    <div class="col-md-6">
+                                        <label for="role" class="form-label fw-semibold">
+                                            <i class="fas fa-user-tag text-danger me-2"></i>Role *
+                                        </label>
+                                        <select class="form-select form-select-lg" id="role" required>
+                                            <option value="">Select your role</option>
+                                            <option value="passenger" selected>Passenger</option>
+                                            <option value="admin">Administrator</option>
+                                            <option value="staff">Staff Member</option>
+                                            <option value="conductor">Train Conductor</option>
+                                            <option value="manager">Station Manager</option>
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            Please select your role.
+                                        </div>
+                                    </div>
+
+
+
+                                    <!-- Action Buttons -->
+                                    <div class="col-12 mt-4">
+                                        <div class="d-flex flex-wrap gap-2">
+                                            <button type="submit" class="btn btn-danger btn-lg px-4 py-2 fw-semibold">
+                                                <i class="fas fa-save me-2"></i>Update Profile
+                                            </button>
+                                            <button type="reset" class="btn btn-outline-secondary btn-lg px-4 py-2">
+                                                <i class="fas fa-undo me-2"></i>Reset Changes
+                                            </button>
+                                            <button type="button" class="btn btn-outline-danger btn-lg px-4 py-2" 
+                                                    data-bs-toggle="modal" data-bs-target="#deactivateModal">
+                                                <i class="fas fa-user-times me-2"></i>Deactivate Account
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Picture Modal -->
+        <div class="modal fade" id="profilePicModal" tabindex="-1" aria-labelledby="profilePicModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title" id="profilePicModalLabel">
+                            <i class="fas fa-camera me-2"></i>Change Profile Picture
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="text-center mb-4">
+                            <img src="https://via.placeholder.com/150x150/dc3545/ffffff?text=User" 
+                                 alt="Current Profile Picture" 
+                                 class="rounded-circle border border-3 border-danger" 
+                                 width="100" 
+                                 height="100"
+                                 id="modalProfileImage">
+                        </div>
+                        <div class="mb-3">
+                            <label for="profilePicInput" class="form-label fw-semibold">
+                                <i class="fas fa-upload me-2"></i>Select New Picture
+                            </label>
+                            <input type="file" class="form-control" id="profilePicInput" accept="image/*">
+                            <div class="form-text">
+                                <i class="fas fa-info-circle me-1"></i>
+                                Supported formats: JPG, PNG, GIF. Maximum size: 2MB
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-danger" id="uploadProfilePic">
+                            <i class="fas fa-save me-2"></i>Save Changes
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Deactivate Account Modal -->
+        <div class="modal fade" id="deactivateModal" tabindex="-1" aria-labelledby="deactivateModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title" id="deactivateModalLabel">
+                            <i class="fas fa-exclamation-triangle me-2"></i>Deactivate Account
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <strong>Warning!</strong> This action will deactivate your account. You will lose access to:
+                        </div>
+                        <ul class="list-unstyled ps-3">
+                            <li><i class="fas fa-times text-danger me-2"></i>Booking new tickets</li>
+                            <li><i class="fas fa-times text-danger me-2"></i>Accessing existing bookings</li>
+                            <li><i class="fas fa-times text-danger me-2"></i>Customer support features</li>
+                            <li><i class="fas fa-times text-danger me-2"></i>Account history and data</li>
+                        </ul>
+                        <p class="mb-3">Are you sure you want to proceed?</p>
+                        <div class="mb-3">
+                            <label for="deactivateReason" class="form-label fw-semibold">Reason for deactivation</label>
+                            <select class="form-select" id="deactivateReason">
+                                <option value="">Select a reason</option>
+                                <option value="no-longer-needed">No longer need the service</option>
+                                <option value="privacy-concerns">Privacy concerns</option>
+                                <option value="poor-service">Poor service experience</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-danger" id="confirmDeactivate">
+                            <i class="fas fa-user-times me-2"></i>Deactivate Account
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+        <script>
+            // Profile form validation and submission
+            document.getElementById('profileForm').addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                const form = this;
+                const password = document.getElementById('password').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+
+                // Reset previous validation states
+                form.classList.remove('was-validated');
+
+                // Validate password match if passwords are provided
+                let isValid = true;
+                if (password || confirmPassword) {
+                    if (password !== confirmPassword) {
+                        document.getElementById('confirmPassword').setCustomValidity('Passwords do not match.');
+                        isValid = false;
+                    } else if (password.length < 6) {
+                        document.getElementById('password').setCustomValidity('Password must be at least 6 characters long.');
+                        isValid = false;
+                    } else {
+                        document.getElementById('password').setCustomValidity('');
+                        document.getElementById('confirmPassword').setCustomValidity('');
+                    }
+                } else {
+                    document.getElementById('password').setCustomValidity('');
+                    document.getElementById('confirmPassword').setCustomValidity('');
+                }
+
+                // Validate NIC format (basic validation)
+                const nic = document.getElementById('nic').value;
+                const nicRegex = /^(\d{9}[vVxX]|\d{12})$/;
+                if (!nicRegex.test(nic)) {
+                    document.getElementById('nic').setCustomValidity('Please enter a valid NIC number (9 digits + V/X or 12 digits).');
+                    isValid = false;
+                } else {
+                    document.getElementById('nic').setCustomValidity('');
+                }
+
+                // Validate phone number
+                const phone = document.getElementById('phone').value;
+                const phoneRegex = /^[\+]?[1-9][\d\s\-\(\)]{7,15}$/;
+                if (!phoneRegex.test(phone.replace(/\s/g, ''))) {
+                    document.getElementById('phone').setCustomValidity('Please enter a valid phone number.');
+                    isValid = false;
+                } else {
+                    document.getElementById('phone').setCustomValidity('');
+                }
+
+                // Check if form is valid
+                if (!form.checkValidity() || !isValid) {
+                    form.classList.add('was-validated');
+                    return;
+                }
+
+                // Simulate form submission
+                const submitBtn = form.querySelector('button[type="submit"]');
+                const originalText = submitBtn.innerHTML;
+
+                // Show loading state
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Updating...';
+                submitBtn.disabled = true;
+
+                // Simulate API call
+                setTimeout(() => {
+                    // Update display name and role
+                    const fullName = document.getElementById('fullName').value;
+                    const role = document.getElementById('role').options[document.getElementById('role').selectedIndex].text;
+
+                    document.getElementById('displayFullName').textContent = fullName;
+                    document.getElementById('displayRole').textContent = role;
+
+                    // Show success message
+                    const successAlert = document.createElement('div');
+                    successAlert.className = 'alert alert-success alert-dismissible fade show';
+                    successAlert.innerHTML = `
+                        <i class="fas fa-check-circle me-2"></i>
+                        <strong>Success!</strong> Your profile has been updated successfully.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    `;
+
+                    form.insertBefore(successAlert, form.firstChild);
+
+                    // Clear password fields
+                    document.getElementById('password').value = '';
+                    document.getElementById('confirmPassword').value = '';
+
+                    // Reset validation
+                    form.classList.remove('was-validated');
+
+                    // Restore button
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+
+                    // Scroll to success message
+                    successAlert.scrollIntoView({behavior: 'smooth', block: 'center'});
+
+                    // Auto dismiss after 5 seconds
+                    setTimeout(() => {
+                        if (successAlert.parentNode) {
+                            successAlert.remove();
+                        }
+                    }, 5000);
+
+                }, 2000);
+            });
+
+            // Password visibility toggle
+            document.getElementById('togglePassword').addEventListener('click', function () {
+                const passwordField = document.getElementById('password');
+                const icon = this.querySelector('i');
+
+                if (passwordField.type === 'password') {
+                    passwordField.type = 'text';
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                } else {
+                    passwordField.type = 'password';
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                }
+            });
+
+            document.getElementById('toggleConfirmPassword').addEventListener('click', function () {
+                const passwordField = document.getElementById('confirmPassword');
+                const icon = this.querySelector('i');
+
+                if (passwordField.type === 'password') {
+                    passwordField.type = 'text';
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                } else {
+                    passwordField.type = 'password';
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                }
+            });
+
+            // Profile picture upload
+            document.getElementById('profilePicInput').addEventListener('change', function (e) {
+                const file = e.target.files[0];
+                if (file) {
+                    if (file.size > 2 * 1024 * 1024) { // 2MB limit
+                        alert('File size must be less than 2MB');
+                        this.value = '';
+                        return;
+                    }
+
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        document.getElementById('modalProfileImage').src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            document.getElementById('uploadProfilePic').addEventListener('click', function () {
+                const fileInput = document.getElementById('profilePicInput');
+                const file = fileInput.files[0];
+
+                if (!file) {
+                    alert('Please select a file first');
+                    return;
+                }
+
+                // Simulate upload
+                const originalText = this.innerHTML;
+                this.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Uploading...';
+                this.disabled = true;
+
+                setTimeout(() => {
+                    // Update main profile image
+                    const newImageSrc = document.getElementById('modalProfileImage').src;
+                    document.getElementById('profileImage').src = newImageSrc;
+
+                    // Reset and close modal
+                    this.innerHTML = originalText;
+                    this.disabled = false;
+                    fileInput.value = '';
+
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('profilePicModal'));
+                    modal.hide();
+
+                    // Show success message
+                    const successAlert = document.createElement('div');
+                    successAlert.className = 'alert alert-success alert-dismissible fade show';
+                    successAlert.innerHTML = `
+                        <i class="fas fa-check-circle me-2"></i>
+                        <strong>Success!</strong> Profile picture updated successfully.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    `;
+
+                    document.querySelector('.container').insertBefore(successAlert, document.querySelector('.container').firstChild);
+
+                    // Auto dismiss after 3 seconds
+                    setTimeout(() => {
+                        if (successAlert.parentNode) {
+                            successAlert.remove();
+                        }
+                    }, 3000);
+
+                }, 1500);
+            });
+
+            // Account deactivation
+            document.getElementById('confirmDeactivate').addEventListener('click', function () {
+                const reason = document.getElementById('deactivateReason').value;
+
+                if (!reason) {
+                    alert('Please select a reason for deactivation');
+                    return;
+                }
+
+                // Show confirmation
+                const confirmed = confirm('This action cannot be undone. Are you absolutely sure you want to deactivate your account?');
+
+                if (!confirmed)
+                    return;
+
+                // Simulate deactivation process
+                const originalText = this.innerHTML;
+                this.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Deactivating...';
+                this.disabled = true;
+
+                setTimeout(() => {
+                    alert('Account deactivation request submitted. You will receive a confirmation email within 24 hours.');
+
+                    // Reset button
+                    this.innerHTML = originalText;
+                    this.disabled = false;
+
+                    // Close modal
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('deactivateModal'));
+                    modal.hide();
+
+                    // Reset form
+                    document.getElementById('deactivateReason').value = '';
+
+                }, 2000);
+            });
+
+            // Auto-update display fields when form fields change
+            document.getElementById('fullName').addEventListener('input', function () {
+                document.getElementById('displayFullName').textContent = this.value || 'User Name';
+            });
+
+            document.getElementById('role').addEventListener('change', function () {
+                const selectedText = this.options[this.selectedIndex].text;
+                document.getElementById('displayRole').textContent = selectedText || 'Role';
+            });
+
+            // Password strength indicator
+            document.getElementById('password').addEventListener('input', function () {
+                const password = this.value;
+                let strength = 0;
+                let strengthText = '';
+                let strengthClass = '';
+
+                if (password.length >= 6)
+                    strength++;
+                if (password.match(/[a-z]/))
+                    strength++;
+                if (password.match(/[A-Z]/))
+                    strength++;
+                if (password.match(/[0-9]/))
+                    strength++;
+                if (password.match(/[^a-zA-Z0-9]/))
+                    strength++;
+
+                switch (strength) {
+                    case 0:
+                    case 1:
+                        strengthText = 'Very Weak';
+                        strengthClass = 'text-danger';
+                        break;
+                    case 2:
+                        strengthText = 'Weak';
+                        strengthClass = 'text-warning';
+                        break;
+                    case 3:
+                        strengthText = 'Fair';
+                        strengthClass = 'text-info';
+                        break;
+                    case 4:
+                        strengthText = 'Good';
+                        strengthClass = 'text-success';
+                        break;
+                    case 5:
+                        strengthText = 'Strong';
+                        strengthClass = 'text-success fw-bold';
+                        break;
+                }
+
+                // Remove existing strength indicator
+                const existingIndicator = document.getElementById('passwordStrength');
+                if (existingIndicator) {
+                    existingIndicator.remove();
+                }
+
+                // Add new strength indicator if password is not empty
+                if (password.length > 0) {
+                    const strengthIndicator = document.createElement('div');
+                    strengthIndicator.id = 'passwordStrength';
+                    strengthIndicator.className = `form-text ${strengthClass}`;
+                    strengthIndicator.innerHTML = `<i class="fas fa-shield-alt me-1"></i>Password Strength: ${strengthText}`;
+
+                    this.parentNode.parentNode.appendChild(strengthIndicator);
+                }
+            });
+
+            // Form reset handler
+            document.querySelector('button[type="reset"]').addEventListener('click', function () {
+                // Reset custom validation states
+                const form = document.getElementById('profileForm');
+                form.classList.remove('was-validated');
+
+                // Clear password strength indicator
+                const strengthIndicator = document.getElementById('passwordStrength');
+                if (strengthIndicator) {
+                    strengthIndicator.remove();
+                }
+
+                // Reset custom validity
+                document.getElementById('password').setCustomValidity('');
+                document.getElementById('confirmPassword').setCustomValidity('');
+                document.getElementById('nic').setCustomValidity('');
+                document.getElementById('phone').setCustomValidity('');
+
+                // Show reset confirmation
+                setTimeout(() => {
+                    const resetAlert = document.createElement('div');
+                    resetAlert.className = 'alert alert-info alert-dismissible fade show';
+                    resetAlert.innerHTML = `
+                        <i class="fas fa-info-circle me-2"></i>
+                        Form has been reset to original values.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    `;
+
+                    form.insertBefore(resetAlert, form.firstChild);
+
+                    // Auto dismiss after 3 seconds
+                    setTimeout(() => {
+                        if (resetAlert.parentNode) {
+                            resetAlert.remove();
+                        }
+                    }, 3000);
+                }, 100);
+            });
+
+            // Initialize tooltips for better UX
+            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[title]'));
+            const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+
+            // Age calculation from date of birth
+            document.getElementById('dateOfBirth').addEventListener('change', function () {
+                const birthDate = new Date(this.value);
+                const today = new Date();
+                const age = Math.floor((today - birthDate) / (365.25 * 24 * 60 * 60 * 1000));
+
+                // Remove existing age indicator
+                const existingAge = document.getElementById('ageIndicator');
+                if (existingAge) {
+                    existingAge.remove();
+                }
+
+                // Add age indicator if valid date
+                if (!isNaN(age) && age >= 0 && age <= 120) {
+                    const ageIndicator = document.createElement('div');
+                    ageIndicator.id = 'ageIndicator';
+                    ageIndicator.className = 'form-text text-info';
+                    ageIndicator.innerHTML = `<i class="fas fa-birthday-cake me-1"></i>Age: ${age} years old`;
+
+                    this.parentNode.appendChild(ageIndicator);
+                }
+            });
+
+            // Trigger age calculation on page load
+            document.getElementById('dateOfBirth').dispatchEvent(new Event('change'));
+        </script>
+    </body>
+</html>

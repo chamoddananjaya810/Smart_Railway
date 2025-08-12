@@ -7,8 +7,13 @@ package controller;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import hibernate.Admin;
+import hibernate.DaysOftravel;
 import hibernate.HibernateUtil;
+import hibernate.Speed;
+import hibernate.Status;
 import hibernate.Train;
+import hibernate.TrainClass;
+import hibernate.TrainType;
 import hibernate.User;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -17,10 +22,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import model.DaysOfTravel;
-import model.Speed;
-import model.Status;
-import model.TrainType;
+
+import model.Util;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -41,70 +44,70 @@ public class AddTrainForm extends HttpServlet {
         JsonObject responseJson = new JsonObject();
         responseJson.addProperty("status", false);
 
-        try {
-            System.out.println("Parsing JSON data...");
+        // Use camelCase field names to match JavaScript
+        
+        
+        String trainNumber = train.get("trainNumber").getAsString();
+        String trainName = train.get("trainName").getAsString();
+        String speedType = train.get("speedType").getAsString();
 
-            // Use camelCase field names to match JavaScript
-            String trainNumber = train.get("trainNumber").getAsString();
-            String trainName = train.get("trainName").getAsString();
-            String speedType = train.get("speedType").getAsString();
-            Speed speed = Speed.valueOf(speedType);
+        String daysOfTravel = train.get("daysOfTravel").getAsString();
 
-            String daysOfTravel = train.get("daysOfTravel").getAsString();
-            DaysOfTravel dot = DaysOfTravel.valueOf(daysOfTravel);
+        String trainType = train.get("trainType").getAsString();
 
-            String trainType = train.get("trainType").getAsString();
-            TrainType type = TrainType.valueOf(trainType);
+        String totalCoaches = train.get("totalCoaches").getAsString();
+        String trainStatus = train.get("trainStatus").getAsString();
 
-            String totalCoaches = train.get("totalCoaches").getAsString();
-            String trainStatus = train.get("trainStatus").getAsString();
-            Status s = Status.valueOf(trainStatus);
+        SessionFactory sf = HibernateUtil.getSessionFactory();
+        Session s = sf.openSession();
 
-            SessionFactory sf = HibernateUtil.getSessionFactory();
-            Session session = sf.openSession();
+        if (request.getSession().getAttribute("admin") == null) {
+            responseJson.addProperty("message", "Please sign in!");
+        } else if (trainNumber.isEmpty()) {
+            responseJson.addProperty("message", "Please enter Train Number!");
+        } else if ("Select Type".equals(speedType)) {
+            responseJson.addProperty("message", "Please enter valid Speed!");
+        } else if ("Select Speed".equals(daysOfTravel)) {
+            responseJson.addProperty("message", "Please enter valid daysOfTravel!");
+        } else if ("Select Days".equals(trainType)) {
+            responseJson.addProperty("message", "Please enter valid trainType!");
+        } else if ("Select Status".equals(trainStatus)) {
+            responseJson.addProperty("message", "Please enter valid trainStatus!");
+        } else {
 
-            if (request.getSession().getAttribute("admin") == null) {
-                responseJson.addProperty("message", "Please sign in!");
-            } else {
+            Admin admin = (Admin) request.getSession().getAttribute("admin");
+            Criteria c1 = s.createCriteria(Admin.class);
+            c1.add(Restrictions.eq("email", admin.getEmail()));
+            Admin a1 = (Admin) c1.uniqueResult();
 
-                Admin admin = (Admin) request.getSession().getAttribute("admin");
-                Criteria c1 = session.createCriteria(Admin.class);
-                c1.add(Restrictions.eq("email", admin.getEmail()));
-                Admin a1 = (Admin) c1.uniqueResult();
-                System.out.println("a1" + a1);
-                System.out.println("Admin found: " + a1);
-                System.out.println("Admin ID: " + (a1 != null ? a1.getId() : "null"));
-                System.out.println("Admin Email: " + (a1 != null ? a1.getEmail() : "null"));
-                
+            Speed speed = (Speed) s.get(Speed.class, Integer.parseInt(speedType));
+            DaysOftravel dot = (DaysOftravel) s.get(DaysOftravel.class, Integer.parseInt(daysOfTravel));
+            TrainType type = (TrainType) s.get(TrainType.class, Integer.parseInt(trainType));
+            Status status = (Status) s.get(Status.class, Integer.parseInt(trainStatus));
 
-                Train t = new Train();
-                t.setTrain_number(trainNumber);
-                t.setTrain_name(trainName);
+            Train t = new Train();
+            t.setTrain_number(trainNumber);
+            t.setTrain_name(trainName);
 
-                t.setSpeed(speed);
-                t.setDays_of_travel(dot);
-                t.setTrain_type(type);
-                t.setTotal_coaches(totalCoaches);
-                t.setStatus(s);
-                t.setAdmin_id(a1);
+            t.setSpeed_id(speed);
+            t.setDays_of_travel_id(dot);
+            t.setType_id(type);
+            t.setTotal_coaches(totalCoaches);
+            t.setStatus_id(status);
+            t.setAdmin_id(a1);
 
-                session.beginTransaction();
-                session.save(t);
-                session.getTransaction().commit();
+            s.beginTransaction();
+            s.save(t);
+            s.getTransaction().commit();
 
-                responseJson.addProperty("status", true);
-                responseJson.addProperty("message", "Train data received successfully");
-            }
+            responseJson.addProperty("status", true);
+            responseJson.addProperty("message", "Train data received successfully");
 
-        } catch (Exception e) {
-            System.out.println("Error parsing JSON: " + e.getMessage());
-            e.printStackTrace();
-            responseJson.addProperty("status", false);
-            responseJson.addProperty("message", "Error processing train data: " + e.getMessage());
         }
 
         response.setContentType("application/json");
         response.getWriter().write(gson.toJson(responseJson));
+        s.close();
     }
 
 }

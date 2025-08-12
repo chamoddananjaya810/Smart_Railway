@@ -33,13 +33,11 @@ public class VerifyAccount extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-      
 
-       Gson gson = new Gson();
+        Gson gson = new Gson();
         JsonObject responseJson = new JsonObject();
         responseJson.addProperty("status", false);
 
-        
         System.out.println("okkkkkkkkkkkkkkkkkkkkkkk");
 
         try {
@@ -111,9 +109,8 @@ public class VerifyAccount extends HttpServlet {
         }
 
         response.setContentType("application/json");
-            response.getWriter().write(gson.toJson(responseJson));
+        response.getWriter().write(gson.toJson(responseJson));
 
-     
     }
 
 }

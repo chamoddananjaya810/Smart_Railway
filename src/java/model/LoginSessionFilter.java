@@ -37,16 +37,15 @@ public class LoginSessionFilter implements Filter {
 
         if (ses != null) {
             if (ses != null && ses.getAttribute("user") != null) {
+                System.out.println("yes");
                 chain.doFilter(req, res);
+                
             } else {
+                System.out.println("no");
                 response.sendRedirect("sign-in.html");
             }
             
-            if (ses != null && ses.getAttribute("admin") != null) {
-                chain.doFilter(req, res);
-            } else {
-                response.sendRedirect("AdminSignIn.html");
-            }
+         
         }
 
     }

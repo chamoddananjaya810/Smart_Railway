@@ -37,13 +37,10 @@ public class AdminVerifyAccount extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-       
 
         Gson gson = new Gson();
         JsonObject responseJson = new JsonObject();
         responseJson.addProperty("status", false);
-
-        System.out.println("okkkkkkkkkkkkkkkkkkkkkkk");
 
         try {
             JsonObject verification = gson.fromJson(request.getReader(), JsonObject.class);
@@ -65,9 +62,9 @@ public class AdminVerifyAccount extends HttpServlet {
                     out.flush();
                     return; // Exit here if no session
                 }
-                
+
                 email = ses.getAttribute("email").toString();
-                
+
                 System.out.println("Using email from session: " + email);
             }
 
@@ -91,15 +88,14 @@ public class AdminVerifyAccount extends HttpServlet {
                     System.out.println("No admin found with email: " + email + " and verification code: " + verification_code);
                 } else {
                     Admin admin = (Admin) c1.list().get(0);
-                    
-                  LocalDateTime now = LocalDateTime.now();  // current date and time
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-                String formattedDateTime = now.format(formatter);
 
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                Date nowDate = sdf.parse(formattedDateTime);
-                    
-                    
+                    LocalDateTime now = LocalDateTime.now();  // current date and time
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                    String formattedDateTime = now.format(formatter);
+
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    Date nowDate = sdf.parse(formattedDateTime);
+
                     admin.setLast_login(nowDate);
 
                     Transaction tx = s.beginTransaction();
@@ -109,7 +105,8 @@ public class AdminVerifyAccount extends HttpServlet {
                     // Store user in session
                     HttpSession ses = request.getSession(true);
                     ses.setAttribute("admin", admin);
-                    ses.setMaxInactiveInterval(21600);
+                    ses.setMaxInactiveInterval(36000);
+
                     responseJson.addProperty("status", true);
                     responseJson.addProperty("message", "Verification successful");
                     System.out.println("admin verified successfully: " + email);
@@ -124,8 +121,8 @@ public class AdminVerifyAccount extends HttpServlet {
             responseJson.addProperty("message", "Invalid verification request");
         }
 
-     response.setContentType("application/json");
-            response.getWriter().write(gson.toJson(responseJson));
+        response.setContentType("application/json");
+        response.getWriter().write(gson.toJson(responseJson));
 
     }
 }

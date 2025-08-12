@@ -1,13 +1,33 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="si">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Smart Railway - Home</title>
         <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+        <style>
+            .red-card {
+                border-color: #dc3545 !important;
+            }
+
+            .red-card .card-header {
+                background-color: #dc3545 !important;
+                color: white !important;
+            }
+
+            .red-card .card-title,
+            .red-card .text-danger {
+                color: #dc3545 !important;
+            }
+
+            .card:hover {
+                transform: scale(1.02);
+                transition: 0.3s ease-in-out;
+            }
+        </style>
     </head>
-    <body>
+    <body onload="loadRoute();">
         <div id="navbar" ></div>
 
         <!-- Hero Section with Carousel -->
@@ -37,9 +57,9 @@
                                         <div class="badge bg-light bg-opacity-25 text-white fs-6 px-3 py-2 rounded-pill">
                                             <i class="fas fa-clock me-2"></i>Real-time Tracking
                                         </div>
-                                        <div class="badge bg-light bg-opacity-25 text-white fs-6 px-3 py-2 rounded-pill">
+                                        <a href="booking.html" target="_blank" class="badge bg-light bg-opacity-25 text-white fs-6 px-3 py-2 rounded-pill">
                                             <i class="fas fa-map-marker-alt me-2"></i>Route Planning
-                                        </div>
+                                        </a>
                                     </div>
 
                                     <!-- CTA Button -->
@@ -224,436 +244,318 @@
                 <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="4" aria-label="Slide 5"></button>
             </div>
         </div>
+        <!--        card dive-->
+        <div class="container py-5">
+            <div class="row justify-content-center" id="routeContainer">
 
-        <!-- Bootstrap JS -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
-        <script>
-                    let isPlaying = true;
-                    const carousel = new bootstrap.Carousel('#heroCarousel', {
-                        interval: 5000,
-                        ride: 'carousel'
-                    });
 
-                    // Toggle play/pause functionality
-                    function togglePlayPause() {
-                        const playPauseIcon = document.getElementById('playPauseIcon');
 
-                        if (isPlaying) {
-                            carousel.pause();
-                            playPauseIcon.classList.remove('fa-pause');
-                            playPauseIcon.classList.add('fa-play');
-                            isPlaying = false;
-                        } else {
-                            carousel.cycle();
-                            playPauseIcon.classList.remove('fa-play');
-                            playPauseIcon.classList.add('fa-pause');
-                            isPlaying = true;
-                        }
-                    }
 
-                    // Handle book now button
-                    function handleBookNow() {
-                        // Replace with your booking page URL
-                        window.location.href = 'booking.html';
-                        // Or you can show an alert for demo
-                        // alert('Redirecting to booking page...');
-                    }
+            </div>
+        </div>
 
-                    // Add hover effects to buttons
-                    document.addEventListener('DOMContentLoaded', function () {
-                        const bookButtons = document.querySelectorAll('.btn-danger');
-
-                        bookButtons.forEach(button => {
-                            button.addEventListener('mouseenter', function () {
-                                this.style.transform = 'translateY(-2px)';
-                                this.style.transition = 'all 0.3s ease';
-                            });
-
-                            button.addEventListener('mouseleave', function () {
-                                this.style.transform = 'translateY(0)';
-                            });
-                        });
-
-                        // Add fade in animation on load
-                        const heroContent = document.querySelectorAll('.carousel-caption > .container');
-                        heroContent.forEach((content, index) => {
-                            content.style.animation = 'fadeInUp 1.5s ease-out';
-                        });
-                    });
-
-                    // Add some basic animations with CSS keyframes
-                    const style = document.createElement('style');
-                    style.textContent = `
-                @keyframes fadeInUp {
-                    from {
-                        opacity: 0;
-                        transform: translateY(30px);
-                    }
-                    to {
-                        opacity: 1;
-                        transform: translateY(0);
-                    }
-                }
-            
-                .text-shadow {
-                    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-                }
-            
-                .carousel-item::before {
-                    content: '';
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    right: 0;
-                    bottom: 0;
-                    background: linear-gradient(45deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.2) 100%);
-                    z-index: 1;
-                }
-            
-                .carousel-caption {
-                    z-index: 2;
-                }
-            `;
-                    document.head.appendChild(style);
-        </script>
-
-        <div id="navbar"></div>
-
-        <script>
-            fetch('nav-bar.html')
-                    .then(response => response.text())
-                    .then(html => {
-                        document.getElementById('navbar').innerHTML = html;
-                    });
-        </script>
-
-    </body>
-</html>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SignIn Function with Toast Integration</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.1/font/bootstrap-icons.min.css" rel="stylesheet">
-</head>
-<body class="bg-light">
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card shadow">
-                    <div class="card-header bg-primary text-white text-center">
-                        <h4><i class="bi bi-lock-fill me-2"></i>Sign In</h4>
+        <!--        contact Us page-->
+        <div class="bg-danger text-white py-5 mb-5">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-8">
+                        <h1 class="display-4 fw-bold mb-3">
+                            <i class="fas fa-envelope me-3"></i>Contact Us
+                        </h1>
+                        <p class="lead mb-0">We're here to help! Get in touch with our customer service team for any questions, suggestions, or assistance with your railway bookings.</p>
                     </div>
-                    <div class="card-body">
-                        <!-- Sign In Form -->
-                        <form id="signInForm" onsubmit="signIn(event)">
-                            <div class="mb-3">
-                                <label for="email" class="form-label">
-                                    <i class="bi bi-envelope me-2"></i>Email
-                                </label>
-                                <input type="email" class="form-control" id="email" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="password" class="form-label">
-                                    <i class="bi bi-key me-2"></i>Password
-                                </label>
-                                <input type="password" class="form-control" id="password" required>
-                            </div>
-                            <div class="d-grid">
-                                <button type="submit" class="btn btn-primary" id="signInBtn">
-                                    <i class="bi bi-box-arrow-in-right me-2"></i>Sign In
-                                </button>
-                            </div>
-                        </form>
+                    <div class="col-lg-4 text-end d-none d-lg-block">
+                        <i class="fas fa-headset display-1 opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-                        <!-- Traditional Message Display (fallback) -->
-                        <div id="message" class="mt-3 d-none"></div>
+        <!-- Main Content -->
+        <div class="container mb-5">
+            <div class="row g-5">
+                <!-- Contact Form -->
+                <div class="col-lg-8">
+                    <div class="card shadow-sm border-0 h-100">
+                        <div class="card-header bg-danger text-white py-3">
+                            <h4 class="mb-0 fw-semibold">
+                                <i class="fas fa-paper-plane me-2"></i>Send us a Message
+                            </h4>
+                        </div>
+                        <div class="card-body p-4">
+                            <form id="contactForm">
+                                <div class="row g-3">
+                                    <!-- Your Name -->
+                                    <div class="col-md-6">
+                                        <label for="yourName" class="form-label fw-semibold">
+                                            <i class="fas fa-user text-danger me-2"></i>Your Name *
+                                        </label>
+                                        <input type="text" class="form-control form-control-lg" id="yourName" 
+                                               placeholder="Enter your full name" required>
+                                        <div class="invalid-feedback">
+                                            Please provide your name.
+                                        </div>
+                                    </div>
+
+                                    <!-- Your Email -->
+                                    <div class="col-md-6">
+                                        <label for="yourEmail" class="form-label fw-semibold">
+                                            <i class="fas fa-envelope text-danger me-2"></i>Your Email *
+                                        </label>
+                                        <input type="email" class="form-control form-control-lg" id="yourEmail" 
+                                               placeholder="Enter your email address" required>
+                                        <div class="invalid-feedback">
+                                            Please provide a valid email address.
+                                        </div>
+                                    </div>
+
+                                    <!-- Your Mobile -->
+                                    <div class="col-md-6">
+                                        <label for="yourMobile" class="form-label fw-semibold">
+                                            <i class="fas fa-phone text-danger me-2"></i>Your Mobile *
+                                        </label>
+                                        <input type="tel" class="form-control form-control-lg" id="yourMobile" 
+                                               placeholder="Enter your mobile number" required>
+                                        <div class="invalid-feedback">
+                                            Please provide your mobile number.
+                                        </div>
+                                    </div>
+
+                                    <!-- Subject -->
+                                    <div class="col-md-6">
+                                        <label for="subject" class="form-label fw-semibold">
+                                            <i class="fas fa-tag text-danger me-2"></i>Subject *
+                                        </label>
+                                        <select class="form-select form-select-lg" id="subject" required>
+                                            <option value="">Select a subject</option>
+                                            <option value="booking-inquiry">Booking Inquiry</option>
+                                            <option value="ticket-cancellation">Ticket Cancellation</option>
+                                            <option value="refund-request">Refund Request</option>
+                                            <option value="schedule-inquiry">Schedule Inquiry</option>
+                                            <option value="technical-support">Technical Support</option>
+                                            <option value="feedback">Feedback</option>
+                                            <option value="complaint">Complaint</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            Please select a subject.
+                                        </div>
+                                    </div>
+
+                                    <!-- Message -->
+                                    <div class="col-12">
+                                        <label for="message" class="form-label fw-semibold">
+                                            <i class="fas fa-comment text-danger me-2"></i>Message *
+                                        </label>
+                                        <textarea class="form-control" id="message" rows="6" 
+                                                  placeholder="Please describe your inquiry or message in detail..." required></textarea>
+                                        <div class="invalid-feedback">
+                                            Please provide your message.
+                                        </div>
+                                        <div class="form-text">
+                                            <i class="fas fa-info-circle me-1"></i>
+                                            Minimum 10 characters required
+                                        </div>
+                                    </div>
+
+                                    <!-- Submit Button -->
+                                    <div class="col-12 mt-4">
+                                        <button type="submit" class="btn btn-danger btn-lg px-5 py-3 fw-semibold">
+                                            <i class="fas fa-paper-plane me-2"></i>Send Message
+                                        </button>
+                                        <button type="reset" class="btn btn-outline-secondary btn-lg px-4 py-3 ms-3">
+                                            <i class="fas fa-undo me-2"></i>Reset
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Code Examples -->
-                <div class="card mt-4">
-                    <div class="card-header bg-success text-white">
-                        <h5 class="mb-0"><i class="bi bi-code-slash me-2"></i>Fixed Code</h5>
+                <!-- Contact Information -->
+                <div class="col-lg-4">
+                    <div class="card shadow-sm border-0 mb-4">
+                        <div class="card-header bg-danger text-white py-3">
+                            <h5 class="mb-0 fw-semibold">
+                                <i class="fas fa-info-circle me-2"></i>Contact Information
+                            </h5>
+                        </div>
+                        <div class="card-body p-4">
+                            <div class="mb-4">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="bg-danger text-white rounded-circle p-3 me-3">
+                                        <i class="fas fa-phone"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-1 fw-semibold">Phone Support</h6>
+                                        <p class="mb-0 text-muted">+1 (555) 123-4567</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="bg-danger text-white rounded-circle p-3 me-3">
+                                        <i class="fas fa-envelope"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-1 fw-semibold">Email Support</h6>
+                                        <p class="mb-0 text-muted">support@railwaybooking.com</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="bg-danger text-white rounded-circle p-3 me-3">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-1 fw-semibold">Office Address</h6>
+                                        <p class="mb-0 text-muted">123 Railway Station<br>Downtown City, ST 12345</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-0">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="bg-danger text-white rounded-circle p-3 me-3">
+                                        <i class="fas fa-clock"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-1 fw-semibold">Business Hours</h6>
+                                        <p class="mb-1 text-muted">Mon - Fri: 6:00 AM - 10:00 PM</p>
+                                        <p class="mb-0 text-muted">Sat - Sun: 7:00 AM - 9:00 PM</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <h6>Issues Fixed:</h6>
-                        <ul>
-                            <li>Fixed syntax errors (missing semicolons, extra quotes)</li>
-                            <li>Fixed typo: <code>json.massage</code> → <code>json.message</code></li>
-                            <li>Added proper error handling</li>
-                            <li>Integrated toast notifications</li>
-                            <li>Added loading states</li>
-                        </ul>
+
+                    <!-- Emergency Contact -->
+                    <div class="card shadow-sm border-0 mb-4">
+                        <div class="card-header bg-warning text-dark py-3">
+                            <h5 class="mb-0 fw-semibold">
+                                <i class="fas fa-exclamation-triangle me-2"></i>Emergency Contact
+                            </h5>
+                        </div>
+                        <div class="card-body p-4">
+                            <div class="text-center">
+                                <div class="bg-warning text-dark rounded-circle p-3 d-inline-flex mb-3">
+                                    <i class="fas fa-phone-alt fs-4"></i>
+                                </div>
+                                <h6 class="fw-semibold">24/7 Emergency Hotline</h6>
+                                <h4 class="text-danger fw-bold">+1 (555) 911-HELP</h4>
+                                <p class="text-muted mb-0">For urgent travel assistance and emergencies</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FAQ Link -->
+                    <div class="card shadow-sm border-0">
+                        <div class="card-body p-4 text-center">
+                            <i class="fas fa-question-circle text-danger display-4 mb-3"></i>
+                            <h5 class="fw-semibold mb-3">Need Quick Answers?</h5>
+                            <p class="text-muted mb-4">Check our frequently asked questions for instant solutions.</p>
+                            <a href="/faq" class="btn btn-outline-danger">
+                                <i class="fas fa-book me-2"></i>View FAQ
+                            </a>
+                        </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- Demo Buttons -->
-                <div class="card mt-4">
-                    <div class="card-header bg-info text-white">
-                        <h5 class="mb-0"><i class="bi bi-play-circle me-2"></i>Test Different Responses</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="row g-2">
-                            <div class="col-6">
-                                <button class="btn btn-success w-100 btn-sm" onclick="testResponse('success')">
-                                    Success Response
-                                </button>
-                            </div>
-                            <div class="col-6">
-                                <button class="btn btn-danger w-100 btn-sm" onclick="testResponse('error')">
-                                    Error Response
-                                </button>
-                            </div>
-                            <div class="col-6">
-                                <button class="btn btn-warning w-100 btn-sm" onclick="testResponse('verification')">
-                                    Needs Verification
-                                </button>
-                            </div>
-                            <div class="col-6">
-                                <button class="btn btn-secondary w-100 btn-sm" onclick="testResponse('network_error')">
-                                    Network Error
-                                </button>
+            <!-- Additional Information -->
+            <div class="row mt-5">
+                <div class="col-12">
+                    <div class="card shadow-sm border-0">
+                        <div class="card-body p-4">
+                            <div class="row g-4 text-center">
+                                <div class="col-md-3">
+                                    <div class="bg-danger text-white rounded-circle p-3 d-inline-flex mb-3">
+                                        <i class="fas fa-clock"></i>
+                                    </div>
+                                    <h6 class="fw-semibold">Quick Response</h6>
+                                    <p class="text-muted mb-0">We respond to all inquiries within 24 hours</p>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="bg-danger text-white rounded-circle p-3 d-inline-flex mb-3">
+                                        <i class="fas fa-headset"></i>
+                                    </div>
+                                    <h6 class="fw-semibold">Expert Support</h6>
+                                    <p class="text-muted mb-0">Our trained team is ready to assist you</p>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="bg-danger text-white rounded-circle p-3 d-inline-flex mb-3">
+                                        <i class="fas fa-shield-alt"></i>
+                                    </div>
+                                    <h6 class="fw-semibold">Secure Communication</h6>
+                                    <p class="text-muted mb-0">Your information is safe and protected</p>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="bg-danger text-white rounded-circle p-3 d-inline-flex mb-3">
+                                        <i class="fas fa-smile"></i>
+                                    </div>
+                                    <h6 class="fw-semibold">Customer Satisfaction</h6>
+                                    <p class="text-muted mb-0">We're committed to your satisfaction</p>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+        <!--        contact Us page-->
 
-    <!-- Toast Container -->
-    <div class="toast-container position-fixed top-0 end-0 p-3">
-        <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="toast-header">
-                <i id="toastIcon" class="bi bi-info-circle-fill text-primary me-2"></i>
-                <strong id="toastTitle" class="me-auto">Notification</strong>
-                <small class="text-muted">now</small>
-                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-            <div id="toastBody" class="toast-body">
-                Default toast message
-            </div>
-        </div>
-    </div>
+        <div id="footer"></div>
+        <script>
+            // Simple booking function directly in HTML
+            function bookTrain1(routeId) {
+                console.log("Button clicked! Route ID:", routeId);
 
-    <!-- Loading Modal -->
-    <div class="modal fade" id="loadingModal" tabindex="-1" data-bs-backdrop="static">
-        <div class="modal-dialog modal-dialog-centered modal-sm">
-            <div class="modal-content">
-                <div class="modal-body text-center p-4">
-                    <div class="spinner-border text-primary mb-3" role="status">
-                        <span class="visually-hidden">Loading...</span>
-                    </div>
-                    <p class="mb-0">Signing in...</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Toast function
-        function showToast(type, title, message) {
-            const toast = document.getElementById('liveToast');
-            const toastIcon = document.getElementById('toastIcon');
-            const toastTitle = document.getElementById('toastTitle');
-            const toastBody = document.getElementById('toastBody');
-            
-            const configs = {
-                success: { icon: 'bi-check-circle-fill', class: 'text-success' },
-                error: { icon: 'bi-x-circle-fill', class: 'text-danger' },
-                warning: { icon: 'bi-exclamation-triangle-fill', class: 'text-warning' },
-                info: { icon: 'bi-info-circle-fill', class: 'text-info' }
-            };
-            
-            const config = configs[type] || configs.info;
-            toastIcon.className = `bi ${config.icon} ${config.class} me-2`;
-            toastTitle.textContent = title;
-            toastBody.textContent = message;
-            
-            const bsToast = new bootstrap.Toast(toast);
-            bsToast.show();
-        }
-
-        // FIXED VERSION - Your corrected signIn function
-        async function signIn(event) {
-            if (event) event.preventDefault(); // Prevent form submission if called from form
-            
-            // Show loading state
-            const signInBtn = document.getElementById("signInBtn");
-            const originalBtnText = signInBtn.innerHTML;
-            signInBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Signing in...';
-            signInBtn.disabled = true;
-
-            try {
-                const email = document.getElementById("email").value;
-                const password = document.getElementById("password").value;
-                
-                console.log(email);
-                console.log(password);
-                
-                const signInData = {
-                    email: email,
-                    password: password,
-                };
-
-                const signInJson = JSON.stringify(signInData);
-
-                const response = await fetch("SignIn", {
-                    method: "POST",
-                    body: signInJson,
-                    headers: {
-                        "Content-Type": "application/json"
-                    }
-                });
-
-                if (response.ok) {
-                    const json = await response.json();
-                    
-                    if (json.status) {
-                        // Success cases
-                        if (json.message === "1") {
-                            showToast('warning', 'Verification Required', 'Please verify your account to continue.');
-                            setTimeout(() => {
-                                window.location = "verify-account.html";
-                            }, 2000);
-                        } else {
-                            showToast('success', 'Login Successful', 'Welcome back! Redirecting to dashboard...');
-                            setTimeout(() => {
-                                window.location = "index.html";
-                            }, 2000);
-                        }
-                    } else {
-                        // Error from server
-                        // Fixed: json.massage → json.message
-                        const errorMessage = json.message || 'Login failed. Please try again.';
-                        showToast('error', 'Login Failed', errorMessage);
-                        
-                        // Fallback: still update the message div
-                        const messageDiv = document.getElementById("message");
-                        messageDiv.className = "alert alert-danger";
-                        messageDiv.innerHTML = errorMessage;
-                        messageDiv.classList.remove('d-none');
-                    }
+                if (routeId) {
+                    alert("Redirecting to booking page with ID: " + routeId);
+                    window.location.href = `booking.html?routeId=${routeId}`;
                 } else {
-                    // Network/HTTP error
-                    const errorMsg = "Sign in failed. Please check your connection.";
-                    showToast('error', 'Connection Error', errorMsg);
-                    
-                    // Fallback message
-                    const messageDiv = document.getElementById("message");
-                    messageDiv.className = "alert alert-danger";
-                    messageDiv.innerHTML = errorMsg;
-                    messageDiv.classList.remove('d-none');
+                    alert("Route ID නැහැ!");
                 }
-            } catch (error) {
-                // JavaScript/Network error
-                console.error('SignIn error:', error);
-                showToast('error', 'Unexpected Error', 'An unexpected error occurred. Please try again.');
-                
-                const messageDiv = document.getElementById("message");
-                messageDiv.className = "alert alert-danger";
-                messageDiv.innerHTML = "An unexpected error occurred.";
-                messageDiv.classList.remove('d-none');
-            } finally {
-                // Reset button state
-                signInBtn.innerHTML = originalBtnText;
-                signInBtn.disabled = false;
-            }
-        }
-
-        // ALTERNATIVE VERSION - With loading modal
-        async function signInWithModal(event) {
-            if (event) event.preventDefault();
-            
-            // Show loading modal
-            const loadingModal = new bootstrap.Modal(document.getElementById('loadingModal'));
-            loadingModal.show();
-
-            try {
-                const email = document.getElementById("email").value;
-                const password = document.getElementById("password").value;
-                
-                const response = await fetch("SignIn", {
-                    method: "POST",
-                    body: JSON.stringify({ email, password }),
-                    headers: { "Content-Type": "application/json" }
-                });
-
-                const json = await response.json();
-                
-                // Hide loading modal
-                loadingModal.hide();
-                
-                if (response.ok && json.status) {
-                    if (json.message === "1") {
-                        showToast('warning', 'Verification Required', 'Redirecting to verification page...');
-                        setTimeout(() => window.location = "verify-account.html", 1500);
-                    } else {
-                        showToast('success', 'Welcome Back!', 'Login successful. Redirecting...');
-                        setTimeout(() => window.location = "index.html", 1500);
-                    }
-                } else {
-                    showToast('error', 'Login Failed', json.message || 'Invalid credentials');
-                }
-            } catch (error) {
-                loadingModal.hide();
-                showToast('error', 'Connection Error', 'Unable to connect to server');
-            }
-        }
-
-        // Test functions for demonstration
-        function testResponse(type) {
-            const responses = {
-                success: {
-                    status: true,
-                    message: "Login successful"
-                },
-                error: {
-                    status: false,
-                    message: "Invalid email or password"
-                },
-                verification: {
-                    status: true,
-                    message: "1"
-                },
-                network_error: null
-            };
-
-            const json = responses[type];
-            
-            if (type === 'network_error') {
-                showToast('error', 'Network Error', 'Failed to connect to server');
-                return;
             }
 
-            if (json.status) {
-                if (json.message === "1") {
-                    showToast('warning', 'Verification Required', 'Please verify your account to continue.');
-                } else {
-                    showToast('success', 'Login Successful', 'Welcome back! Login successful.');
-                }
-            } else {
-                showToast('error', 'Login Failed', json.message);
+            // Test function
+            function testBooking() {
+                console.log("Testing booking function...");
+                bookTrain1(1);
             }
-        }
+        </script>
+        <script src="assets/js/load-route-home.js"></script>
+        <!-- Bootstrap JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
-        // Form validation
-        document.getElementById('signInForm').addEventListener('submit', function(e) {
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            
-            if (!email || !password) {
-                e.preventDefault();
-                showToast('warning', 'Missing Information', 'Please fill in all required fields.');
-                return false;
-            }
-        });
-    </script>
-</body>
+
+        <div id="navbar"></div>
+        <div id=footer"></div>
+        <script>
+            fetch('nav-bar.html')
+                    .then(response => response.text())
+                    .then(html => {
+                        document.getElementById('navbar').innerHTML = html;
+                    });
+
+            fetch('footer.html')
+                    .then(response => response.text())
+                    .then(html => {
+                        document.getElementById('footer').innerHTML = html;
+                    });
+        </script>
+
+    </body>
 </html>
+
+
+
+
+
+
+

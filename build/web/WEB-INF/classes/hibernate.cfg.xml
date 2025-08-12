@@ -14,5 +14,17 @@
         <mapping class="hibernate.UserSearch"></mapping>
         <mapping class="hibernate.Admin"></mapping>
         <mapping class="hibernate.Train"></mapping>
+        <mapping class="hibernate.TrainClass"></mapping>
+        <mapping class="hibernate.Coaches"></mapping>
+        <mapping class="hibernate.Route"></mapping>
+        <mapping class="hibernate.Station"></mapping>
+        <mapping class="hibernate.Speed"></mapping>
+        <mapping class="hibernate.Status"></mapping>
+        <mapping class="hibernate.TrainType"></mapping>
+        <mapping class="hibernate.DaysOftravel"></mapping>
+        <mapping class="hibernate.TrainStation"></mapping>
+        <mapping class="hibernate.RoutePrice"></mapping>
+        <mapping class="hibernate.SmartBooking"></mapping>
+        <mapping class="hibernate.TrainStationPrice"></mapping>
     </session-factory>
 </hibernate-configuration>

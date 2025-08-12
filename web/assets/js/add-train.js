@@ -1,98 +1,152 @@
 
-async function loadData() {
-    console.log("ok");
+async function loadTrainData() { // Fixed function name
+    try {
+        console.log("Starting to load train data...");
 
-    const response = await fetch("../LoadTrainData");
-    if (response.ok) {
-        const  json = await response.json();
-        console.log(json);
-        
-        if (json.status) {
-            
-            
-             loadSelect("trainType", json.trainTypes);
-             loadSelect("speedType", json.speeds);
-             loadSelect("daysOfTravel", json.daysOfTravel);
-             loadSelect("trainStatus", json.statuses);
-            
-           
+        const response = await fetch("../LoadTrainData", {
+            method: "GET",
+            credentials: "include"
+        });
 
-             console.log("susss");
+        console.log("Response status:", response.status);
+        console.log("Response ok:", response.ok);
 
+        if (response.ok) {
+            const json = await response.json();
+            console.log("Received train data:", json); // Fixed logging
 
-        } else {
-//            document.getElementById("massage").innerHTML = json.massage;
+            if (json.status) {
+                console.log("Train data loaded successfully");
+                console.log("train" + json);
+                // Load all the select options
+                loadSelect("trainType", json.typeList);
+                loadSelect("speedType", json.speeedList);
+                loadSelect("daysOfTravel", json.daysofList);
+                loadSelect("trainStatus", json.statusList);
 
-            console.log("no");
-        }
-    } else {
-//        document.getElementById("massage").innerHTML = "Unable to get product data please try again later";
-        console.log("response error");
-    }
-}
+                console.log("All selects populated successfully");
 
-async function loadTrainTableData() {
-    console.log("ok");
-
-    const response = await fetch("../LoadTrainTable");
-    if (response.ok) {
-        const  json = await response.json();
-        console.log(json);
-        
-        if (json.status) {
-             console.log(json.TrainList); 
-           
-           
-            
-           
-
-             console.log("susss");
-
-
-        } else {
-//            document.getElementById("massage").innerHTML = json.massage;
-
-            console.log("no");
-        }
-    } else {
-//        document.getElementById("massage").innerHTML = "Unable to get product data please try again later";
-        console.log("response error");
-    }
-}
-
-
-
-
-
-
-function loadSelect(selectId, list, isObject = false, key = "value") {
-    const select = document.getElementById(selectId);
-    select.innerHTML = `<option value="">Select</option>`; // reset
-
-    list.forEach(item => {
-        const option = document.createElement("option");
-
-        if (isObject) {
-            const value = item[key];
-            option.value = value;
-            option.textContent = value ? value.replaceAll("_", " ") : "";
-        } else {
-            if (item && typeof item === "string") {
-                option.value = item;
-                option.textContent = item.replaceAll("_", " ");
+            } else {
+                console.log("Server returned error status");
+                showToast('error', 'Invalid Details', json.message || 'Unknown server error');
             }
+        } else {
+            console.error("Network error - Response not ok:", response.status);
+            testResponse('network_error');
         }
+    } catch (error) {
+        console.error("Error in loadTrainData:", error);
+        testResponse('network_error');
+    }
+}
 
+function loadSelect(selectId, list) {
+    const select = document.getElementById(selectId);
+    list.forEach((item) => {
+        const option = document.createElement("option");
+        option.value = item.id; // Use the nested id property
+        option.innerHTML = item.name; // Display the nested name property
         select.appendChild(option);
     });
 }
 
 
-function  loadTrainTableData(){
-    
-    
-    
+
+
+
+
+async function loadTrainTable() {
+    console.log("Loading train table...");
+
+    const response = await fetch("../LoadTrainTable", {
+        method: "GET", // Optional, defaults to "GET"
+        credentials: "include"      // ✅ This sends cookies/session data
+    });
+    if (response.ok) {
+        const json = await response.json();
+
+        if (json.status) {
+            console.log(json);
+            const tbody = document.querySelector("#trainsTable tbody");
+            tbody.innerHTML = ""; // Clear existing rows if any
+
+            json.TrainList.forEach(train => {
+                console.log(train.type_id.name);
+                const row = document.createElement("tr");
+
+                row.innerHTML = `
+                <td><strong>${train.tarin_id}</strong></td>
+                    <td><strong>${train.train_number}</strong></td>
+                    <td>${train.train_name}</td>
+                    <td><span class="badge bg-secondary">${train.type_id.name}</span></td>
+                    <td>${train.speed_id.name}</td>
+                    <td>${train.days_of_travel_id.name}</td>
+                
+                    <td>${train.total_coaches}</td>
+                    <td>
+                        <span class="badge ${train.status_id.name === 'Active' ? 'bg-success' : 'bg-danger'}">
+                            ${train.status_id.name}
+                        </span>
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary me-1" onclick="editTrain(${train.tarin_id})" title="Edit">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger" title="Delete">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </td>
+                `;
+
+                tbody.appendChild(row);
+
+            });
+
+
+        } else {
+            console.log("No train data found.");
+        }
+
+    } else {
+        console.log("Response error: Could not fetch train data.");
+    }
 }
+
+
+
+function alert() {
+    showToast('success', 'Login Successful', 'Welcome back! Redirecting to dashboard...');
+
+
+}
+
+function showToast(type, title, message) {
+    const toast = document.getElementById('liveToast');
+    const toastIcon = document.getElementById('toastIcon');
+    const toastTitle = document.getElementById('toastTitle');
+    const toastBody = document.getElementById('toastBody');
+
+    const configs = {
+        success: {icon: 'bi-check-circle-fill', class: 'text-success'},
+        error: {icon: 'bi-x-circle-fill', class: 'text-danger'},
+        warning: {icon: 'bi-exclamation-triangle-fill', class: 'text-warning'},
+        info: {icon: 'bi-info-circle-fill', class: 'text-info'}
+    };
+
+    const config = configs[type] || configs.info;
+    toastIcon.className = `bi ${config.icon} ${config.class} me-2`;
+    toastTitle.textContent = title;
+    toastBody.textContent = message;
+
+    const bsToast = new bootstrap.Toast(toast);
+    bsToast.show();
+}
+
+//    
+
+
+
+
 
 async function saveTrain() {
     const trainNumber = document.getElementById("trainNumber").value;
@@ -102,48 +156,58 @@ async function saveTrain() {
     const daysOfTravel = document.getElementById("daysOfTravel").value;
     const totalCoaches = document.getElementById("totalCoaches").value;
     const trainStatus = document.getElementById("trainStatus").value;
-   
-    // Use snake_case property names to match Java expectations
+
+
+    console.log(trainType);
+    console.log(daysOfTravel);
+    console.log(speedType);
+
     const train = {
         trainNumber: trainNumber,
         trainName: trainName,
         trainType: trainType,
-        speedType: speedType,  // Note: Java expects 'speed', not 'speed_type'
+        speedType: speedType, // Note: Java expects 'speed', not 'speed_type'
         daysOfTravel: daysOfTravel,
         totalCoaches: totalCoaches,
         trainStatus: trainStatus
+
     };
-    
+
     try {
         // Send request
-        
+
         const trainJson = JSON.stringify(train);
         const response = await fetch("../AddTrainForm", {
             method: "POST",
+
             headers: {
                 "Content-Type": "application/json"
             },
-            body: trainJson
+            body: trainJson,
+            credentials: "include",
         });
-        
+
         // Handle response
         if (response.ok) {
             const json = await response.json();
-            console.log("Server response:", json);  // Fixed: log json, not response
+
             if (json.status) {
-                alert("Train saved successfully!");
-                // Optionally clear form
+
+                showToast('success', 'Successful', 'Train saved successfully!');
                 document.getElementById("trainForm").reset();
             } else {
-                alert("Failed to save train: " + (json.message || "Unknown error"));
+
+                showToast('error', 'Failed to save train', json.message);
             }
         } else {
-            console.error("Server error:", response.status);
-            alert("Failed to communicate with server.");
+
+            showToast('error', 'Server error', 'Failed to communicate with server');
+
         }
     } catch (error) {
-        console.error("Fetch error:", error);
-        alert("An error occurred while saving the train.");
+
+
+        showToast('error', 'Network Error', 'An error occurred while saving the train');
     }
 }
 
@@ -153,10 +217,274 @@ async function saveTrain() {
 
 
 
+async function editTrain(trainId) {
+    console.log("Train ID:", trainId);
+
+    const requestBody = {
+        id: trainId
+    };
+
+    try {
+        const response = await fetch("../SingelTrainData", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(requestBody),
+            credentials: "include"
+        });
+
+
+
+        const json = await response.json();
+
+        if (json.status) {
+
+//            console.log(json);
+
+            editingTrainId = trainId;
+
+
+            console.log(json.trianList[0]);
+
+            //singel  product end
+
+            document.getElementById("trainNumber").value = json.trianList[0].train_number;
+            document.getElementById("trainName").value = json.trianList[0].train_name;
+            document.getElementById("trainType").value = json.trianList[0].type_id.id;
+            document.getElementById("speedType").value = json.trianList[0].speed_id.id;
+            document.getElementById("daysOfTravel").value = json.trianList[0].days_of_travel_id.id;
+            document.getElementById("totalCoaches").value = json.trianList[0].total_coaches;
+            document.getElementById("trainStatus").value = json.trianList[0].status_id.id;
+
+
+// Change modal title
+            const modalTitle = document.querySelector('#addTrainModal .modal-title');
+            if (modalTitle) {
+                modalTitle.innerHTML = '<i class="bi bi-pencil me-2"></i>Edit Train';
+            }
+
+// Change "Save Train" button to "Update Train" with new onclick
+            const modalFooterButtons = document.querySelectorAll('#addTrainModal .modal-footer .btn-danger');
+            modalFooterButtons.forEach(btn => {
+                if (btn.getAttribute('onclick') === 'saveTrain();') {
+                    btn.textContent = 'Update Train';
+                    btn.setAttribute('onclick', `updateTrain(${trainId});`);
+                }
+            });
+
+// Check if modal exists before trying to show it
+            const modalElement = document.getElementById('addTrainModal');
+            if (!modalElement) {
+                console.error("Modal element 'addTrainModal' not found.");
+                alert("Edit modal not found. Please ensure the modal HTML is loaded.");
+                return;
+            }
+
+            // Show modal
+            try {
+                const modal = new bootstrap.Modal(modalElement);
+                modal.show();
+            } catch (error) {
+                console.error("Error showing modal:", error);
+                alert("Error opening edit modal. Please check console for details.");
+            }
+
+
+        } else {
+            console.log("No train data found.");
+        }
+
+
+    } catch (error) {
+        console.error("Fetch error:", error);
+        alert("An error occurred while loading train data.");
+    }
+
+
+}
+
+function resetTrain() {
+    // Clear input fields
+    // Clear text/number fields
+    document.getElementById("trainNumber").value = "";
+    document.getElementById("trainName").value = "";
+    document.getElementById("totalCoaches").value = "";
+
+    // Reset selects to first option (e.g., "Select Type", "Select Speed", etc.)
+    document.getElementById("trainType").selectedIndex = 0;
+    document.getElementById("speedType").selectedIndex = 0;
+    document.getElementById("daysOfTravel").selectedIndex = 0;
+    document.getElementById("trainStatus").selectedIndex = 0;
+
+    // Reset modal title to "Add New Train"
+    const modalTitle = document.querySelector('#addTrainModal .modal-title');
+    if (modalTitle) {
+        modalTitle.innerHTML = '<i class="bi bi-plus-circle me-2"></i>Add New Train';
+    }
+
+    // Reset Save button text and onclick
+    const modalFooterButtons = document.querySelectorAll('#addTrainModal .modal-footer .btn-danger');
+    modalFooterButtons.forEach(btn => {
+        if (btn.getAttribute('onclick')?.includes("updateTrain(")) {
+            btn.textContent = 'Save Train';
+            btn.setAttribute('onclick', 'saveTrain();');
+        }
+    });
+
+    // Optional: reset global edit ID
+    if (typeof editingTrainId !== "undefined") {
+        editingTrainId = null;
+    }
+}
+
+async function updateTrain(trainId) {
+
+    console.log("update" + trainId);
+
+
+
+    const trainNumber = document.getElementById("trainNumber").value;
+    const trainName = document.getElementById("trainName").value;
+    const trainType = document.getElementById("trainType").value;
+    const speedType = document.getElementById("speedType").value;
+    const daysOfTravel = document.getElementById("daysOfTravel").value;
+    const totalCoaches = document.getElementById("totalCoaches").value;
+    const trainStatus = document.getElementById("trainStatus").value;
+
+
+    console.log(trainType);
+    console.log(daysOfTravel);
+    console.log(speedType);
+
+    const train = {
+        trainId: trainId,
+        trainNumber: trainNumber,
+        trainName: trainName,
+        trainType: trainType,
+        speedType: speedType, // Note: Java expects 'speed', not 'speed_type'
+        daysOfTravel: daysOfTravel,
+        totalCoaches: totalCoaches,
+        trainStatus: trainStatus
+
+    };
+
+    try {
+        // Send request
+
+        const trainJson = JSON.stringify(train);
+        const response = await fetch("../UpdateTrainForm", {
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: trainJson,
+            credentials: "include"
+        });
+
+        // Handle response
+        if (response.ok) {
+            const json = await response.json();
+
+            if (json.status) {
+
+                showToast('success', 'Successful', 'Train saved successfully!');
+                document.getElementById("trainForm").reset();
+            } else {
+
+                showToast('error', 'Failed to save train', json.message);
+            }
+        } else {
+
+            showToast('error', 'Server error', 'Failed to communicate with server');
+
+        }
+    } catch (error) {
+
+
+        showToast('error', 'Network Error', 'An error occurred while saving the train');
+    }
+
+}
+
+function ok() {
+    testResponse('success');
+
+}
+function error() {
+    testResponse('error');
+
+}
+function verification() {
+    testResponse('verification');
+
+}
+function network_error() {
+    testResponse('network_error');
+
+}
+// Toast function
+function showToast(type, title, message) {
+    const toast = document.getElementById('liveToast');
+    const toastIcon = document.getElementById('toastIcon');
+    const toastTitle = document.getElementById('toastTitle');
+    const toastBody = document.getElementById('toastBody');
+
+    const configs = {
+        success: {icon: 'bi-check-circle-fill', class: 'text-success'},
+        error: {icon: 'bi-x-circle-fill', class: 'text-danger'},
+        warning: {icon: 'bi-exclamation-triangle-fill', class: 'text-warning'},
+        info: {icon: 'bi-info-circle-fill', class: 'text-info'}
+    };
+
+    const config = configs[type] || configs.info;
+    toastIcon.className = `bi ${config.icon} ${config.class} me-2`;
+    toastTitle.textContent = title;
+    toastBody.textContent = message;
+
+    const bsToast = new bootstrap.Toast(toast);
+    bsToast.show();
+}
 
 
 
 
+// Test functions for demonstration
+function testResponse(type) {
+    const responses = {
+        success: {
+            status: true,
+            message: "Login successful"
+        },
+        error: {
+            status: false,
+            message: "Invalid email or password"
+        },
+        verification: {
+            status: true,
+            message: "1"
+        },
+        network_error: null
+    };
+
+    const json = responses[type];
+
+    if (type === 'network_error') {
+        showToast('error', 'Network Error', 'Failed to connect to server');
+        return;
+    }
+
+    if (json.status) {
+        if (json.message === "1") {
+            showToast('warning', 'Verification Required', 'Please verify your account to continue.');
+        } else {
+            showToast('success', 'Login Successful', 'Welcome back! Login successful.');
+        }
+    } else {
+        showToast('error', 'Login Failed', json.message);
+    }
+}
 //}
 //let trains = [
 //    {

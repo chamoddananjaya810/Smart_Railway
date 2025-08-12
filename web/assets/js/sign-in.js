@@ -11,7 +11,7 @@ async function signIn() {
 
     const signIn = {
         email: email,
-        password: password,
+        password: password
     };
 
     const signInJson = JSON.stringify(signIn);

@@ -16,10 +16,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import model.DaysOfTravel;
-import model.Speed;
-import model.Status;
-import model.TrainType;
+
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -37,17 +34,19 @@ public class LoadTrainTable extends HttpServlet {
 
         JsonObject responseJson = new JsonObject();
         responseJson.addProperty("status", false);
-        
-        
+
         SessionFactory sf = HibernateUtil.getSessionFactory();
         Session s = sf.openSession();
         try {
-         
 
             Criteria criteria = s.createCriteria(Train.class);
             List<Train> TrainList = criteria.list();
 
-           responseJson.add("TrainList", gson.toJsonTree(TrainList));
+            for (Train train : TrainList) {
+                train.setAdmin_id(null);
+            }
+
+            responseJson.add("TrainList", gson.toJsonTree(TrainList));
 
             responseJson.addProperty("status", true);
 
@@ -57,6 +56,7 @@ public class LoadTrainTable extends HttpServlet {
         }
         response.setContentType("application/json");
         response.getWriter().write(gson.toJson(responseJson));
+        s.close();
     }
 
 }

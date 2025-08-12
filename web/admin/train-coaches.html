@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Coach Management</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
+
+
+    </head>
+    <body class="bg-light" onload="dashboard(); loadCoachesData(); loadCoachTable()">  
+        <div id="dashboard"></div>
+        <!-- Header -->
+        <div class="bg-danger text-white py-4 mb-4">
+            <div class="container-fluid">
+                <div class="d-flex align-items-center justify-content-between flex-wrap">
+                    <div>
+                        <h1 class="mb-1"><i class="bi bi-box-seam me-3"></i>Coach Management</h1>
+                        <p class="mb-0 opacity-75">Manage train coaches and seating arrangements</p>
+                    </div>
+                    <div class="d-flex align-items-center gap-3 flex-wrap mt-3 mt-lg-0">
+                        <input type="text" class="form-control" placeholder="Search coaches..." id="searchInput" style="width: 200px;">
+                        <button class="btn btn-light" data-bs-toggle="modal" data-bs-target="#addCoachModal">
+                            <i class="bi bi-plus-lg me-2"></i>Add New Coach
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="container-fluid px-4">
+            <div class="row g-4 mb-4">
+                <div class="col-md-3 col-sm-6">
+                    <div class="card bg-danger text-white h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5 class="card-title">Total Coaches</h5>
+                                    <h2 class="mb-0" id="totalCoaches">12</h2>
+                                    <small class="opacity-75">Across all trains</small>
+                                </div>
+                                <i class="bi bi-box-seam display-4 opacity-50"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="card border-danger h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5 class="card-title text-danger">Total Seats</h5>
+                                    <h2 class="mb-0 text-danger" id="totalSeats">856</h2>
+                                    <small class="text-danger">Available capacity</small>
+                                </div>
+                                <i class="bi bi-person-fill display-4 text-danger opacity-50"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="card bg-danger text-white h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5 class="card-title">AC Coaches</h5>
+                                    <h2 class="mb-0" id="acCoaches">8</h2>
+                                    <small class="opacity-75">Air conditioned</small>
+                                </div>
+                                <i class="bi bi-snow display-4 opacity-50"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="card border-danger h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5 class="card-title text-danger">Non-AC Coaches</h5>
+                                    <h2 class="mb-0 text-danger" id="nonAcCoaches">4</h2>
+                                    <small class="text-danger">General coaches</small>
+                                </div>
+                                <i class="bi bi-wind display-4 text-danger opacity-50"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Coaches Table -->
+            <div class="card shadow">
+                <div class="card-header bg-transparent p-4 border-bottom">
+                    <div class="d-flex justify-content-between align-items-center flex-wrap">
+                        <h5 class="mb-0"><i class="bi bi-list me-2"></i>All Coaches</h5>
+                        <div class="d-flex gap-2 flex-wrap">
+                            <select class="form-select" id="trainFilter" style="width: auto;">
+                                <option value="">All Trains</option>
+                            </select>
+                            <select class="form-select" id="classFilter" style="width: auto;">
+                                <option value="">All Classes</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0" id="coachesTable">
+                        <thead class="table-danger">
+                            <tr>
+                                <th>ID</th>
+                                <th>Coach Name</th>
+                                <th>Total Seats</th>
+                                <th>Train</th>
+                                <th>Class</th>
+                                <th>Actions</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add/Edit Coach Modal -->
+        <div class="modal fade" id="addCoachModal" tabindex="-1" aria-labelledby="addCoachModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title">
+                            <i class="bi bi-plus-circle me-2"></i>Add New Coach
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        
+                            <input type="hidden" id="coachId" value="">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Coach Name <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="coach" placeholder="e.g., A1, B2, S1" required>
+                                    <div class="form-text">Enter coach identifier (e.g., A1 for AC First Class)</div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label">Total Seats <span class="text-danger">*</span></label>
+                                    <input type="number" class="form-control" id="seat" placeholder="e.g., 72" min="1" max="120" required>
+                                    <div class="form-text">Number of seats in this coach</div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label">Select Train <span class="text-danger">*</span></label>
+                                    <select class="form-select" id="trains" required>
+                                        <option value="0">Choose Train</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label">Select Class <span class="text-danger">*</span></label>
+                                    <select class="form-select" id="class" required>
+                                        <option value="0">Choose Class</option>
+                                    </select>
+                                </div>
+                            </div>
+                      
+                    </div>
+
+                    <!--                    alert-->
+
+                    <div class="toast-container position-fixed top-0 end-0 p-3">
+                        <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                            <div class="toast-header">
+                                <i id="toastIcon" class="bi bi-info-circle-fill text-primary me-2"></i>
+                                <strong id="toastTitle" class="me-auto">Notification</strong>
+                                <small class="text-muted">now</small>
+                                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                            </div>
+                            <div id="toastBody" class="toast-body">
+                                Default toast message
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--                    alert-->
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal" onclick="resetCoach();">Cancel</button>
+                        <button type="button" class="btn btn-danger" onclick="saveCoach1();">Save Coach</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Delete Confirmation Modal -->
+        <div class="modal fade" id="deleteModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title"><i class="bi bi-exclamation-triangle me-2"></i>Confirm Delete</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to delete this coach? This action cannot be undone.</p>
+                        <div class="alert alert-warning">
+                            <strong>Coach:</strong> <span id="deleteCoachName"></span><br>
+                            <strong>Seats:</strong> <span id="deleteCoachSeats"></span>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-danger" onclick="confirmDelete();">Delete Coach</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="../assets/js/dashboard.js"></script>
+        <script src="../assets/js/add-coaches.js"></script>
+
+    </body>
+</html>

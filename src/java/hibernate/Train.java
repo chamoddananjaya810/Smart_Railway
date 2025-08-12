@@ -15,10 +15,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import model.DaysOfTravel;
-import model.Speed;
-import model.Status;
-import model.TrainType;
 
 /**
  *
@@ -71,45 +67,45 @@ public class Train implements Serializable {
     }
 
     /**
-     * @return the speed
+     * @return the speed_id
      */
-    public Speed getSpeed() {
-        return speed;
+    public Speed getSpeed_id() {
+        return speed_id;
     }
 
     /**
-     * @param speed the speed to set
+     * @param speed_id the speed_id to set
      */
-    public void setSpeed(Speed speed) {
-        this.speed = speed;
+    public void setSpeed_id(Speed speed_id) {
+        this.speed_id = speed_id;
     }
 
     /**
-     * @return the days_of_travel
+     * @return the days_of_travel_id
      */
-    public DaysOfTravel getDays_of_travel() {
-        return days_of_travel;
+    public DaysOftravel getDays_of_travel_id() {
+        return days_of_travel_id;
     }
 
     /**
-     * @param days_of_travel the days_of_travel to set
+     * @param days_of_travel_id the days_of_travel_id to set
      */
-    public void setDays_of_travel(DaysOfTravel days_of_travel) {
-        this.days_of_travel = days_of_travel;
+    public void setDays_of_travel_id(DaysOftravel days_of_travel_id) {
+        this.days_of_travel_id = days_of_travel_id;
     }
 
     /**
-     * @return the train_type
+     * @return the type_id
      */
-    public TrainType getTrain_type() {
-        return train_type;
+    public TrainType getType_id() {
+        return type_id;
     }
 
     /**
-     * @param train_type the train_type to set
+     * @param type_id the type_id to set
      */
-    public void setTrain_type(TrainType train_type) {
-        this.train_type = train_type;
+    public void setType_id(TrainType type_id) {
+        this.type_id = type_id;
     }
 
     /**
@@ -127,17 +123,17 @@ public class Train implements Serializable {
     }
 
     /**
-     * @return the status
+     * @return the status_id
      */
-    public Status getStatus() {
-        return status;
+    public Status getStatus_id() {
+        return status_id;
     }
 
     /**
-     * @param status the status to set
+     * @param status_id the status_id to set
      */
-    public void setStatus(Status status) {
-        this.status = status;
+    public void setStatus_id(Status status_id) {
+        this.status_id = status_id;
     }
 
     /**
@@ -165,24 +161,27 @@ public class Train implements Serializable {
     @Column(name = "train_name", length = 200, nullable = false)
     private String train_name;
 
-    @Enumerated(EnumType.STRING) // or EnumType.ORDINAL
-    private Speed speed;
-//    @Column(name = "speed", length = 200, nullable = false)
-//    private String speed;
+    @ManyToOne
+    @JoinColumn(name = "speed_id", nullable = false)
+    private Speed speed_id;
 
-    @Enumerated(EnumType.STRING)
-    private DaysOfTravel days_of_travel;
+    @ManyToOne
+    @JoinColumn(name = "days_of_travel_id", nullable = false)
+    private DaysOftravel days_of_travel_id;
 
-    @Enumerated(EnumType.STRING)
-    private TrainType train_type;
+    @ManyToOne
+    @JoinColumn(name = "type_id", nullable = false)
+    private TrainType type_id;
 
     @Column(name = "total_coaches", length = 45, nullable = false)
     private String total_coaches;
 
-    @Enumerated(EnumType.STRING)
-    private Status status;
+    @ManyToOne
+    @JoinColumn(name = "status_id", nullable = false)
+    private Status status_id;
 
     @ManyToOne
-    @JoinColumn(name = "admin_id",nullable = false)
+    @JoinColumn(name = "admin_id", nullable = false)
     private Admin admin_id;
+
 }

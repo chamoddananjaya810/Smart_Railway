@@ -14,7 +14,7 @@ import java.util.Random;
  * @author Chamod
  */
 public class Util {
-    
+
     public static String genaratecode() {
         Random random = new Random();
 
@@ -34,6 +34,15 @@ public class Util {
         return password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=]).{8,}$");
 
     }
+
+    public static boolean isInterger(String value) {
+        return value.matches("^-?\\d+$");
+    }
+
+    public static boolean isDouble(String text) {
+        return text.matches("^-?\\d*(\\.\\d+)?$");
+    }
+
     public static boolean isValidDOB(String dobString) {
         try {
             LocalDate dob = LocalDate.parse(dobString, DateTimeFormatter.ofPattern("yyyy-MM-dd"));

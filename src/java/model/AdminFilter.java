@@ -23,9 +23,9 @@ import javax.servlet.http.HttpSession;
  *
  * @author Chamod
  */
-@WebFilter(filterName = "AdminFilter", urlPatterns = {"/admin/add-train.html"})
+@WebFilter(filterName = "AdminFilter", urlPatterns = {""})
 public class AdminFilter implements Filter {
-
+//,"/admin/train-coaches.html"/admin/add-train.html
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
 

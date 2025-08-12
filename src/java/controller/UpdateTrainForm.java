@@ -4,6 +4,17 @@
  */
 package controller;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import hibernate.Admin;
+import hibernate.Coaches;
+import hibernate.DaysOftravel;
+import hibernate.HibernateUtil;
+import hibernate.Speed;
+import hibernate.Status;
+import hibernate.Train;
+import hibernate.TrainClass;
+import hibernate.TrainType;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -11,6 +22,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import model.Util;
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 
 /**
  *
@@ -19,69 +35,79 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "UpdateTrainForm", urlPatterns = {"/UpdateTrainForm"})
 public class UpdateTrainForm extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet UpdateTrainForm</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet UpdateTrainForm at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Gson gson = new Gson();
+        JsonObject train = gson.fromJson(request.getReader(), JsonObject.class);
+        JsonObject responseJson = new JsonObject();
+        responseJson.addProperty("status", false);
+
+        // Use camelCase field names to match JavaScript
+        String trainId = train.get("trainId").getAsString();
+        String trainNumber = train.get("trainNumber").getAsString();
+        String trainName = train.get("trainName").getAsString();
+        String speedType = train.get("speedType").getAsString();
+
+        String daysOfTravel = train.get("daysOfTravel").getAsString();
+
+        String trainType = train.get("trainType").getAsString();
+
+        String totalCoaches = train.get("totalCoaches").getAsString();
+        String trainStatus = train.get("trainStatus").getAsString();
+
+        SessionFactory sf = HibernateUtil.getSessionFactory();
+        Session s = sf.openSession();
+
+        if (request.getSession().getAttribute("admin") == null) {
+            responseJson.addProperty("message", "Please sign in!");
+        } else if (trainNumber.isEmpty()) {
+            responseJson.addProperty("message", "Please enter Train Number!");
+        } else if ("Select Type".equals(speedType)) {
+            responseJson.addProperty("message", "Please enter valid Speed!");
+        } else if ("Select Speed".equals(daysOfTravel)) {
+            responseJson.addProperty("message", "Please enter valid daysOfTravel!");
+        } else if ("Select Days".equals(trainType)) {
+            responseJson.addProperty("message", "Please enter valid trainType!");
+        } else if ("Select Status".equals(trainStatus)) {
+            responseJson.addProperty("message", "Please enter valid trainStatus!");
+        } else {
+            Admin admin = (Admin) request.getSession().getAttribute("admin");
+            Criteria c1 = s.createCriteria(Admin.class);
+            c1.add(Restrictions.eq("email", admin.getEmail()));
+            Admin a1 = (Admin) c1.uniqueResult();
+
+            Speed speed = (Speed) s.get(Speed.class, Integer.parseInt(speedType));
+            DaysOftravel dot = (DaysOftravel) s.get(DaysOftravel.class, Integer.parseInt(daysOfTravel));
+            TrainType type = (TrainType) s.get(TrainType.class, Integer.parseInt(trainType));
+            Status status = (Status) s.get(Status.class, Integer.parseInt(trainStatus));
+
+            Train t = (Train) s.get(Train.class, Integer.parseInt(trainId));
+
+            if (t != null) {
+                t.setTrain_number(trainNumber);
+                t.setTrain_name(trainName);
+                t.setSpeed_id(speed);
+                t.setDays_of_travel_id(dot);
+                t.setType_id(type);
+                t.setTotal_coaches(totalCoaches);
+                t.setStatus_id(status);
+                t.setAdmin_id(a1);
+
+                s.beginTransaction();
+                s.update(t); // or s.saveOrUpdate(t)
+                s.getTransaction().commit();
+
+                responseJson.addProperty("status", true);
+                responseJson.addProperty("message", "Train data updated successfully");
+            } else {
+                responseJson.addProperty("status", false);
+                responseJson.addProperty("message", "Train not found");
+            }
+
         }
+        response.setContentType("application/json");
+        response.getWriter().write(gson.toJson(responseJson));
+        s.close();
     }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
 
 }

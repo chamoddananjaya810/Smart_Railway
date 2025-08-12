@@ -6,8 +6,12 @@ package controller;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import hibernate.DaysOftravel;
 import hibernate.HibernateUtil;
+import hibernate.Speed;
+import hibernate.Status;
 import hibernate.Train;
+import hibernate.TrainType;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -16,10 +20,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import model.DaysOfTravel;
-import model.Speed;
-import model.Status;
-import model.TrainType;
+
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -38,33 +39,38 @@ public class LoadTrainData extends HttpServlet {
 
         JsonObject responseJson = new JsonObject();
 
-//        SessionFactory sf = HibernateUtil.getSessionFactory();
-//        Session s = sf.openSession();
+        SessionFactory sf = HibernateUtil.getSessionFactory();
+        Session s = sf.openSession();
         try {
-            // Get enum values
-            Speed[] speeds = Speed.values();
-            DaysOfTravel[] dot = DaysOfTravel.values();
-            TrainType[] types = TrainType.values();
-            Status[] status = Status.values();
 
+            Criteria c1 = s.createCriteria(Speed.class);
+            List<Speed> speeedList = c1.list();
 
-            responseJson.add("speeds", gson.toJsonTree(speeds));
-            responseJson.add("daysOfTravel", gson.toJsonTree(dot));
-            responseJson.add("trainTypes", gson.toJsonTree(types));
-            responseJson.add("statuses", gson.toJsonTree(status));
+            Criteria c2 = s.createCriteria(Status.class);
+            List<Status> statusList = c2.list();
 
+            Criteria c3 = s.createCriteria(TrainType.class);
+            List<TrainType> typeList = c3.list();
+
+            Criteria c4 = s.createCriteria(DaysOftravel.class);
+            List<DaysOftravel> daysofList = c4.list();
+
+            responseJson.add("speeedList", gson.toJsonTree(speeedList));
+            responseJson.add("statusList", gson.toJsonTree(statusList));
+            responseJson.add("typeList", gson.toJsonTree(typeList));
+            responseJson.add("daysofList", gson.toJsonTree(daysofList));
+         
             responseJson.addProperty("status", true);
 
+            response.setContentType("application/json");
+            response.getWriter().write(gson.toJson(responseJson));
             
-            
-            
-            
+
         } catch (Exception e) {
             e.printStackTrace();
             responseJson.addProperty("status", false);
         }
-        response.setContentType("application/json");
-        response.getWriter().write(gson.toJson(responseJson));
+      s.close();
     }
 
 }

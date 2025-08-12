@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="si">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Train Destination Cards</title>
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            >
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+        <style>
+            .red-card {
+                border-color: #dc3545 !important;
+            }
+
+            .red-card .card-header {
+                background-color: #dc3545 !important;
+                color: white !important;
+            }
+
+            .red-card .card-title,
+            .red-card .text-danger {
+                color: #dc3545 !important;
+            }
+
+            .card:hover {
+                transform: scale(1.02);
+                transition: 0.3s ease-in-out;
+            }
+        </style>
+    </head>
+    <body class="bg-light"   onload="loadRouteList();">
+        <div id="navbar" ></div>
+        <div class="container py-5">
+
+            <!-- Selection Form -->
+            <div class="row justify-content-center mb-4">
+                <div class="col-md-8">
+                    <div class="card border-danger">
+                        <div class="card-header bg-danger text-white text-center">
+                            <h4 class="mb-0">🚆 ගමනාන්ත තෝරන්න</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold text-danger">පිටත් වන ස්ථානය:</label>
+                                    <select class="form-select border-danger" id="departure">
+                                        <option value="">තෝරන්න...</option>
+                                        <option value="කොළඹ">කොළඹ</option>
+                                        <option value="නවගමුව">නවගමුව</option>
+                                        <option value="කුරුණෑගල">කුරුණෑගල</option>
+                                        <option value="අනුරාධපුර">අනුරාධපුර</option>
+                                        <option value="කැන්ඩි">කැන්ඩි</option>
+                                        <option value="ගම්පහ">ගම්පහ</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold text-danger">ගමනාන්තය:</label>
+                                    <select class="form-select border-danger" id="destination">
+                                        <option value="">තෝරන්න...</option>
+                                        <option value="කොළඹ">කොළඹ</option>
+                                        <option value="නවගමුව">නවගමුව</option>
+                                        <option value="කුරුණෑගල">කුරුණෑගල</option>
+                                        <option value="අනුරාධපුර">අනුරාධපුර</option>
+                                        <option value="කැන්ඩි">කැන්ඩි</option>
+                                        <option value="ගම්පහ">ගම්පහ</option>
+                                        <option value="මාතර">මාතර</option>
+                                        <option value="ගාල්ල">ගාල්ල</option>
+                                        <option value="බදුල්ල">බදුල්ල</option>
+                                    </select>
+                                </div>
+                                <div class="col-12 text-center">
+                                    <button class="btn btn-danger btn-lg px-5" onclick="searchTrains()">
+                                        🚆 ගමනාන්ත දැක්වීම
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Message -->
+            <div id="searchMessage" class="text-center mb-4 d-none">
+                <div class="alert alert-info">
+                    <h5 class="mb-0">🔍 <span id="searchRoute"></span> සඳහා ලබා ගත හැකි දුම්රිය සේවා</h5>
+                </div>
+            </div>
+
+            <!-- Card Container -->
+            <div id="cardContainer" class="row justify-content-center d-none">
+                <!-- Cards will be generated here -->
+            </div>
+
+            <!-- No Results -->
+            <div id="noResults" class="text-center d-none">
+                <div class="alert alert-warning">
+                    <h5>😔 කණගාටුයි!</h5>
+                    <p class="mb-0">මෙම ගමන සඳහා දුම්රිය සේවාවක් නොමැත. කරුණාකර වෙනත් ගමනාන්තයක් තෝරන්න.</p>
+                </div>
+            </div>
+        </div>
+        <div class="container py-5">
+            <div class="row justify-content-center" id="routeContainer2">
+
+                <!-- Card 1 -->
+                <div class="col-sm-6 col-lg-4 mb-4"  >
+                    <div class="card red-card bg-white text-dark shadow-sm h-100">
+                        <div class="card-header border-0 py-2">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="fw-bold">
+                                    <i class="fas fa-train me-1"></i>
+                                    Udarata Menike Express
+                                </small>
+                                <span class="badge bg-light text-dark">Express</span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title text-center fw-bold mb-3">
+                                <i class="fas fa-route me-2"></i>
+                                කොළඹ ➜ බදුල්ල
+                            </h5>
+                            <div class="row mb-3">
+                                <div class="col-5 text-center">
+                                    <div class="bg-success-subtle rounded-3 p-2">
+                                        <i class="fas fa-play-circle text-success"></i>
+                                        <div class="fw-bold text-success">05:45</div>
+                                        <small class="text-muted">පිටත් වීම</small>
+                                    </div>
+                                </div>
+                                <div class="col-2 text-center">
+                                    <div class="mt-2">
+                                        <i class="fas fa-arrow-right text-danger"></i>
+                                        <div class="small text-muted">9h 15m</div>
+                                    </div>
+                                </div>
+                                <div class="col-5 text-center">
+                                    <div class="bg-danger-subtle rounded-3 p-2">
+                                        <i class="fas fa-stop-circle text-danger"></i>
+                                        <div class="fw-bold text-danger">15:00</div>
+                                        <small class="text-muted">පැමිණීම</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-center gap-3">
+                                    <span title="WiFi Available"><i class="fas fa-wifi text-success"></i></span>
+                                    <span title="Food Service"><i class="fas fa-utensils text-warning"></i></span>
+                                    <span title="AC Available"><i class="fas fa-snowflake text-info"></i></span>
+                                    <span title="Power Outlet"><i class="fas fa-plug text-primary"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer border-0 bg-transparent">
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-danger" >
+                                    <i class="fas fa-ticket-alt me-2"></i>
+                                    Book Now | වෙන්කරවන්න
+                                </button>
+                                <button class="btn btn-outline-secondary btn-sm">
+                                    <i class="fas fa-info-circle me-1"></i>
+                                    More Details
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+        <script src="assets/js/load-route-booking.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <div id="navbar"></div>
+
+        <script>
+                                    fetch('nav-bar.html')
+                                            .then(response => response.text())
+                                            .then(html => {
+                                                document.getElementById('navbar').innerHTML = html;
+                                            });
+        </script>
+        <script>
+            // Sample train data - you can replace this with database calls
+            const trainData = [
+                {
+                    departure: "නවගමුව",
+                    destination: "කොළඹ",
+                    departureTime: "07:00 AM",
+                    arrivalTime: "09:30 AM",
+                    trainNumber: "1015",
+                    totalSeats: 120,
+                    availableSeats: 45
+                },
+                {
+                    departure: "කුරුණෑගල",
+                    destination: "මාතර",
+                    departureTime: "10:00 AM",
+                    arrivalTime: "02:15 PM",
+                    trainNumber: "2022",
+                    totalSeats: 100,
+                    availableSeats: 28
+                },
+                {
+                    departure: "අනුරාධපුර",
+                    destination: "ගාල්ල",
+                    departureTime: "05:30 PM",
+                    arrivalTime: "10:00 PM",
+                    trainNumber: "3011",
+                    totalSeats: 90,
+                    availableSeats: 12
+                },
+                {
+                    departure: "කොළඹ",
+                    destination: "කැන්ඩි",
+                    departureTime: "06:00 AM",
+                    arrivalTime: "09:15 AM",
+                    trainNumber: "4001",
+                    totalSeats: 150,
+                    availableSeats: 67
+                },
+                {
+                    departure: "කැන්ඩි",
+                    destination: "කොළඹ",
+                    departureTime: "03:30 PM",
+                    arrivalTime: "06:45 PM",
+                    trainNumber: "4002",
+                    totalSeats: 150,
+                    availableSeats: 89
+                },
+                {
+                    departure: "කොළඹ",
+                    destination: "ගම්පහ",
+                    departureTime: "08:00 AM",
+                    arrivalTime: "08:45 AM",
+                    trainNumber: "5001",
+                    totalSeats: 80,
+                    availableSeats: 23
+                },
+                {
+                    departure: "ගම්පහ",
+                    destination: "කොළඹ",
+                    departureTime: "05:15 PM",
+                    arrivalTime: "06:00 PM",
+                    trainNumber: "5002",
+                    totalSeats: 80,
+                    availableSeats: 34
+                },
+                {
+                    departure: "කොළඹ",
+                    destination: "බදුල්ල",
+                    departureTime: "09:30 AM",
+                    arrivalTime: "04:45 PM",
+                    trainNumber: "6001",
+                    totalSeats: 120,
+                    availableSeats: 56
+                }
+            ];
+
+            function searchTrains() {
+                const departure = document.getElementById('departure').value;
+                const destination = document.getElementById('destination').value;
+
+                if (!departure || !destination) {
+                    alert('කරුණාකර පිටත් වන ස්ථානය සහ ගමනාන්තය තෝරන්න!');
+                    return;
+                }
+
+                if (departure === destination) {
+                    alert('පිටත් වන ස්ථානය සහ ගමනාන්තය එකම නොවිය යුතුයි!');
+                    return;
+                }
+
+                // Filter trains based on selection
+                const availableTrains = trainData.filter(train =>
+                    train.departure === departure && train.destination === destination
+                );
+
+                // Show search message
+                document.getElementById('searchRoute').textContent = departure + ' → ' + destination;
+                document.getElementById('searchMessage').classList.remove('d-none');
+
+                const cardContainer = document.getElementById('cardContainer');
+                const noResults = document.getElementById('noResults');
+
+                if (availableTrains.length === 0) {
+                    cardContainer.classList.add('d-none');
+                    noResults.classList.remove('d-none');
+                    return;
+                }
+
+                // Hide no results and show cards
+                noResults.classList.add('d-none');
+                cardContainer.classList.remove('d-none');
+
+                // Generate cards
+                cardContainer.innerHTML = '';
+                availableTrains.forEach(train => {
+                    const cardHtml = `
+                <div class="col-md-4 mb-4">
+                  <div class="card border-danger bg-white text-dark h-100">
+                    <div class="card-body d-flex flex-column justify-content-between">
+                      <div>
+                        <h5 class="card-title text-danger text-center fw-bold">🚆 ${train.departure} ➜ ${train.destination}</h5>
+                        <hr class="border-danger">
+                        <p><strong class="text-danger">පිටත් වීම:</strong> ${train.departureTime}</p>
+                        <p><strong class="text-danger">පැමිණීම:</strong> ${train.arrivalTime}</p>
+                        <p><strong class="text-danger">අංකය:</strong> ${train.trainNumber}</p>
+                        <p><strong class="text-danger">ආසන:</strong> ${train.totalSeats}</p>
+                        <p><strong class="text-danger">ඉතිරි:</strong> <span class="${train.availableSeats < 20 ? 'text-warning fw-bold' : ''}">${train.availableSeats}</span></p>
+                        ${train.availableSeats < 20 ? '<div class="alert alert-warning py-1 small">⚠️ සීමිත ආසන!</div>' : ''}
+                      </div>
+                      <div class="text-center mt-3">
+                        <button class="btn btn-danger btn-sm" onclick="bookTrain('${train.trainNumber}', '${train.departure}', '${train.destination}')">
+                          🚀 වෙන්කරවන්න
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              `;
+                    cardContainer.innerHTML += cardHtml;
+                });
+
+                // Scroll to results
+                setTimeout(() => {
+                    document.getElementById('searchMessage').scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }, 100);
+            }
+
+            function bookTrain(trainNumber, departure, destination) {
+                alert(`🎫 වෙන්කරවීම ආරම්භ කරමින්...\n\n🚆 දුම්රිය: ${trainNumber}\n📍 ගමන: ${departure} → ${destination}\n\n✅ ඔබේ වෙන්කරවීම සත්‍යාපනය කරන්න!`);
+            }
+
+            // Reset form when page loads
+            document.addEventListener('DOMContentLoaded', function () {
+                document.getElementById('departure').value = '';
+                document.getElementById('destination').value = '';
+            });
+        </script>
+    </body>
+</html>

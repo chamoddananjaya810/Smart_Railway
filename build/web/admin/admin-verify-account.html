@@ -23,6 +23,8 @@
                             <h3 class="mb-2">Verify Your Account</h3>
                             <p class="mb-0 opacity-75">Enter the 5-digit code sent to your email</p>
                         </div>
+                        <h1 id="welcome"></h1> <!-- You can show email here -->
+
 
                         <!-- Body -->
                         <div class="card-body p-4">
@@ -30,7 +32,17 @@
                                 <p class="text-muted">We've sent a verification code to:</p>
                                 <p class="fw-bold text-danger" id="emailDisplay">user@example.com</p>
                             </div>
-
+                            <script>
+                                // Get email from URL query parameter
+                                const urlParams = new URLSearchParams(window.location.search);
+                                const email = urlParams.get("email");
+                             
+                                if (email) {
+                                    document.getElementById("emailDisplay").innerText = email;
+                                } else {
+                                    window.location = "admin-signin.html";
+                                }
+                            </script>
                             <form id="verificationForm">
                                 <!-- Code Input Fields -->
                                 <div class="d-flex justify-content-center gap-3 mb-4">
@@ -169,220 +181,220 @@
             <i class="bi bi-question-lg"></i>
         </button>
 
-        
+
         <script src="../assets/js/admin-verify-account.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script>
-            // Auto-focus and navigation between inputs
-            const inputs = document.querySelectorAll('input[id^="code"]');
-            let timer = 300; // 5 minutes in seconds
-            let resendTimer = 60; // 1 minute for resend
-            let timerInterval;
-            let resendInterval;
+                            // Auto-focus and navigation between inputs
+                            const inputs = document.querySelectorAll('input[id^="code"]');
+                            let timer = 300; // 5 minutes in seconds
+                            let resendTimer = 60; // 1 minute for resend
+                            let timerInterval;
+                            let resendInterval;
 
-            // Initialize
-            document.addEventListener('DOMContentLoaded', function () {
-                // Focus first input
-                inputs[0].focus();
+                            // Initialize
+                            document.addEventListener('DOMContentLoaded', function () {
+                                // Focus first input
+                                inputs[0].focus();
 
-                // Add input event listeners
-                inputs.forEach((input, index) => {
-                    input.addEventListener('input', function (e) {
-                        // Only allow numbers
-                        this.value = this.value.replace(/[^0-9]/g, '');
+                                // Add input event listeners
+                                inputs.forEach((input, index) => {
+                                    input.addEventListener('input', function (e) {
+                                        // Only allow numbers
+                                        this.value = this.value.replace(/[^0-9]/g, '');
 
-                        // Move to next input if current is filled
-                        if (this.value.length === 1 && index < inputs.length - 1) {
-                            inputs[index + 1].focus();
-                        }
+                                        // Move to next input if current is filled
+                                        if (this.value.length === 1 && index < inputs.length - 1) {
+                                            inputs[index + 1].focus();
+                                        }
 
-                        // Check if all inputs are filled
-                        checkAllInputsFilled();
-                    });
+                                        // Check if all inputs are filled
+                                        checkAllInputsFilled();
+                                    });
 
-                    input.addEventListener('keydown', function (e) {
-                        // Move to previous input on backspace if current is empty
-                        if (e.key === 'Backspace' && this.value === '' && index > 0) {
-                            inputs[index - 1].focus();
-                            e.preventDefault();
-                        }
-                    });
+                                    input.addEventListener('keydown', function (e) {
+                                        // Move to previous input on backspace if current is empty
+                                        if (e.key === 'Backspace' && this.value === '' && index > 0) {
+                                            inputs[index - 1].focus();
+                                            e.preventDefault();
+                                        }
+                                    });
 
-                    input.addEventListener('paste', function (e) {
-                        e.preventDefault();
-                        const paste = (e.clipboardData || window.clipboardData).getData('text');
-                        const numbers = paste.replace(/[^0-9]/g, '').slice(0, 5);
+                                    input.addEventListener('paste', function (e) {
+                                        e.preventDefault();
+                                        const paste = (e.clipboardData || window.clipboardData).getData('text');
+                                        const numbers = paste.replace(/[^0-9]/g, '').slice(0, 5);
 
-                        // Fill inputs with pasted numbers
-                        for (let i = 0; i < numbers.length && i < inputs.length; i++) {
-                            inputs[i].value = numbers[i];
-                        }
+                                        // Fill inputs with pasted numbers
+                                        for (let i = 0; i < numbers.length && i < inputs.length; i++) {
+                                            inputs[i].value = numbers[i];
+                                        }
 
-                        // Focus appropriate input
-                        if (numbers.length < inputs.length) {
-                            inputs[numbers.length].focus();
-                        }
+                                        // Focus appropriate input
+                                        if (numbers.length < inputs.length) {
+                                            inputs[numbers.length].focus();
+                                        }
 
-                        checkAllInputsFilled();
-                    });
-                });
+                                        checkAllInputsFilled();
+                                    });
+                                });
 
-                // Initial check
-                checkAllInputsFilled();
-            });
+                                // Initial check
+                                checkAllInputsFilled();
+                            });
 
-            function checkAllInputsFilled() {
-                const allFilled = Array.from(inputs).every(input => input.value.length === 1);
-                const verifyBtn = document.getElementById('verifyBtn');
-                
-                if (allFilled) {
-                    verifyBtn.disabled = false;
-                    verifyBtn.classList.remove('btn-secondary');
-                    verifyBtn.classList.add('btn-danger');
-                } else {
-                    verifyBtn.disabled = true;
-                    verifyBtn.classList.remove('btn-danger');
-                    verifyBtn.classList.add('btn-secondary');
-                }
-            }
+                            function checkAllInputsFilled() {
+                                const allFilled = Array.from(inputs).every(input => input.value.length === 1);
+                                const verifyBtn = document.getElementById('verifyBtn');
 
-            function startResendTimer() {
-                document.getElementById('resendBtn').parentElement.classList.add('d-none');
-                document.getElementById('resendDisabled').classList.remove('d-none');
+                                if (allFilled) {
+                                    verifyBtn.disabled = false;
+                                    verifyBtn.classList.remove('btn-secondary');
+                                    verifyBtn.classList.add('btn-danger');
+                                } else {
+                                    verifyBtn.disabled = true;
+                                    verifyBtn.classList.remove('btn-danger');
+                                    verifyBtn.classList.add('btn-secondary');
+                                }
+                            }
 
-                resendInterval = setInterval(function () {
-                    document.getElementById('resendTimer').textContent = resendTimer;
+                            function startResendTimer() {
+                                document.getElementById('resendBtn').parentElement.classList.add('d-none');
+                                document.getElementById('resendDisabled').classList.remove('d-none');
 
-                    if (resendTimer <= 0) {
-                        clearInterval(resendInterval);
-                        document.getElementById('resendBtn').parentElement.classList.remove('d-none');
-                        document.getElementById('resendDisabled').classList.add('d-none');
-                        resendTimer = 60;
-                    }
-                    resendTimer--;
-                }, 1000);
-            }
+                                resendInterval = setInterval(function () {
+                                    document.getElementById('resendTimer').textContent = resendTimer;
 
-            // Form submission
-            document.getElementById('verificationForm').addEventListener('submit', function (e) {
-                e.preventDefault();
+                                    if (resendTimer <= 0) {
+                                        clearInterval(resendInterval);
+                                        document.getElementById('resendBtn').parentElement.classList.remove('d-none');
+                                        document.getElementById('resendDisabled').classList.add('d-none');
+                                        resendTimer = 60;
+                                    }
+                                    resendTimer--;
+                                }, 1000);
+                            }
 
-                const code = Array.from(inputs).map(input => input.value).join('');
+                            // Form submission
+                            document.getElementById('verificationForm').addEventListener('submit', function (e) {
+                                e.preventDefault();
 
-                if (code.length !== 5) {
-                    showError('Please enter all 5 digits');
-                    return;
-                }
+                                const code = Array.from(inputs).map(input => input.value).join('');
 
-                // Show loading state
-                document.getElementById('verifyBtn').classList.add('d-none');
-                document.getElementById('loadingState').classList.remove('d-none');
+                                if (code.length !== 5) {
+                                    showError('Please enter all 5 digits');
+                                    return;
+                                }
 
-                // Simulate API call
-                setTimeout(() => {
-                    // Hide loading state
-                    document.getElementById('verifyBtn').classList.remove('d-none');
-                    document.getElementById('loadingState').classList.add('d-none');
+                                // Show loading state
+                                document.getElementById('verifyBtn').classList.add('d-none');
+                                document.getElementById('loadingState').classList.remove('d-none');
 
-                    // Simulate verification (replace with actual API call)
-                    if (code === '12345') {
-                        showSuccess();
-                    } else {
-                        showError('Invalid verification code. Please try again.');
-                        clearInputs();
-                    }
-                }, 2000);
-            });
+                                // Simulate API call
+                                setTimeout(() => {
+                                    // Hide loading state
+                                    document.getElementById('verifyBtn').classList.remove('d-none');
+                                    document.getElementById('loadingState').classList.add('d-none');
 
-            // Resend code
-            document.getElementById('resendBtn').addEventListener('click', function () {
-                // Start resend cooldown
-                startResendTimer();
+                                    // Simulate verification (replace with actual API call)
+                                    if (code === '12345') {
+                                        showSuccess();
+                                    } else {
+                                        showError('Invalid verification code. Please try again.');
+                                        clearInputs();
+                                    }
+                                }, 2000);
+                            });
 
-                // Clear inputs
-                clearInputs();
+                            // Resend code
+                            document.getElementById('resendBtn').addEventListener('click', function () {
+                                // Start resend cooldown
+                                startResendTimer();
 
-                // Show success message
-                showTemporaryMessage('New verification code sent to your email!', 'success');
+                                // Clear inputs
+                                clearInputs();
 
-                // Re-enable inputs if they were disabled
-                inputs.forEach(input => {
-                    input.disabled = false;
-                    input.classList.remove('border-secondary');
-                    input.classList.add('border-danger');
-                });
-            });
+                                // Show success message
+                                showTemporaryMessage('New verification code sent to your email!', 'success');
 
-            function clearInputs() {
-                inputs.forEach(input => {
-                    input.value = '';
-                });
-                inputs[0].focus();
-                checkAllInputsFilled();
-            }
+                                // Re-enable inputs if they were disabled
+                                inputs.forEach(input => {
+                                    input.disabled = false;
+                                    input.classList.remove('border-secondary');
+                                    input.classList.add('border-danger');
+                                });
+                            });
 
-            function showSuccess() {
-                document.getElementById('successAlert').classList.remove('d-none');
-                document.getElementById('errorAlert').classList.add('d-none');
+                            function clearInputs() {
+                                inputs.forEach(input => {
+                                    input.value = '';
+                                });
+                                inputs[0].focus();
+                                checkAllInputsFilled();
+                            }
 
-                // Simulate redirect
-                setTimeout(() => {
-                    alert('Redirecting to dashboard...');
-                    // window.location.href = 'dashboard.html';
-                }, 2000);
-            }
+                            function showSuccess() {
+                                document.getElementById('successAlert').classList.remove('d-none');
+                                document.getElementById('errorAlert').classList.add('d-none');
 
-            function showError(message) {
-                document.getElementById('errorMessage').textContent = message;
-                document.getElementById('errorAlert').classList.remove('d-none');
-                document.getElementById('successAlert').classList.add('d-none');
+                                // Simulate redirect
+                                setTimeout(() => {
+                                    alert('Redirecting to dashboard...');
+                                    // window.location.href = 'dashboard.html';
+                                }, 2000);
+                            }
 
-                // Auto-hide after 5 seconds
-                setTimeout(() => {
-                    document.getElementById('errorAlert').classList.add('d-none');
-                }, 5000);
-            }
+                            function showError(message) {
+                                document.getElementById('errorMessage').textContent = message;
+                                document.getElementById('errorAlert').classList.remove('d-none');
+                                document.getElementById('successAlert').classList.add('d-none');
 
-            function showTemporaryMessage(message, type) {
-                const alertClass = type === 'success' ? 'alert-success' : 'alert-info';
-                const icon = type === 'success' ? 'check-circle-fill' : 'info-circle-fill';
+                                // Auto-hide after 5 seconds
+                                setTimeout(() => {
+                                    document.getElementById('errorAlert').classList.add('d-none');
+                                }, 5000);
+                            }
 
-                const tempAlert = document.createElement('div');
-                tempAlert.className = `alert ${alertClass} mt-3`;
-                tempAlert.innerHTML = `
+                            function showTemporaryMessage(message, type) {
+                                const alertClass = type === 'success' ? 'alert-success' : 'alert-info';
+                                const icon = type === 'success' ? 'check-circle-fill' : 'info-circle-fill';
+
+                                const tempAlert = document.createElement('div');
+                                tempAlert.className = `alert ${alertClass} mt-3`;
+                                tempAlert.innerHTML = `
                     <div class="d-flex align-items-center">
                         <i class="bi bi-${icon} me-3 fs-4"></i>
                         <p class="mb-0">${message}</p>
                     </div>
                 `;
 
-                document.querySelector('.col-md-6').appendChild(tempAlert);
+                                document.querySelector('.col-md-6').appendChild(tempAlert);
 
-                setTimeout(() => {
-                    tempAlert.remove();
-                }, 3000);
-            }
+                                setTimeout(() => {
+                                    tempAlert.remove();
+                                }, 3000);
+                            }
 
-            function goBack() {
-                if (confirm('Are you sure you want to go back? You will need to verify your account later.')) {
-                    alert('Going back...');
-                    // window.history.back();
-                }
-            }
+                            function goBack() {
+                                if (confirm('Are you sure you want to go back? You will need to verify your account later.')) {
+                                    alert('Going back...');
+                                    // window.history.back();
+                                }
+                            }
 
-            function changeEmail() {
-                if (confirm('Do you want to change your email address? This will redirect you to the registration page.')) {
-                    alert('Redirecting to change email...');
-                    // window.location.href = 'register.html';
-                }
-            }
+                            function changeEmail() {
+                                if (confirm('Do you want to change your email address? This will redirect you to the registration page.')) {
+                                    alert('Redirecting to change email...');
+                                    // window.location.href = 'register.html';
+                                }
+                            }
 
-            function contactSupport() {
-                alert('Opening email client to contact support...');
-                // window.open('mailto:support@railwaysystem.com?subject=Verification Help Request', '_blank');
-            }
-       
-        
+                            function contactSupport() {
+                                alert('Opening email client to contact support...');
+                                // window.open('mailto:support@railwaysystem.com?subject=Verification Help Request', '_blank');
+                            }
+
+
         </script>
     </body>
 </html>

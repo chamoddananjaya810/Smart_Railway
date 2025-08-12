@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Smart Ticket Booking - Payment System</title>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    </head>
+    <body class="bg-light"  onload="load1();">
+        <div id="bookingDetails"></div>
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="card shadow-lg border-danger">
+                        <div class="card-header bg-danger text-white text-center">
+                            <h3 class="mb-0"><i class="fas fa-ticket-alt me-2"></i>Smart Ticket Booking</h3>
+                            <p class="mb-0">Complete your train reservation</p>
+                        </div>
+                        <div class="card-body p-4">
+
+                            <!-- Travel Information Section -->
+                            <div class="row mb-4">
+                                <div class="col-12">
+                                    <h5 class="text-danger border-bottom pb-2 mb-3">
+                                        <i class="fas fa-calendar-check me-2"></i>Travel Information
+                                    </h5>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="travel_date" class="form-label fw-bold">Travel Date</label>
+                                    <input type="date" class="form-control border-danger" id="travel_date" name="travel_date" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="class_id" class="form-label fw-bold" >Select Class</label>
+                                    <select class="form-select border-danger" id="class_id" name="class_id" onchange="handleClassChange(this.value)" required>
+                                        <option value="0">Choose Class...</option>
+                                        <option value="1">First Class</option>
+                                        <option value="2">Second Class</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Class Selection Section -->
+                            <div class="row mb-4">
+                                <div class="col-12">
+                                    <h5 class="text-danger border-bottom pb-2 mb-3">
+                                        <i class="fas fa-chair me-2"></i>Class Selection
+                                    </h5>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="passengers" class="form-label fw-bold">Passengers</label>
+                                    <input type="text" class="form-control border-danger" id="passengers" name="passengers" oninput="handleClassChange(document.getElementById('class_id').value)" placeholder="Passenger count (comma separated)" required>
+
+
+
+                                </div>
+                                <div class="col-md-6 mb-3">
+
+                                </div>
+                            </div>
+
+
+
+
+                            <div class="row mb-4">
+                                <div class="col-12">
+                                    <h5 class="text-danger border-bottom pb-2 mb-3">
+                                        <i class="fas fa-chair me-2"></i>Passanger Details
+                                    </h5>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="description" class="form-label fw-bold">Description</label>
+                                    <textarea class="form-control border-danger" id="description" name="description" rows="3" placeholder="Enter booking description or special requirements..."></textarea>
+
+
+                                </div>
+                                <div class="col-md-6 mb-3">
+
+                                </div>
+                            </div>
+                            <!-- Route Information Section -->
+                            <div class="row mb-4">
+                                <div class="col-12">
+                                    <h5 class="text-danger border-bottom pb-2 mb-3">
+                                        <i class="fas fa-route me-2"></i>Route Information
+                                    </h5>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="train_routes_id" class="form-label fw-bold">Train Route ID</label>
+                                    <input type="text" class="form-control border-danger" id="train_routes_id" name="train_routes_id" readonly>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="price_id" class="form-label fw-bold">Price ID</label>
+                                    <input type="text" class="form-control border-danger" id="price_id" name="price_id" readonly>
+                                </div>
+                            </div>
+
+                            <!-- Pricing Section -->
+                            <div class="row mb-4">
+                                <div class="col-12">
+                                    <h5 class="text-danger border-bottom pb-2 mb-3">
+                                        <i class="fas fa-money-bill-wave me-2"></i>Pricing Details
+                                    </h5>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label for="first_class_price" class="form-label fw-bold">First Class Price</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-danger text-white">Rs.</span>
+                                        <input type="number" class="form-control border-danger" id="first_class_price" name="first_class_price" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label for="second_class_price" class="form-label fw-bold">Second Class Price</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-danger text-white">Rs.</span>
+                                        <input type="number" class="form-control border-danger" id="second_class_price" name="second_class_price" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label for="total_price" class="form-label fw-bold">Total Amount</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-danger text-white">Rs.</span>
+                                        <input type="number" class="form-control border-danger fw-bold" id="total_price" name="total_price" readonly>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Payment Method Section -->
+                            <div class="row mb-4">
+                                <div class="col-12">
+                                    <h5 class="text-danger border-bottom pb-2 mb-3">
+                                        <i class="fas fa-credit-card me-2"></i>Payment Method
+                                    </h5>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="payment_method" class="form-label fw-bold">Select Payment Method</label>
+                                    <select class="form-select border-danger" id="payment_method" name="payment_method" required>
+                                       
+                                        <option value="1">Only  Credit Card</option>
+
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                        <button type="button" class="btn btn-outline-danger me-md-2">
+                                            <i class="fas fa-arrow-left me-2"></i>Back
+                                        </button>
+                                        <button type="submit" class="btn btn-danger" onclick="checkout();">
+                                            <i class="fas fa-credit-card me-2"></i>Proceed to Payment
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            function handleClassChange(value) {
+                console.log("Selected class ID:", value);
+
+                // Get passenger value and trim spaces
+                const passengers = document.getElementById("passengers").value.trim();
+
+                // Validate passenger count
+                if (passengers === "" || isNaN(passengers) || Number(passengers) <= 0) {
+                    console.log("Invalid passengers number");
+                    document.getElementById("total_price").value = "";
+                    return;
+                }
+
+                let total = 0;
+
+                if (value == "1") {
+                    console.log("First Class selected");
+
+                    // Get first class price
+                    const first_class_price = document.getElementById("first_class_price").value;
+
+                    // Calculate total
+                    total = Number(passengers) * Number(first_class_price);
+
+                } else if (value == "2") {
+                    console.log("Second Class selected");
+
+                    // Get second class price
+                    const second_class_price = document.getElementById("second_class_price").value;
+
+                    // Calculate total
+                    total = Number(passengers) * Number(second_class_price);
+                }
+
+                // Set total price
+                document.getElementById("total_price").value = total;
+            }
+
+        </script>
+        <script type="text/javascript" src="https://www.payhere.lk/lib/payhere.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+        <script src="assets/js/smart-ticket-payment.js"></script>
+        <script src="assets/js/checkout.js"></script>
+    </body>
+</html>
+<!--onclick="checkout();"-->
