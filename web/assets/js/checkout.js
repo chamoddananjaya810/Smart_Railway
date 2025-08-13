@@ -81,44 +81,44 @@ async function checkout() {
 }
 
 
-//async function checkout() {
-//
-//    const params = new URLSearchParams(window.location.search);
-//    // Get routeID
-//    let routeID = params.get("routeID");
-//    let priceID = params.get("priceID");
-//    console.log(routeID); // should log "1"
-//    console.log(priceID); // should log "1"
-//
-//    let data = {
-//        priceID:priceID,
-//        routeID:routeID
-//    };
-//    let dataJSON = JSON.stringify(data);
-//    const response = await fetch("CheackOut", {
-//        method: "POST",
-//        header: {
-//            "Content-Type": "application/json"
-//        },
-//        body: dataJSON
-//    });
-//    if (response.ok) {
-//        const json = await response.json();
-//        if (json.status) {
-//            console.log(json);
-//            //PayHere Process
-////            payhere.startPayment(json.payhereJson);
-//        } else {
-//            console.log(json);
-////            popup.error({
-////                message: json.message
-////            });
-//        }
-//    } else {
-//        console.log(json.message);
-////        popup.error({
-////            message: "Somthing went wrong. Please try again!"
-////        });
-//    }
-//}
+async function checkout() {
+
+    const params = new URLSearchParams(window.location.search);
+    // Get routeID
+    let routeID = params.get("routeID");
+    let priceID = params.get("priceID");
+    console.log(routeID); // should log "1"
+    console.log(priceID); // should log "1"
+
+    let data = {
+        priceID:priceID,
+        routeID:routeID
+    };
+    let dataJSON = JSON.stringify(data);
+    const response = await fetch("CheackOut", {
+        method: "POST",
+        header: {
+            "Content-Type": "application/json"
+        },
+        body: dataJSON
+    });
+    if (response.ok) {
+        const json = await response.json();
+        if (json.status) {
+            console.log(json);
+            //PayHere Process
+//            payhere.startPayment(json.payhereJson);
+        } else {
+            console.log(json);
+//            popup.error({
+//                message: json.message
+//            });
+        }
+    } else {
+        console.log(json.message);
+//        popup.error({
+//            message: "Somthing went wrong. Please try again!"
+//        });
+    }
+}
 

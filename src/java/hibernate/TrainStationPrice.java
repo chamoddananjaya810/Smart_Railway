@@ -42,14 +42,14 @@ public class TrainStationPrice implements Serializable {
     /**
      * @return the station_from
      */
-    public Station getStation_from() {
+    public TrainStation getStation_from() {
         return station_from;
     }
 
     /**
      * @param station_from the station_from to set
      */
-    public void setStation_from(Station station_from) {
+    public void setStation_from(TrainStation station_from) {
         this.station_from = station_from;
     }
 
@@ -95,6 +95,8 @@ public class TrainStationPrice implements Serializable {
         this.distance = distance;
     }
 
+    
+
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -102,7 +104,7 @@ public class TrainStationPrice implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "station_from", nullable = false)
-    private Station station_from;
+    private TrainStation station_from;
 
     @ManyToOne
     @JoinColumn(name = "station_to", nullable = false)

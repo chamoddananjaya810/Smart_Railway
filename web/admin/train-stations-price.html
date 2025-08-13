@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Train Station Price Management</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
+    </head>
+    <body class="bg-light"  onload="dashboard();">  
+        <div id="dashboard"></div>
+        <!-- Header -->
+        <div class="bg-danger text-white py-4 mb-4">
+            <div class="container-fluid">
+                <div class="d-flex align-items-center justify-content-between flex-wrap">
+                    <div>
+                        <h1 class="mb-1"><i class="bi bi-currency-dollar me-3"></i>Train Station Price Management</h1>
+                        <p class="mb-0 opacity-75">Manage station-to-station pricing and distances</p>
+                    </div>
+                    <div class="d-flex align-items-center gap-3 flex-wrap mt-3 mt-lg-0">
+                        <input type="text" class="form-control" placeholder="Search stations..." id="searchInput" style="width: 250px;">
+                        <button class="btn btn-light text-danger" data-bs-toggle="modal" data-bs-target="#addPriceModal">
+                            <i class="bi bi-plus-lg me-2"></i>Add Station Price
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="container-fluid px-4">
+            <div class="row g-4 mb-4">
+                <div class="col-md-3 col-sm-6">
+                    <div class="card bg-danger text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5 class="card-title">Total Routes</h5>
+                                    <h2 class="mb-0" id="totalStationPrices">156</h2>
+                                    <small class="opacity-75">Station pairs</small>
+                                </div>
+                                <i class="bi bi-signpost-2 display-4 opacity-50"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="card border-danger">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5 class="card-title text-danger">Average Price</h5>
+                                    <h2 class="mb-0 text-danger" id="averagePrice">₹1,245</h2>
+                                    <small class="text-danger">Per journey</small>
+                                </div>
+                                <i class="bi bi-cash-coin display-4 text-danger opacity-50"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="card bg-danger text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5 class="card-title">Total Distance</h5>
+                                    <h2 class="mb-0" id="totalDistance">75,642</h2>
+                                    <small class="opacity-75">Kilometers</small>
+                                </div>
+                                <i class="bi bi-rulers display-4 opacity-50"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="card border-danger">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5 class="card-title text-danger">Price per KM</h5>
+                                    <h2 class="mb-0 text-danger" id="pricePerKm">₹2.1</h2>
+                                    <small class="text-danger">Average rate</small>
+                                </div>
+                                <i class="bi bi-calculator display-4 text-danger opacity-50"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Station Prices Table -->
+            <div class="card">
+                <div class="card-header bg-danger text-white">
+                    <div class="d-flex justify-content-between align-items-center flex-wrap">
+                        <h5 class="mb-0"><i class="bi bi-list me-2"></i>Station Prices</h5>
+                        <div class="d-flex gap-2 flex-wrap">
+                            <select class="form-select text-dark" id="stationFilter" style="width: auto;">
+                                <option value="">All Stations</option>
+                                <option value="New Delhi">New Delhi</option>
+                                <option value="Mumbai">Mumbai</option>
+                                <option value="Chennai">Chennai</option>
+                                <option value="Kolkata">Kolkata</option>
+                                <option value="Bangalore">Bangalore</option>
+                            </select>
+                            <select class="form-select text-dark" id="priceRangeFilter" style="width: auto;">
+                                <option value="">All Prices</option>
+                                <option value="low">Low (₹0-500)</option>
+                                <option value="medium">Medium (₹500-1500)</option>
+                                <option value="high">High (₹1500+)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0" id="stationPricesTable">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Station From</th>
+                                    <th>Station To</th>
+                                    <th>Distance (km)</th>
+                                    <th>Price (₹)</th>
+                                    <th>Price/KM</th>
+                                    <th>Route Type</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="badge bg-danger">SP001</span></td>
+                                    <td><i class="bi bi-geo-alt text-danger me-1"></i>New Delhi</td>
+                                    <td><i class="bi bi-geo-alt-fill text-danger me-1"></i>Mumbai</td>
+                                    <td><span class="fw-bold">1,384</span></td>
+                                    <td><span class="text-success fw-bold">₹2,850</span></td>
+                                    <td><span class="text-info">₹2.06</span></td>
+                                    <td><span class="badge bg-warning text-dark">Express</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-danger me-1" onclick="editStationPrice('SP001')">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-danger" onclick="deleteStationPrice('SP001')">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge bg-danger">SP002</span></td>
+                                    <td><i class="bi bi-geo-alt text-danger me-1"></i>Chennai</td>
+                                    <td><i class="bi bi-geo-alt-fill text-danger me-1"></i>Bangalore</td>
+                                    <td><span class="fw-bold">350</span></td>
+                                    <td><span class="text-success fw-bold">₹620</span></td>
+                                    <td><span class="text-info">₹1.77</span></td>
+                                    <td><span class="badge bg-info">Passenger</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-danger me-1" onclick="editStationPrice('SP002')">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-danger" onclick="deleteStationPrice('SP002')">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge bg-danger">SP003</span></td>
+                                    <td><i class="bi bi-geo-alt text-danger me-1"></i>Kolkata</td>
+                                    <td><i class="bi bi-geo-alt-fill text-danger me-1"></i>New Delhi</td>
+                                    <td><span class="fw-bold">1,472</span></td>
+                                    <td><span class="text-success fw-bold">₹2,980</span></td>
+                                    <td><span class="text-info">₹2.02</span></td>
+                                    <td><span class="badge bg-success">High-Speed</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-danger me-1" onclick="editStationPrice('SP003')">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-danger" onclick="deleteStationPrice('SP003')">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge bg-danger">SP004</span></td>
+                                    <td><i class="bi bi-geo-alt text-danger me-1"></i>Mumbai</td>
+                                    <td><i class="bi bi-geo-alt-fill text-danger me-1"></i>Pune</td>
+                                    <td><span class="fw-bold">165</span></td>
+                                    <td><span class="text-success fw-bold">₹290</span></td>
+                                    <td><span class="text-info">₹1.76</span></td>
+                                    <td><span class="badge bg-info">Local</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-danger me-1" onclick="editStationPrice('SP004')">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-danger" onclick="deleteStationPrice('SP004')">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge bg-danger">SP005</span></td>
+                                    <td><i class="bi bi-geo-alt text-danger me-1"></i>Hyderabad</td>
+                                    <td><i class="bi bi-geo-alt-fill text-danger me-1"></i>Chennai</td>
+                                    <td><span class="fw-bold">625</span></td>
+                                    <td><span class="text-success fw-bold">₹1,250</span></td>
+                                    <td><span class="text-info">₹2.00</span></td>
+                                    <td><span class="badge bg-warning text-dark">Express</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-danger me-1" onclick="editStationPrice('SP005')">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-danger" onclick="deleteStationPrice('SP005')">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge bg-danger">SP006</span></td>
+                                    <td><i class="bi bi-geo-alt text-danger me-1"></i>Jaipur</td>
+                                    <td><i class="bi bi-geo-alt-fill text-danger me-1"></i>New Delhi</td>
+                                    <td><span class="fw-bold">280</span></td>
+                                    <td><span class="text-success fw-bold">₹480</span></td>
+                                    <td><span class="text-info">₹1.71</span></td>
+                                    <td><span class="badge bg-info">Passenger</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-danger me-1" onclick="editStationPrice('SP006')">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-danger" onclick="deleteStationPrice('SP006')">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add/Edit Station Price Modal -->
+        <div class="modal fade" id="addPriceModal" tabindex="-1" aria-labelledby="addPriceModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title">
+                            <i class="bi bi-plus-circle me-2"></i>Add Station Price
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold text-danger">Station From</label>
+                                <select class="form-select border-danger" id="stationFrom" required>
+                                    <option value="">Select Origin Station</option>
+                                    <option value="New Delhi">New Delhi Railway Station</option>
+                                    <option value="Mumbai Central">Mumbai Central</option>
+                                    <option value="Chennai Central">Chennai Central</option>
+                                    <option value="Kolkata">Howrah Junction</option>
+                                    <option value="Bangalore">Bangalore City Junction</option>
+                                    <option value="Hyderabad">Secunderabad Junction</option>
+                                    <option value="Pune">Pune Junction</option>
+                                    <option value="Ahmedabad">Ahmedabad Junction</option>
+                                    <option value="Jaipur">Jaipur Junction</option>
+                                    <option value="Lucknow">Lucknow Charbagh</option>
+                                    <option value="Kanpur">Kanpur Central</option>
+                                    <option value="Nagpur">Nagpur Junction</option>
+                                    <option value="Patna">Patna Junction</option>
+                                    <option value="Bhopal">Bhopal Junction</option>
+                                    <option value="Indore">Indore Junction</option>
+                                    <option value="Coimbatore">Coimbatore Junction</option>
+                                    <option value="Kochi">Ernakulam Junction</option>
+                                    <option value="Visakhapatnam">Visakhapatnam Junction</option>
+                                    <option value="Guwahati">Guwahati Station</option>
+                                    <option value="Surat">Surat Railway Station</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold text-danger">Station To</label>
+                                <select class="form-select border-danger" id="stationTo" required>
+                                    <option value="">Select Destination Station</option>
+                                    <option value="New Delhi">New Delhi Railway Station</option>
+                                    <option value="Mumbai Central">Mumbai Central</option>
+                                    <option value="Chennai Central">Chennai Central</option>
+                                    <option value="Kolkata">Howrah Junction</option>
+                                    <option value="Bangalore">Bangalore City Junction</option>
+                                    <option value="Hyderabad">Secunderabad Junction</option>
+                                    <option value="Pune">Pune Junction</option>
+                                    <option value="Ahmedabad">Ahmedabad Junction</option>
+                                    <option value="Jaipur">Jaipur Junction</option>
+                                    <option value="Lucknow">Lucknow Charbagh</option>
+                                    <option value="Kanpur">Kanpur Central</option>
+                                    <option value="Nagpur">Nagpur Junction</option>
+                                    <option value="Patna">Patna Junction</option>
+                                    <option value="Bhopal">Bhopal Junction</option>
+                                    <option value="Indore">Indore Junction</option>
+                                    <option value="Coimbatore">Coimbatore Junction</option>
+                                    <option value="Kochi">Ernakulam Junction</option>
+                                    <option value="Visakhapatnam">Visakhapatnam Junction</option>
+                                    <option value="Guwahati">Guwahati Station</option>
+                                    <option value="Surat">Surat Railway Station</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold text-info">Distance (km)</label>
+                                <input type="number" class="form-control border-info" id="stationDistance" placeholder="e.g., 1384" min="1" required>
+                                <div class="form-text text-muted">Enter distance between stations in kilometers</div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold text-success">Price (₹)</label>
+                                <input type="number" class="form-control border-success" id="stationPrice" placeholder="e.g., 2850" min="1" required>
+                                <div class="form-text text-muted">Ticket price in Indian Rupees</div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="card bg-light">
+                                    <div class="card-body">
+                                        <h6 class="text-danger mb-2"><i class="bi bi-calculator me-1"></i>Price Calculator</h6>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <small class="text-muted">Distance: <span id="calcDistance">-</span> km</small>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <small class="text-muted">Price: ₹<span id="calcPrice">-</span></small>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <small class="text-muted">Rate: ₹<span id="calcRate">-</span>/km</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <label class="form-label fw-bold text-danger">Route Type (Optional)</label>
+                                <select class="form-select" id="routeType">
+                                    <option value="Express">Express</option>
+                                    <option value="Passenger">Passenger</option>
+                                    <option value="High-Speed">High-Speed</option>
+                                    <option value="Local">Local</option>
+                                    <option value="Superfast">Superfast</option>
+                                    <option value="Mail">Mail</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal" onclick="resetStationPrice();">Cancel</button>
+                        <button type="button" class="btn btn-danger" onclick="saveStationPrice();">
+                            <i class="bi bi-save me-1"></i>Save Price
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast Notification -->
+        <div class="toast-container position-fixed top-0 end-0 p-3">
+            <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header">
+                    <i id="toastIcon" class="bi bi-info-circle-fill text-primary me-2"></i>
+                    <strong id="toastTitle" class="me-auto">Notification</strong>
+                    <small class="text-muted">now</small>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+                </div>
+                <div id="toastBody" class="toast-body"></div>
+            </div>
+        </div>
+ <script src="../assets/js/dashboard.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+                            // Initialize data
+                            let stationPrices = [];
+                            let editingPriceId = null;
+
+                            function showToast(message, type = 'success') {
+                                const toast = new bootstrap.Toast(document.getElementById('liveToast'));
+                                const toastIcon = document.getElementById('toastIcon');
+                                const toastTitle = document.getElementById('toastTitle');
+                                const toastBody = document.getElementById('toastBody');
+
+                                // Set icon and title based on type
+                                if (type === 'success') {
+                                    toastIcon.className = 'bi bi-check-circle-fill text-success me-2';
+                                    toastTitle.textContent = 'Success';
+                                } else if (type === 'error') {
+                                    toastIcon.className = 'bi bi-exclamation-triangle-fill text-danger me-2';
+                                    toastTitle.textContent = 'Error';
+                                } else if (type === 'warning') {
+                                    toastIcon.className = 'bi bi-exclamation-circle-fill text-warning me-2';
+                                    toastTitle.textContent = 'Warning';
+                                }
+
+                                toastBody.textContent = message;
+                                toast.show();
+                            }
+
+                            function calculateRate() {
+                                const distance = parseFloat(document.getElementById('stationDistance').value);
+                                const price = parseFloat(document.getElementById('stationPrice').value);
+
+                                document.getElementById('calcDistance').textContent = distance || '-';
+                                document.getElementById('calcPrice').textContent = price || '-';
+
+                                if (distance && price) {
+                                    const rate = (price / distance).toFixed(2);
+                                    document.getElementById('calcRate').textContent = rate;
+                                } else {
+                                    document.getElementById('calcRate').textContent = '-';
+                                }
+                            }
+
+                            function saveStationPrice() {
+                                const stationFrom = document.getElementById('stationFrom').value;
+                                const stationTo = document.getElementById('stationTo').value;
+                                const distance = document.getElementById('stationDistance').value;
+                                const price = document.getElementById('stationPrice').value;
+                                const routeType = document.getElementById('routeType').value;
+
+                                // Validation
+                                if (!stationFrom || !stationTo || !distance || !price) {
+                                    showToast('Please fill all required fields', 'error');
+                                    return;
+                                }
+
+                                if (stationFrom === stationTo) {
+                                    showToast('Origin and destination stations cannot be the same', 'error');
+                                    return;
+                                }
+
+                                const rate = (parseFloat(price) / parseFloat(distance)).toFixed(2);
+
+                                // Success message
+                                if (editingPriceId) {
+                                    showToast(`Station price updated! Rate: ₹${rate}/km`, 'success');
+                                } else {
+                                    showToast(`New station price added! ${stationFrom} to ${stationTo} - ₹${price} (₹${rate}/km)`, 'success');
+                                }
+
+                                // Close modal and reset form
+                                const modal = bootstrap.Modal.getInstance(document.getElementById('addPriceModal'));
+                                modal.hide();
+                                resetStationPrice();
+                            }
+
+                            function resetStationPrice() {
+                                document.getElementById('stationFrom').value = '';
+                                document.getElementById('stationTo').value = '';
+                                document.getElementById('stationDistance').value = '';
+                                document.getElementById('stationPrice').value = '';
+                                document.getElementById('routeType').value = 'Express';
+                                document.getElementById('calcDistance').textContent = '-';
+                                document.getElementById('calcPrice').textContent = '-';
+                                document.getElementById('calcRate').textContent = '-';
+                                editingPriceId = null;
+                                document.querySelector('.modal-title').innerHTML = '<i class="bi bi-plus-circle me-2"></i>Add Station Price';
+                            }
+
+                            function editStationPrice(priceId) {
+                                editingPriceId = priceId;
+                                document.querySelector('.modal-title').innerHTML = '<i class="bi bi-pencil-square me-2"></i>Edit Station Price';
+
+                                // Show modal
+                                const modal = new bootstrap.Modal(document.getElementById('addPriceModal'));
+                                modal.show();
+
+                                showToast('Edit mode activated for price ' + priceId, 'warning');
+                            }
+
+                            function deleteStationPrice(priceId) {
+                                if (confirm(`Are you sure you want to delete station price ${priceId}?`)) {
+                                    showToast(`Station price ${priceId} deleted successfully!`, 'success');
+                                }
+                            }
+
+                            // Event listeners for real-time calculation
+                            document.getElementById('stationDistance').addEventListener('input', calculateRate);
+                            document.getElementById('stationPrice').addEventListener('input', calculateRate);
+
+                            // Auto-calculate price based on distance (optional helper)
+                            document.getElementById('stationDistance').addEventListener('input', function (e) {
+                                const distance = parseFloat(e.target.value);
+                                if (distance && distance > 0 && !document.getElementById('stationPrice').value) {
+                                    // Suggest price based on ₹2/km rate
+                                    const suggestedPrice = Math.round(distance * 2);
+                                    document.getElementById('stationPrice').placeholder = `Suggested: ₹${suggestedPrice}`;
+                                }
+                            });
+
+                            // Search functionality
+                            document.getElementById('searchInput').addEventListener('input', function (e) {
+                                const searchTerm = e.target.value.toLowerCase();
+                                console.log('Searching for:', searchTerm);
+                            });
+
+                            // Filter functionality
+                            document.getElementById('stationFilter').addEventListener('change', function (e) {
+                                console.log('Filter by station:', e.target.value);
+                            });
+
+                            document.getElementById('priceRangeFilter').addEventListener('change', function (e) {
+                                console.log('Filter by price range:', e.target.value);
+                            });
+        </script>
+    </body>
+</html>

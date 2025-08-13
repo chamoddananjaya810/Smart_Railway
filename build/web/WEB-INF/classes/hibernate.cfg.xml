@@ -26,5 +26,6 @@
         <mapping class="hibernate.RoutePrice"></mapping>
         <mapping class="hibernate.SmartBooking"></mapping>
         <mapping class="hibernate.TrainStationPrice"></mapping>
+        <mapping class="hibernate.SimpleStationPayment"></mapping>
     </session-factory>
 </hibernate-configuration>

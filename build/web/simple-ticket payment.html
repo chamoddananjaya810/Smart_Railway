@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Train Ticket Booking</title>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    </head>
+    <body class="bg-light"  onload="load();">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="card shadow-lg border-danger">
+                        <div class="card-header bg-danger text-white text-center">
+                            <h3 class="mb-0"><i class="fas fa-train me-2"></i>Train Ticket Booking</h3>
+                            <p class="mb-0">Complete your reservation</p>
+                        </div>
+                        <div class="card-body p-4">
+
+                            <!-- Booking Date Section -->
+                            <div class="row mb-4">
+                                <div class="col-12">
+                                    <h5 class="text-danger border-bottom pb-2 mb-3">
+                                        <i class="fas fa-calendar-alt me-2"></i>Travel Date
+                                    </h5>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="booking_date" class="form-label fw-bold">Booking Date</label>
+                                    <input type="date" class="form-control border-danger" id="booking_date" name="booking_date" required>
+                                </div>
+                            </div>
+
+
+
+
+
+                            <!--                            details-->
+                            <div class="row mb-4">
+                                <div class="col-12">
+                                    <h5 class="text-danger border-bottom pb-2 mb-3">
+                                        <i class="fas fa-route me-2"></i>Details
+                                    </h5>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="from_station" class="form-label fw-bold">Station Id</label>
+
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-danger text-white"></span>
+                                        <input type="text" class="form-control border-danger" id="StationId" readonly>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="to_station" class="form-label fw-bold">Price ID</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-danger text-white"></span>
+                                        <input type="text" class="form-control border-danger" id="priceId" readonly>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <!--                            details-->
+
+                            <!-- Train Stations Section -->
+                            <div class="row mb-4">
+                                <div class="col-12">
+                                    <h5 class="text-danger border-bottom pb-2 mb-3">
+                                        <i class="fas fa-route me-2"></i>Train Route
+                                    </h5>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="from_station" class="form-label fw-bold">From Station</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-danger text-white"></span>
+                                        <input type="text" class="form-control border-danger" id="from_station" readonly>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="to_station" class="form-label fw-bold">To Station</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-danger text-white"></span>
+                                        <input type="text" class="form-control border-danger" id="to_station" readonly>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- Pricing Section -->
+                            <div class="row mb-4">
+                                <div class="col-12">
+                                    <h5 class="text-danger border-bottom pb-2 mb-3">
+                                        <i class="fas fa-money-bill-wave me-2"></i>Pricing Information
+                                    </h5>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="train_station_price" class="form-label fw-bold">Price Per Ticket</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-danger text-white">Rs.</span>
+                                        <input type="number" class="form-control border-danger" id="train_station_price" name="train_station_price" readonly>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Passenger Section -->
+                            <div class="row mb-4">
+                                <div class="col-12">
+                                    <h5 class="text-danger border-bottom pb-2 mb-3">
+                                        <i class="fas fa-users me-2"></i>Passenger Details
+                                    </h5>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="passengers" class="form-label fw-bold">Number of Passengers</label>
+                                    <input type="number" class="form-control border-danger" id="passengers" name="passengers" min="1" max="10" oninput="calculateTotal()" placeholder="Enter passenger count" required>
+                                </div>
+                            </div>
+
+                            <!-- Total Section -->
+                            <div class="row mb-4">
+                                <div class="col-12">
+                                    <h5 class="text-danger border-bottom pb-2 mb-3">
+                                        <i class="fas fa-calculator me-2"></i>Payment Summary
+                                    </h5>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="total" class="form-label fw-bold">Total Amount</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-danger text-white">Rs.</span>
+                                        <input type="number" class="form-control border-danger fw-bold fs-5" id="total" name="total" readonly>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Payment Method Section -->
+                            <div class="row mb-4">
+                                <div class="col-12">
+                                    <h5 class="text-danger border-bottom pb-2 mb-3">
+                                        <i class="fas fa-credit-card me-2"></i>Payment Method
+                                    </h5>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="payment_method" class="form-label fw-bold">Select Payment Method</label>
+                                    <select class="form-select border-danger" id="payment_method" name="payment_method" required>
+                                        <option value="1">Credit Card</option>
+
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                        <button type="button" class="btn btn-outline-danger me-md-2">
+                                            <i class="fas fa-arrow-left me-2"></i>Back
+                                        </button>
+                                        <button type="button" class="btn btn-danger" onclick="simplePayment();">
+                                            <i class="fas fa-credit-card me-2"></i>Proceed to Payment
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+        <script src="assets/js/simple-ticket-payment.js"></script>
+        <script src="assets/js/simple-cheackout.js"></script>
+        <script>
+                                            // Price matrix for different routes
+                                            const routePrices = {
+                                                'colombo-kandy': 150,
+                                                'colombo-galle': 120,
+                                                'colombo-matara': 180,
+                                                'colombo-anuradhapura': 200,
+                                                'colombo-badulla': 250,
+                                                'kandy-galle': 220,
+                                                'kandy-matara': 280,
+                                                'kandy-anuradhapura': 100,
+                                                'kandy-badulla': 120,
+                                                'galle-matara': 80,
+                                                'galle-anuradhapura': 300,
+                                                'galle-badulla': 350,
+                                                'matara-anuradhapura': 380,
+                                                'matara-badulla': 400,
+                                                'anuradhapura-badulla': 200
+                                            };
+
+                                            function calculateTotal() {
+                                                const fromStation = document.getElementById('from_station').value;
+                                                const toStation = document.getElementById('to_station').value;
+                                                const passengers = parseInt(document.getElementById('passengers').value) || 0;
+
+                                                if (fromStation && toStation && fromStation !== toStation) {
+                                                    // Create route key (always alphabetically ordered)
+                                                    const route = fromStation < toStation ? `${fromStation}-${toStation}` : `${toStation}-${fromStation}`;
+                                                    const pricePerTicket = routePrices[route] || 100; // Default price if route not found
+
+                                                    document.getElementById('train_station_price').value = pricePerTicket;
+
+                                                    if (passengers > 0) {
+                                                        const total = pricePerTicket * passengers;
+                                                        document.getElementById('total').value = total;
+                                                    } else {
+                                                        document.getElementById('total').value = '';
+                                                    }
+                                                } else {
+                                                    document.getElementById('train_station_price').value = '';
+                                                    document.getElementById('total').value = '';
+                                                }
+                                            }
+
+                                            
+        </script>
+    </body>
+</html>
