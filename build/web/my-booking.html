@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Bookings - Railway Booking System</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-light" onload="loadWachlist();">
+     <div id="navbar" ></div>
+    <div class="container my-5 py-5">
+        <!-- Header -->
+        <div class="row mb-4">
+            <div class="col">
+                <h2 class="fw-bold text-danger mb-2">
+                    <i class="fas fa-list me-3"></i>My Train Bookings
+                </h2>
+                <p class="text-muted">Track and manage your railway reservations</p>
+            </div>
+        </div>
+
+        <!-- Booking Cards -->
+        <div class="row g-4">
+            <!-- Booking 1 - Confirmed -->
+            <div class="col-lg-6"  >
+                <div class="card shadow-sm border-0 border-start border-danger border-4" id="watchlist">
+                    
+                </div>
+            </div>
+
+            
+            
+            
+            
+            
+<!--             Booking 2 - Pending 
+            <div class="col-lg-6">
+                <div class="card shadow-sm border-0 border-start border-danger border-4">
+                    <div class="card-header bg-danger text-white py-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h6 class="mb-0 fw-semibold">
+                                <i class="fas fa-ticket-alt me-2"></i>Booking #RB001235
+                            </h6>
+                            <span class="badge bg-warning text-dark">Pending</span>
+                        </div>
+                    </div>
+                    <div class="card-body p-4">
+                         Route Info 
+                        <div class="bg-light rounded p-3 mb-3">
+                            <div class="row align-items-center text-center">
+                                <div class="col-4">
+                                    <h5 class="fw-bold text-danger mb-1">Kandy</h5>
+                                    <small class="text-muted">02:30 PM</small>
+                                </div>
+                                <div class="col-4">
+                                    <i class="fas fa-arrow-right text-danger fs-4"></i>
+                                    <div class="small text-muted mt-1">2h 15m</div>
+                                </div>
+                                <div class="col-4">
+                                    <h5 class="fw-bold text-danger mb-1">Galle</h5>
+                                    <small class="text-muted">04:45 PM</small>
+                                </div>
+                            </div>
+                        </div>
+
+                         Booking Details 
+                        <div class="row g-3 mb-3">
+                            <div class="col-6">
+                                <small class="text-muted d-block">Date</small>
+                                <span class="fw-semibold">March 28, 2024</span>
+                            </div>
+                            <div class="col-6">
+                                <small class="text-muted d-block">Train</small>
+                                <span class="fw-semibold">Coastal #2045</span>
+                            </div>
+                            <div class="col-6">
+                                <small class="text-muted d-block">Class</small>
+                                <span class="fw-semibold">2nd Class</span>
+                            </div>
+                            <div class="col-6">
+                                <small class="text-muted d-block">Seats</small>
+                                <span class="fw-semibold">3B/08</span>
+                            </div>
+                        </div>
+
+                         Price and Actions 
+                        <div class="d-flex justify-content-between align-items-center pt-3 border-top">
+                            <div>
+                                <span class="text-danger fw-bold fs-5">Rs. 850</span>
+                                <small class="text-muted d-block">1 passenger</small>
+                            </div>
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-danger btn-sm">
+                                    <i class="fas fa-credit-card me-1"></i>Pay Now
+                                </button>
+                                <button type="button" class="btn btn-outline-danger btn-sm">
+                                    <i class="fas fa-times me-1"></i>Cancel
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+             Booking 3 - Cancelled 
+            <div class="col-lg-6">
+                <div class="card shadow-sm border-0 border-start border-danger border-4">
+                    <div class="card-header bg-danger text-white py-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h6 class="mb-0 fw-semibold">
+                                <i class="fas fa-ticket-alt me-2"></i>Booking #RB001233
+                            </h6>
+                            <span class="badge bg-secondary">Cancelled</span>
+                        </div>
+                    </div>
+                    <div class="card-body p-4">
+                         Route Info 
+                        <div class="bg-light rounded p-3 mb-3">
+                            <div class="row align-items-center text-center">
+                                <div class="col-4">
+                                    <h5 class="fw-bold text-danger mb-1">Colombo</h5>
+                                    <small class="text-muted">06:00 AM</small>
+                                </div>
+                                <div class="col-4">
+                                    <i class="fas fa-arrow-right text-danger fs-4"></i>
+                                    <div class="small text-muted mt-1">5h 30m</div>
+                                </div>
+                                <div class="col-4">
+                                    <h5 class="fw-bold text-danger mb-1">Jaffna</h5>
+                                    <small class="text-muted">11:30 AM</small>
+                                </div>
+                            </div>
+                        </div>
+
+                         Booking Details 
+                        <div class="row g-3 mb-3">
+                            <div class="col-6">
+                                <small class="text-muted d-block">Date</small>
+                                <span class="fw-semibold">March 20, 2024</span>
+                            </div>
+                            <div class="col-6">
+                                <small class="text-muted d-block">Train</small>
+                                <span class="fw-semibold">Northern #3012</span>
+                            </div>
+                            <div class="col-6">
+                                <small class="text-muted d-block">Class</small>
+                                <span class="fw-semibold">Sleeper</span>
+                            </div>
+                            <div class="col-6">
+                                <small class="text-muted d-block">Refund</small>
+                                <span class="fw-semibold text-success">Processed</span>
+                            </div>
+                        </div>
+
+                         Price and Actions 
+                        <div class="d-flex justify-content-between align-items-center pt-3 border-top">
+                            <div>
+                                <span class="text-muted fw-bold fs-5 text-decoration-line-through">Rs. 3,200</span>
+                                <small class="text-success d-block">Refunded</small>
+                            </div>
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-outline-danger btn-sm">
+                                    <i class="fas fa-eye me-1"></i>Details
+                                </button>
+                                <button type="button" class="btn btn-outline-danger btn-sm">
+                                    <i class="fas fa-redo me-1"></i>Rebook
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+             Booking 4 - Completed 
+            <div class="col-lg-6">
+                <div class="card shadow-sm border-0 border-start border-danger border-4">
+                    <div class="card-header bg-danger text-white py-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h6 class="mb-0 fw-semibold">
+                                <i class="fas fa-ticket-alt me-2"></i>Booking #RB001232
+                            </h6>
+                            <span class="badge bg-info text-dark">Completed</span>
+                        </div>
+                    </div>
+                    <div class="card-body p-4">
+                         Route Info 
+                        <div class="bg-light rounded p-3 mb-3">
+                            <div class="row align-items-center text-center">
+                                <div class="col-4">
+                                    <h5 class="fw-bold text-danger mb-1">Galle</h5>
+                                    <small class="text-muted">07:15 AM</small>
+                                </div>
+                                <div class="col-4">
+                                    <i class="fas fa-arrow-right text-danger fs-4"></i>
+                                    <div class="small text-muted mt-1">2h 45m</div>
+                                </div>
+                                <div class="col-4">
+                                    <h5 class="fw-bold text-danger mb-1">Colombo</h5>
+                                    <small class="text-muted">10:00 AM</small>
+                                </div>
+                            </div>
+                        </div>
+
+                         Booking Details 
+                        <div class="row g-3 mb-3">
+                            <div class="col-6">
+                                <small class="text-muted d-block">Date</small>
+                                <span class="fw-semibold">March 18, 2024</span>
+                            </div>
+                            <div class="col-6">
+                                <small class="text-muted d-block">Train</small>
+                                <span class="fw-semibold">Coastal #2022</span>
+                            </div>
+                            <div class="col-6">
+                                <small class="text-muted d-block">Class</small>
+                                <span class="fw-semibold">1st Class</span>
+                            </div>
+                            <div class="col-6">
+                                <small class="text-muted d-block">Seats</small>
+                                <span class="fw-semibold">1A/05</span>
+                            </div>
+                        </div>
+
+                         Price and Actions 
+                        <div class="d-flex justify-content-between align-items-center pt-3 border-top">
+                            <div>
+                                <span class="text-danger fw-bold fs-5">Rs. 1,750</span>
+                                <small class="text-muted d-block">1 passenger</small>
+                            </div>
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-outline-danger btn-sm">
+                                    <i class="fas fa-star me-1"></i>Rate Trip
+                                </button>
+                                <button type="button" class="btn btn-outline-danger btn-sm">
+                                    <i class="fas fa-redo me-1"></i>Book Again
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>-->
+        </div>
+
+        <!-- Summary Stats -->
+       
+    </div>
+ <div id="navbar" ></div>
+ 
+     <script>
+            fetch('nav-bar.html')
+                    .then(response => response.text())
+                    .then(html => {
+                        document.getElementById('navbar').innerHTML = html;
+                    });
+
+            fetch('footer.html')
+                    .then(response => response.text())
+                    .then(html => {
+                        document.getElementById('footer').innerHTML = html;
+                    });
+        </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/load-booking-watchlist.js"></script>
+</body>
+</html>

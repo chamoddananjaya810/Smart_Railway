@@ -71,13 +71,14 @@ public class LoadSimpleBooking extends HttpServlet {
             }
 
             responseJson.addProperty("status", true);
+            s.close();
         } else {
             responseJson.addProperty("massage", "Product Not Found");
             responseJson.addProperty("status", "Not Found");
         }
         response.setContentType("application/json");
         response.getWriter().write(gson.toJson(responseJson));
-        s.close();
+        
     }
 
 }

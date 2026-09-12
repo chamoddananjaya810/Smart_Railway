@@ -6,6 +6,10 @@ package controller;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.stripe.Stripe;
+import com.stripe.exception.StripeException;
+import com.stripe.model.PaymentIntent;
+import com.stripe.param.PaymentIntentCreateParams;
 import hibernate.DaysOftravel;
 import hibernate.HibernateUtil;
 import hibernate.Route;
@@ -25,6 +29,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -32,10 +37,14 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import model.Mail;
 import model.PayHere;
+import model.Util;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Projections;
+
 import org.hibernate.criterion.Restrictions;
 
 /**
@@ -65,54 +74,89 @@ public class CheackOut extends HttpServlet {
         Session s = sf.openSession();
         
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-// 2025-08-28
-
+        
         if (request.getSession().getAttribute("user") == null) {
             responseJson.addProperty("message", "Please sign in!");
         } else if (travelDate.isEmpty()) {
             responseJson.addProperty("message", "Please enter Travel Date!");
         } else {
-            // Date check: cannot be in the past
-            LocalDate today = LocalDate.now();
-            LocalDate selectedDate = LocalDate.parse(travelDate);
-            
-            if (selectedDate.isBefore(today)) {
-                responseJson.addProperty("message", "Travel date cannot be in the past!");
-            } else if ("0".equals(classId)) {
-                responseJson.addProperty("message", "Please select a valid Class!");
-            } else if (passengers <= 0) {
-                responseJson.addProperty("message", "Passenger count must be greater than 0!");
-            } else if (totalPrice <= 0) {
-                responseJson.addProperty("message", "Total Price must be greater than 0!");
-            } else if (paymentMethod.isEmpty()) {
-                responseJson.addProperty("message", "Please select a Payment Method!");
-            } else {
-                // Passed all validations
-
-                User user = (User) request.getSession().getAttribute("user");
-                Criteria c1 = s.createCriteria(User.class);
-                c1.add(Restrictions.eq("email", user.getEmail()));
-                User uid = (User) c1.uniqueResult();
-                // Debug output
-                System.out.println("travelDate: " + travelDate);
-                System.out.println("classId: " + classId);
-                System.out.println("passengers: " + passengers);
-                System.out.println("description: " + description);
-                System.out.println("trainRoutesId: " + trainRoutesId);
-                System.out.println("priceId: " + priceId);
-                System.out.println("totalPrice: " + totalPrice);
-                System.out.println("paymentMethod: " + paymentMethod);
+            try {
                 TrainClass trainClass = (TrainClass) s.get(TrainClass.class, Integer.parseInt(classId));
                 Route rId = (Route) s.get(Route.class, Integer.parseInt(trainRoutesId));
                 RoutePrice pId = (RoutePrice) s.get(RoutePrice.class, Integer.parseInt(priceId));
-                try {
+                
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                Date travel_Date = sdf.parse(travelDate);
+
+                // ---- TOTAL PASSENGER CHECK ----
+                Criteria criteria = s.createCriteria(SmartBooking.class)
+                        .add(Restrictions.eq("travel_date", travel_Date))
+                        .add(Restrictions.eq("class_id", trainClass))
+                        .add(Restrictions.eq("train_routes_id", rId))
+                        .setProjection(Projections.sum("passengers"));
+                
+                Long totalBooked = (Long) criteria.uniqueResult();
+                if (totalBooked == null) {
+                    totalBooked = 0L;
+                }
+                
+                if (totalBooked + passengers > 20) {
+                    responseJson.addProperty("message", "Booking limit reached for this class and date!");
+                    s.close();
+                    response.setContentType("application/json");
+                    response.getWriter().write(gson.toJson(responseJson));
+                    return; // Stop here
+                }
+
+                // ---- VALIDATIONS ----
+                LocalDate today = LocalDate.now();
+                LocalDate selectedDate = LocalDate.parse(travelDate);
+                if (selectedDate.isBefore(today)) {
+                    responseJson.addProperty("message", "Travel date cannot be in the past!");
+                } else if ("0".equals(classId)) {
+                    responseJson.addProperty("message", "Please select a valid Class!");
+                } else if (passengers <= 0) {
+                    responseJson.addProperty("message", "Passenger count must be greater than 0!");
+                } else if (totalPrice <= 0) {
+                    responseJson.addProperty("message", "Total Price must be greater than 0!");
+                } else if (paymentMethod.isEmpty()) {
+                    responseJson.addProperty("message", "Please select a Payment Method!");
+                } else {
+                    try {
+                        // ---- STRIPE PAYMENT ----
+                        double totalAmount = totalPrice;
+                        long amountInCents = (long) (totalAmount * 100);
+                        if (amountInCents < 50) {
+                            amountInCents = 50;
+                        }
+                        
+                        int orderId = 1400; // you can generate dynamically
+                        Stripe.apiKey = "sk_test_51PLevYP1GdaOtmzh1GKZ8LeiXL5a5DyJb1QFarUfZKNKhZUwFwX1QBc7qEXdGyLz08Hs79nIoW7yEj1wWxGDrI1j00FT0oOwZn";
+                        
+                        PaymentIntentCreateParams params = PaymentIntentCreateParams.builder()
+                                .setAmount(amountInCents)
+                                .setCurrency("usd")
+                                .putMetadata("order_id", String.valueOf(orderId))
+                                .setDescription("Order #" + orderId)
+                                .build();
+                        
+                        PaymentIntent paymentIntent = PaymentIntent.create(params);
+                        
+                        responseJson.addProperty("status", true);
+                        responseJson.addProperty("clientSecret", paymentIntent.getClientSecret());
+                        responseJson.addProperty("message", "Checkout completed, ready for payment!");
+                    } catch (StripeException ex) {
+                        Logger.getLogger(CheackOut.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+                    // ---- SAVE BOOKING ----
+                    User user = (User) request.getSession().getAttribute("user");
+                    Criteria c1 = s.createCriteria(User.class);
+                    c1.add(Restrictions.eq("email", user.getEmail()));
+                    User uid = (User) c1.uniqueResult();
+                    
                     LocalDate tDate = LocalDate.parse(travelDate, dateFormatter);
-                    System.out.println(tDate);
-                    
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                    Date travel_Date;
-                    
-                    travel_Date = sdf.parse(travelDate);
+                    final String vf = Util.genaratecode();
                     
                     SmartBooking b = new SmartBooking();
                     b.setBooking_date(new Date());
@@ -120,7 +164,8 @@ public class CheackOut extends HttpServlet {
                     b.setPassengers_details(description);
                     b.setPassengers(passengers);
                     b.setClass_id(trainClass);
-                    
+                    b.setQr_code(vf);
+                    b.setTotal_price(totalPrice);
                     b.setRoute_price_id(pId);
                     b.setTrain_routes_id(rId);
                     b.setUser_id(uid);
@@ -128,75 +173,30 @@ public class CheackOut extends HttpServlet {
                     s.beginTransaction();
                     s.save(b);
                     s.getTransaction().commit();
-                } catch (ParseException ex) {
-                    Logger.getLogger(CheackOut.class.getName()).log(Level.SEVERE, null, ex);
+
+                    // Send email in background
+                    new Thread(() -> Mail.sendMail(user.getEmail(), "Smart Booking QR Code", "<h1>" + vf + "</h1>")).start();
                 }
-                responseJson.addProperty("status", true);
-                responseJson.addProperty("message", "Validation successful!");
+                
+            } catch (ParseException ex) {
+                Logger.getLogger(CheackOut.class.getName()).log(Level.SEVERE, null, ex);
             }
+            
+            s.close();
+            responseJson.addProperty("status", true);
+            responseJson.addProperty("message", "Validation successful!");
         }
+        
+        response.setContentType("application/json");
+        response.getWriter().write(gson.toJson(responseJson));
+    }
 
 //        responseJson.addProperty("priceID", priceID);
 //        responseJson.addProperty("routeID", routeID);
 //        responseJson.addProperty("status", true);
-//        processcheackout(responseJson);
-        response.setContentType("application/json");
-        response.getWriter().write(gson.toJson(responseJson));
-        s.close();
-    }
-    
-    private void processcheackout(JsonObject responseObject) {
-        try {
-            double amount = responseObject.get("priceID").getAsDouble();
-            String route = responseObject.get("routeID").getAsString();
-            
-            String merahantID = "1225054";
-            String merchantSecret = "Mzg3NTE4MTg3MTMyMTI1ODE5OTEzMTk0NTg4NDQwMjc2OTUxOTA5MA==";
-            String orderID = "000" + route;
-            String currency = "LKR";
-            String formattedAmount = new DecimalFormat("0.00").format(amount);
-            String merchantSecretMD5 = PayHere.generateMD5(merchantSecret);
-            
-            String hash = PayHere.generateMD5(merahantID + orderID + formattedAmount + currency + merchantSecretMD5);
-            
-            JsonObject payHereJson = new JsonObject();
-            payHereJson.addProperty("sandbox", true);
-            payHereJson.addProperty("merchant_id", merahantID);
-            
-            payHereJson.addProperty("return_url", "");
-            payHereJson.addProperty("cancel_url", "");
-            payHereJson.addProperty("notify_url", "https://82d999c7ab2d.ngrok-free.app/SmartRailway/VerifyPayment");
-            
-            payHereJson.addProperty("order_id", orderID);
-//            payHereJson.addProperty("items", items);
-            payHereJson.addProperty("amount", formattedAmount);
-            payHereJson.addProperty("currency", currency);
-            payHereJson.addProperty("hash", hash);
-            
-            payHereJson.addProperty("first_name", "cc");
-            payHereJson.addProperty("last_name", "dd");
-            payHereJson.addProperty("email", "chamoddhananjaya76@gmail.com");
-
-//            payHereJson.addProperty("phone", tel.getValue());
-//            payHereJson.addProperty("address", address.getLineOne() + ", " + address.getLineTwo());
-//            payHereJson.addProperty("city", address.getCity().getName());
-            payHereJson.addProperty("country", "Sri Lanka");
-            
-            payHereJson.addProperty("sandbox", true);
-            
-            responseObject.addProperty("status", true);
-            responseObject.addProperty("message", "Checkout completed");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        
-    }
-;
+//        processcheackout(totalPrice, trainRoutesId, response);
 }
 
-//publish
 //pk_test_51PLevYP1GdaOtmzhCdg6VzMZbcOzfYd6vN7rwgizmQHYW9o7zvENmheM5ANOLcfVScPoZRwAw5r6BkD5lkJ7R3YZ00LbT67G5y
-
-
 //SECRET_KEY
 //sk_test_51PLevYP1GdaOtmzh1GKZ8LeiXL5a5DyJb1QFarUfZKNKhZUwFwX1QBc7qEXdGyLz08Hs79nIoW7yEj1wWxGDrI1j00FT0oOwZn

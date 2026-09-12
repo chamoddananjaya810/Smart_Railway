@@ -167,11 +167,17 @@
                                     <i class="fas fa-user-tag text-danger me-2"></i>Role
                                 </label>
                                 <select class="form-select" id="role"  required>
-                                    <option value="">Choose your role</option>
-                                    <option value="user">User</option>
-                                    <option value="admin">Admin</option>
-                                    <option value="moderator">Moderator</option>
+                                    <option value="">Choose passenger type</option>
+                                    <option value="private_employer">Private Employer</option>
+                                    <option value="government_employee">Government Employee</option>
+                                    <option value="student">Student</option>
+                                    <option value="senior_citizen">Senior Citizen</option>
+                                    <option value="child">Child</option>
+                                    <option value="foreigner">Foreigner</option>
+                                    <option value="military_personnel">Military Personnel</option>
+                                    <option value="disabled_person">Person with Disabilities</option>
                                 </select>
+
                                 <div class="invalid-feedback">
                                     Please select your role.
                                 </div>
@@ -201,7 +207,7 @@
 
                         <!-- Submit Button -->
                         <button 
-type="button"
+                            type="button"
                             class="btn btn-danger btn-lg w-100 py-3 mb-4"
 
                             onclick="signUp();"

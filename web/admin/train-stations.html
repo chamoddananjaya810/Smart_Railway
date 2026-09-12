@@ -11,7 +11,7 @@
 
 
     </head>
-    <body class="bg-light" onload="dashboard(); loadStaionData();">  
+    <body class="bg-light" onload="dashboard(); loadStaionData();  loadPrices();">  
         <div id="dashboard"></div>
         <!-- Header -->
         <div class="bg-danger text-white py-4 mb-4">
@@ -117,7 +117,7 @@
                                 <th>Platform</th>
                                 <th>Arrival Time</th>
                                 <th>Departure Time</th>
-                                <th>Stay Duration</th>
+
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -174,20 +174,20 @@
                                 <input type="time" class="form-control" id="departureTime" required>
                                 <div class="form-text">When train leaves station</div>
                             </div>
-                            
-                            <input type="time" class="form-control" id="departureTime" required>
-<!--<script>
-function formatToAmPm(timeStr) {
-    let [hour, minute] = timeStr.split(":").map(Number);
-    let ampm = hour >= 12 ? "PM" : "AM";
-    hour = hour % 12 || 12; // convert to 12-hour format
-    return `${hour}:${minute.toString().padStart(2, "0")} ${ampm}`;
-}
 
-document.getElementById("departureTime").addEventListener("change", function() {
-    console.log(formatToAmPm(this.value)); // e.g., "2:30 PM"
-});
-</script>-->
+                            <input type="time" class="form-control" id="departureTime" required>
+                            <!--<script>
+                            function formatToAmPm(timeStr) {
+                                let [hour, minute] = timeStr.split(":").map(Number);
+                                let ampm = hour >= 12 ? "PM" : "AM";
+                                hour = hour % 12 || 12; // convert to 12-hour format
+                                return `${hour}:${minute.toString().padStart(2, "0")} ${ampm}`;
+                            }
+                            
+                            document.getElementById("departureTime").addEventListener("change", function() {
+                                console.log(formatToAmPm(this.value)); // e.g., "2:30 PM"
+                            });
+                            </script>-->
                             <div class="col-12">
                                 <div class="alert alert-info">
                                     <i class="bi bi-info-circle me-2"></i>
@@ -253,268 +253,7 @@ document.getElementById("departureTime").addEventListener("change", function() {
         <script src="../assets/js/add-station.js"></script>
 
 
-        <!--        <script>
-                                    // Sample data storage
-                                    let schedules = [
-                                        {id: 1, train_id: 1, train_name: 'Rajdhani Express', station_id: 1, station_name: 'New Delhi', stop_platform: 'Platform 1', arrival_time: '06:00', departure_time: '06:10', stay_duration_minutes: 10},
-                                        {id: 2, train_id: 1, train_name: 'Rajdhani Express', station_id: 2, station_name: 'Agra Cantt', stop_platform: 'Platform 2', arrival_time: '08:30', departure_time: '08:35', stay_duration_minutes: 5},
-                                        {id: 3, train_id: 1, train_name: 'Rajdhani Express', station_id: 3, station_name: 'Jhansi Jn', stop_platform: 'Platform 1', arrival_time: '10:15', departure_time: '10:25', stay_duration_minutes: 10},
-                                        {id: 4, train_id: 2, train_name: 'Shatabdi Express', station_id: 1, station_name: 'New Delhi', stop_platform: 'Platform 3', arrival_time: '07:00', departure_time: '07:05', stay_duration_minutes: 5},
-                                        {id: 5, train_id: 2, train_name: 'Shatabdi Express', station_id: 4, station_name: 'Kanpur Central', stop_platform: 'Platform 4', arrival_time: '11:30', departure_time: '11:38', stay_duration_minutes: 8},
-                                        {id: 6, train_id: 3, train_name: 'Duronto Express', station_id: 5, station_name: 'Mumbai Central', stop_platform: 'Platform 5', arrival_time: '15:00', departure_time: '15:15', stay_duration_minutes: 15},
-                                        {id: 7, train_id: 3, train_name: 'Duronto Express', station_id: 6, station_name: 'Pune Jn', stop_platform: 'Platform 2', arrival_time: '18:45', departure_time: '18:50', stay_duration_minutes: 5},
-                                        {id: 8, train_id: 4, train_name: 'Passenger Train', station_id: 7, station_name: 'Chennai Central', stop_platform: 'Platform A', arrival_time: '09:00', departure_time: '09:03', stay_duration_minutes: 3}
-                                    ];
-        
-                                    let trains = [
-                                        {id: 1, name: 'Rajdhani Express', number: '12001'},
-                                        {id: 2, name: 'Shatabdi Express', number: '12002'},
-                                        {id: 3, name: 'Duronto Express', number: '12003'},
-                                        {id: 4, name: 'Passenger Train', number: '12004'},
-                                        {id: 5, name: 'Mail Express', number: '12005'}
-                                    ];
-        
-                                    let stations = [
-                                        {id: 1, name: 'New Delhi', code: 'NDLS'},
-                                        {id: 2, name: 'Agra Cantt', code: 'AGC'},
-                                        {id: 3, name: 'Jhansi Jn', code: 'JHS'},
-                                        {id: 4, name: 'Kanpur Central', code: 'CNB'},
-                                        {id: 5, name: 'Mumbai Central', code: 'BCT'},
-                                        {id: 6, name: 'Pune Jn', code: 'PUNE'},
-                                        {id: 7, name: 'Chennai Central', code: 'MAS'},
-                                        {id: 8, name: 'Bangalore City', code: 'BNC'},
-                                        {id: 9, name: 'Hyderabad Decan', code: 'HYB'},
-                                        {id: 10, name: 'Kolkata Howrah', code: 'HWH'},
-                                        {id: 11, name: 'Ahmedabad Jn', code: 'ADI'},
-                                        {id: 12, name: 'Lucknow Jn', code: 'LJN'}
-                                    ];
-        
-                                    let nextId = 9;
-                                    let deleteScheduleId = null;
-        
-                                    function loadScheduleData() {
-                                        const tbody = document.querySelector('#scheduleTable tbody');
-                                        tbody.innerHTML = '';
-        
-                                        schedules.forEach(schedule => {
-                                            const row = `
-                                <tr>
-                                    <td><span class="badge bg-secondary">${schedule.id}</span></td>
-                                    <td><strong>${schedule.train_name}</strong></td>
-                                    <td><span class="badge bg-info">${schedule.station_name}</span></td>
-                                    <td><span class="badge bg-warning text-dark">${schedule.stop_platform}</span></td>
-                                    <td><i class="bi bi-clock me-1"></i>${schedule.arrival_time}</td>
-                                    <td><i class="bi bi-clock-fill me-1"></i>${schedule.departure_time}</td>
-                                    <td><span class="badge bg-success">${schedule.stay_duration_minutes} min</span></td>
-                                    <td>
-                                        <button class="btn btn-sm btn-outline-primary me-1" onclick="editSchedule(${schedule.id})" data-bs-toggle="modal" data-bs-target="#addScheduleModal">
-                                            <i class="bi bi-pencil"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-outline-danger" onclick="deleteSchedule(${schedule.id})" data-bs-toggle="modal" data-bs-target="#deleteModal">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            `;
-                                            tbody.innerHTML += row;
-                                        });
-        
-                                        updateStats();
-                                    }
-        
-                                    function loadTrainOptions() {
-                                        const trainSelect = document.getElementById('trainSelect');
-                                        const trainFilter = document.getElementById('trainFilter');
-        
-                                        trains.forEach(train => {
-                                            trainSelect.innerHTML += `<option value="${train.id}">${train.name} (${train.number})</option>`;
-                                            trainFilter.innerHTML += `<option value="${train.name}">${train.name}</option>`;
-                                        });
-                                    }
-        
-                                    function loadStationOptions() {
-                                        const stationSelect = document.getElementById('stationSelect');
-                                        const stationFilter = document.getElementById('stationFilter');
-        
-                                        stations.forEach(station => {
-                                            stationSelect.innerHTML += `<option value="${station.id}">${station.name} (${station.code})</option>`;
-                                            stationFilter.innerHTML += `<option value="${station.name}">${station.name}</option>`;
-                                        });
-                                    }
-        
-                                    function updateStats() {
-                                        document.getElementById('totalStops').textContent = schedules.length;
-        
-                                        const uniqueTrains = [...new Set(schedules.map(s => s.train_id))].length;
-                                        document.getElementById('activeTrains').textContent = uniqueTrains;
-        
-                                        const avgDuration = Math.round(schedules.reduce((sum, s) => sum + s.stay_duration_minutes, 0) / schedules.length);
-                                        document.getElementById('avgDuration').textContent = avgDuration;
-        
-                                        document.getElementById('totalStations').textContent = stations.length;
-                                    }
-        
-                                    function saveSchedule() {
-                                        const scheduleId = document.getElementById('scheduleId').value;
-                                        const trainId = parseInt(document.getElementById('trainSelect').value);
-                                        const stationId = parseInt(document.getElementById('stationSelect').value);
-                                        const stopPlatform = document.getElementById('stopPlatform').value;
-                                        const arrivalTime = document.getElementById('arrivalTime').value;
-                                        const departureTime = document.getElementById('departureTime').value;
-                                        let stayDuration = parseInt(document.getElementById('stayDuration').value);
-        
-                                        if (!trainId || !stationId || !stopPlatform || !arrivalTime || !departureTime || !stayDuration) {
-                                            alert('Please fill all required fields');
-                                            return;
-                                        }
-        
-                                        // Validate that departure is after arrival
-                                        if (departureTime <= arrivalTime) {
-                                            alert('Departure time must be after arrival time');
-                                            return;
-                                        }
-        
-                                        // Get train and station details
-                                        const train = trains.find(t => t.id === trainId);
-                                        const station = stations.find(s => s.id === stationId);
-        
-                                        if (!train || !station) {
-                                            alert('Selected train or station not found');
-                                            return;
-                                        }
-        
-                                        // Calculate duration from times if not provided correctly
-                                        const arrivalDate = new Date(`2024-01-01 ${arrivalTime}`);
-                                        const departureDate = new Date(`2024-01-01 ${departureTime}`);
-                                        const calculatedDuration = Math.round((departureDate - arrivalDate) / (1000 * 60));
-        
-                                        if (Math.abs(calculatedDuration - stayDuration) > 1) {
-                                            if (confirm(`Calculated duration (${calculatedDuration} min) differs from entered duration (${stayDuration} min). Use calculated duration?`)) {
-                                                stayDuration = calculatedDuration;
-                                                document.getElementById('stayDuration').value = calculatedDuration;
-                                            }
-                                        }
-        
-                                        if (scheduleId) {
-                                            // Edit existing schedule
-                                            const index = schedules.findIndex(s => s.id == scheduleId);
-                                            schedules[index] = {
-                                                id: parseInt(scheduleId),
-                                                train_id: trainId,
-                                                train_name: train.name,
-                                                station_id: stationId,
-                                                station_name: station.name,
-                                                stop_platform: stopPlatform,
-                                                arrival_time: arrivalTime,
-                                                departure_time: departureTime,
-                                                stay_duration_minutes: stayDuration
-                                            };
-                                        } else {
-                                            // Add new schedule
-                                            schedules.push({
-                                                id: nextId++,
-                                                train_id: trainId,
-                                                train_name: train.name,
-                                                station_id: stationId,
-                                                station_name: station.name,
-                                                stop_platform: stopPlatform,
-                                                arrival_time: arrivalTime,
-                                                departure_time: departureTime,
-                                                stay_duration_minutes: stayDuration
-                                            });
-                                        }
-        
-                                        loadScheduleData();
-                                        resetSchedule();
-                                        bootstrap.Modal.getInstance(document.getElementById('addScheduleModal')).hide();
-                                    }
-        
-                                    function editSchedule(id) {
-                                        const schedule = schedules.find(s => s.id === id);
-                                        if (schedule) {
-                                            document.getElementById('scheduleId').value = schedule.id;
-                                            document.getElementById('trainSelect').value = schedule.train_id;
-                                            document.getElementById('stationSelect').value = schedule.station_id;
-                                            document.getElementById('stopPlatform').value = schedule.stop_platform;
-                                            document.getElementById('arrivalTime').value = schedule.arrival_time;
-                                            document.getElementById('departureTime').value = schedule.departure_time;
-                                            document.getElementById('stayDuration').value = schedule.stay_duration_minutes;
-        
-                                            document.querySelector('#addScheduleModal .modal-title').innerHTML = '<i class="bi bi-pencil me-2"></i>Edit Stop';
-                                        }
-                                    }
-        
-                                    function deleteSchedule(id) {
-                                        const schedule = schedules.find(s => s.id === id);
-                                        if (schedule) {
-                                            deleteScheduleId = id;
-                                            document.getElementById('deleteTrainName').textContent = schedule.train_name;
-                                            document.getElementById('deleteStationName').textContent = schedule.station_name;
-                                            document.getElementById('deleteScheduleTime').textContent = `${schedule.arrival_time} - ${schedule.departure_time}`;
-                                        }
-                                    }
-        
-                                    function confirmDelete() {
-                                        if (deleteScheduleId) {
-                                            schedules = schedules.filter(s => s.id !== deleteScheduleId);
-                                            loadScheduleData();
-                                            deleteScheduleId = null;
-                                            bootstrap.Modal.getInstance(document.getElementById('deleteModal')).hide();
-                                        }
-                                    }
-        
-                                    function resetSchedule() {
-                                        document.getElementById('scheduleForm').reset();
-                                        document.getElementById('scheduleId').value = '';
-                                        document.querySelector('#addScheduleModal .modal-title').innerHTML = '<i class="bi bi-plus-circle me-2"></i>Add New Stop';
-                                    }
-        
-                                    // Auto-calculate duration when times change
-                                    document.getElementById('arrivalTime').addEventListener('change', calculateDuration);
-                                    document.getElementById('departureTime').addEventListener('change', calculateDuration);
-        
-                                    function calculateDuration() {
-                                        const arrivalTime = document.getElementById('arrivalTime').value;
-                                        const departureTime = document.getElementById('departureTime').value;
-        
-                                        if (arrivalTime && departureTime && departureTime > arrivalTime) {
-                                            const arrivalDate = new Date(`2024-01-01 ${arrivalTime}`);
-                                            const departureDate = new Date(`2024-01-01 ${departureTime}`);
-                                            const duration = Math.round((departureDate - arrivalDate) / (1000 * 60));
-                                            document.getElementById('stayDuration').value = duration;
-                                        }
-                                    }
-        
-                                    // Filter functionality
-                                    document.getElementById('trainFilter').addEventListener('change', filterSchedules);
-                                    document.getElementById('stationFilter').addEventListener('change', filterSchedules);
-                                    document.getElementById('searchInput').addEventListener('input', filterSchedules);
-        
-                                    function filterSchedules() {
-                                        const trainFilter = document.getElementById('trainFilter').value;
-                                        const stationFilter = document.getElementById('stationFilter').value;
-                                        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-        
-                                        const rows = document.querySelectorAll('#scheduleTable tbody tr');
-        
-                                        rows.forEach(row => {
-                                            const train = row.cells[1].textContent;
-                                            const station = row.cells[2].textContent;
-                                            const platform = row.cells[3].textContent.toLowerCase();
-        
-                                            const matchesSearch = train.toLowerCase().includes(searchTerm) ||
-                                                    station.toLowerCase().includes(searchTerm) ||
-                                                    platform.includes(searchTerm);
-                                            const matchesTrain = !trainFilter || train.includes(trainFilter);
-                                            const matchesStation = !stationFilter || station.includes(stationFilter);
-        
-                                            if (matchesSearch && matchesTrain && matchesStation) {
-                                                row.style.display = '';
-                                            } else {
-                                                row.style.display = 'none';
-                                            }
-                                        });
-                                    }
-                </script>-->
+
+                
     </body>
 </html>

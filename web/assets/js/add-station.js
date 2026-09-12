@@ -7,19 +7,12 @@ async function loadStaionData() {
     });
     if (response.ok) {
         const  json = await response.json();
-
-        console.log(json.routeList);
-
-
         if (json.status) {
-            console.log(json.routeList);
-            console.log(json.routeList.route_id);
+
 
 
             loadSelect("route", json.routeList, "titile");
             loadSelect("station", json.sList, "name");
-
-
         } else {
 
 
@@ -38,9 +31,8 @@ function loadTrainSelect(selectId, list, textKey) {
         return;
     }
 
-    // Default option එක reset කරන්න
+// Default option එක reset කරන්න
     select.innerHTML = '<option value="0">Choose Route</option>';
-
     list.forEach(item => {
         const option = document.createElement("option");
         option.value = item.tarin_id ?? ""; // Value → tarin_id
@@ -51,7 +43,6 @@ function loadTrainSelect(selectId, list, textKey) {
 
 function  loadSelect(selectId, list, Property) {
     const select = document.getElementById(selectId);
-
     list.forEach(item => {
         const  option = document.createElement("option");
         option.value = item.id;
@@ -59,6 +50,77 @@ function  loadSelect(selectId, list, Property) {
         select.appendChild(option);
     });
 }
+
+
+
+async function  loadPrices() {
+
+    const searchParams = new URLSearchParams(window.location.search);
+    if (searchParams.has("id")) {
+        const  routeId = searchParams.get("id");
+
+        console.log(routeId);
+        const  response = await fetch("../Loadstation?id=" + routeId);
+        if (response.ok) {
+            const  json = await response.json();
+            if (json.status) {
+                console.log(json);
+
+
+
+
+
+                const tbody = document.querySelector("#scheduleTable tbody");
+                tbody.innerHTML = ""; // Clear existing rows if any
+
+                json.stationList.forEach(station => {
+
+
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+        <td><span class="badge bg-danger">${station.id}</span></td>
+                                    <td>${station.train_routes_id.titile}</td>
+                              
+                                    
+                                    <td><span class="text-success fw-bold">${station.station_id.name}</span></td>
+                                    
+                               
+                                  <td><span class="text-info fw-bold">${station.stop_platform}</span></td>
+                    <td><span class="text-info fw-bold">${station.arrival_time}</span></td>
+                    <td><span class="text-info fw-bold">${station.departure_time}</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-danger me-1" onclick="editRoute('RT001')">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-danger" onclick="viewStationPrice(${station.id})">
+    <i class="bi bi-eye"></i>
+</button>
+
+                                  </td>
+    `;
+
+                    tbody.appendChild(row);
+                });
+
+            } else {
+//            document.getElementById("massage").innerHTML = json.massage;
+
+                console.log("not" + json);
+            }
+        } else {
+            console.log("else");
+//            document.getElementById("massage").innerHTML = "Unable to get product data please try again later";
+        }
+    }
+}
+
+function  viewStationPrice(stationId) {
+
+    window.location.href = `train-stations-price.html?id=${stationId}`;
+
+
+}
+
 async function saveSchedule() {
     // Get form values
     const route = document.getElementById("route").value;
@@ -67,24 +129,23 @@ async function saveSchedule() {
     const arrivalTime = document.getElementById("arrivalTime").value;
     const departureTime = document.getElementById("departureTime").value;
 
-    // Convert 24-hour to AM/PM format for display
     function convertToAMPM(time24) {
-        if (!time24) return '';
-        
+        if (!time24)
+            return '';
         const [hours, minutes] = time24.split(':');
         let hour = parseInt(hours, 10);
         const ampm = hour < 12 ? 'AM' : 'PM';
-        hour = hour % 12 || 12; // Convert 0 to 12, 13+ to 1-11
+        hour = hour % 12 || 12;
         const hourStr = hour.toString().padStart(2, '0');
         const minuteStr = minutes.padStart(2, '0');
-        
         return `${hourStr}:${minuteStr} ${ampm}`;
     }
 
-    // Convert 24-hour to MySQL TIME format (HH:MM:SS)
+
     function convertToMySQLTime(time24) {
-        if (!time24) return '';
-        return `${time24}:00`; // Add seconds for MySQL TIME format
+        if (!time24)
+            return '';
+        return `${time24}:00`;
     }
 
     // Validation
@@ -103,21 +164,11 @@ async function saveSchedule() {
     // Check if departure time is after arrival time
     const arrivalMinutes = parseInt(arrivalTime.split(':')[0]) * 60 + parseInt(arrivalTime.split(':')[1]);
     const departureMinutes = parseInt(departureTime.split(':')[0]) * 60 + parseInt(departureTime.split(':')[1]);
-    
     if (departureMinutes <= arrivalMinutes) {
         showToast('error', 'Time Error', 'Departure time must be after arrival time.');
         return;
     }
 
-    // Log formatted times for debugging
-    console.log("Raw Arrival Time:", arrivalTime);
-    console.log("Raw Departure Time:", departureTime);
-    console.log("Formatted Arrival (AM/PM):", convertToAMPM(arrivalTime));
-    console.log("Formatted Departure (AM/PM):", convertToAMPM(departureTime));
-    console.log("MySQL Arrival Time:", convertToMySQLTime(arrivalTime));
-    console.log("MySQL Departure Time:", convertToMySQLTime(departureTime));
-
-    // Prepare schedule object for backend
     const schedule = {
         route: route,
         station_id: station,
@@ -125,9 +176,7 @@ async function saveSchedule() {
         arrival_time: convertToMySQLTime(arrivalTime), // HH:MM:SS format for MySQL
         departure_time: convertToMySQLTime(departureTime) // HH:MM:SS format for MySQL
     };
-
     console.log("Schedule Object:", schedule);
-
     try {
         // Show loading state
         const submitButton = document.querySelector('button[onclick="saveSchedule()"]');
@@ -146,7 +195,6 @@ async function saveSchedule() {
             body: JSON.stringify(schedule),
             credentials: "include"
         });
-
         // Reset button state
         if (submitButton) {
             submitButton.disabled = false;
@@ -162,34 +210,29 @@ async function saveSchedule() {
 
         const json = await response.json();
         console.log("Server Response:", json);
-
         if (json.status) {
             showToast('success', 'Success', json.message || 'Schedule saved successfully!');
-            
             // Reset form on success
             document.getElementById("route").value = "0";
             document.getElementById("station").value = "0";
             document.getElementById("stopPlatform").value = "";
             document.getElementById("arrivalTime").value = "";
             document.getElementById("departureTime").value = "";
-            
-            // Optional: Refresh schedule list or redirect
-            // loadScheduleList();
-            
+
+
         } else {
             showToast('error', 'Failed', json.message || 'Could not save schedule.');
         }
 
     } catch (error) {
         console.error("Error saving schedule:", error);
-        
         // Reset button state on error
         const submitButton = document.querySelector('button[onclick="saveSchedule()"]');
         if (submitButton) {
             submitButton.disabled = false;
             submitButton.textContent = originalText;
         }
-        
+
         showToast('error', 'Network Error', 'Could not connect to server. Please check your connection.');
     }
 }
@@ -231,19 +274,15 @@ async function saveSchedule() {
 
 function ok() {
     testResponse('success');
-
 }
 function error() {
     testResponse('error');
-
 }
 function verification() {
     testResponse('verification');
-
 }
 function network_error() {
     testResponse('network_error');
-
 }
 // Toast function
 function showToast(type, title, message) {
@@ -251,19 +290,16 @@ function showToast(type, title, message) {
     const toastIcon = document.getElementById('toastIcon');
     const toastTitle = document.getElementById('toastTitle');
     const toastBody = document.getElementById('toastBody');
-
     const configs = {
         success: {icon: 'bi-check-circle-fill', class: 'text-success'},
         error: {icon: 'bi-x-circle-fill', class: 'text-danger'},
         warning: {icon: 'bi-exclamation-triangle-fill', class: 'text-warning'},
         info: {icon: 'bi-info-circle-fill', class: 'text-info'}
     };
-
     const config = configs[type] || configs.info;
     toastIcon.className = `bi ${config.icon} ${config.class} me-2`;
     toastTitle.textContent = title;
     toastBody.textContent = message;
-
     const bsToast = new bootstrap.Toast(toast);
     bsToast.show();
 }
@@ -288,9 +324,7 @@ function testResponse(type) {
         },
         network_error: null
     };
-
     const json = responses[type];
-
     if (type === 'network_error') {
         showToast('error', 'Network Error', 'Failed to connect to server');
         return;
@@ -305,4 +339,5 @@ function testResponse(type) {
     } else {
         showToast('error', 'Login Failed', json.message);
     }
+
 }

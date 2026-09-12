@@ -116,7 +116,7 @@ public class AddStationSchedule extends HttpServlet {
 
         response.setContentType("application/json");
         response.getWriter().write(responseJson.toString());
-        s.close();
+      
     }
 
 }

@@ -49,7 +49,7 @@ public class SignIn extends HttpServlet {
 
             } else if (!Util.isEmailValid(email)) {
                 responseJson.addProperty("message", "please enter the valid email !");
-                System.out.println("okkkkkk");
+              
             } else if (password.isEmpty()) {
                 responseJson.addProperty("message", "password  can not be empty !");
             } else if (!Util.isPasswordValid(password)) {

@@ -35,40 +35,51 @@ import org.hibernate.criterion.Restrictions;
 public class Profile extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
         HttpSession ses = request.getSession(false);
 
         if (ses != null && ses.getAttribute("user") != null) {
             User sessionUser = (User) ses.getAttribute("user");
 
+            JsonObject responseJson = new JsonObject();
             // Hibernate session
             SessionFactory sf = HibernateUtil.getSessionFactory();
             Session s = sf.openSession();
 
-            // If you just want fresh data from DB:
+            // Fetch fresh user data
             Criteria c1 = s.createCriteria(User.class);
-            c1.add(Restrictions.eq("id", sessionUser.getId())); // assuming 'id' is your PK field
+            c1.add(Restrictions.eq("id", sessionUser.getId()));
             User user = (User) c1.uniqueResult();
+
+            s.close();
+
             String dob = new SimpleDateFormat("yyyy-MM-dd").format(user.getDate_of_birth());
-           
+
+            // ✅ Build full image URL
+            String contextPath = request.getContextPath();
+            String serverName = request.getServerName();
+            int serverPort = request.getServerPort();
+            String scheme = request.getScheme();
+
+        
+          
 
             // Build JSON
-            JsonObject responseJson = new JsonObject();
+             responseJson.addProperty("id", user.getId());
             responseJson.addProperty("fullName", user.getFull_name());
             responseJson.addProperty("nic", user.getNic());
             responseJson.addProperty("email", user.getEmail());
             responseJson.addProperty("poneNumber", user.getPhone());
-            responseJson.addProperty("profile", user.getProfile_pic());
+        
             responseJson.addProperty("role", user.getRole());
             responseJson.addProperty("dob", dob);
-
             responseJson.addProperty("status", true);
 
             // Send response
             response.setContentType("application/json");
             response.getWriter().write(responseJson.toString());
-
-            s.close(); // Close Hibernate session
 
         } else {
             // Not logged in
@@ -78,6 +89,5 @@ public class Profile extends HttpServlet {
             response.setContentType("application/json");
             response.getWriter().write(errorJson.toString());
         }
-
     }
 }

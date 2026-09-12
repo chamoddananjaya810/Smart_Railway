@@ -3,13 +3,13 @@ function calculateDuration(departure, arrival) {
     // Extract time from datetime string if needed
     let depTime = departure;
     let arrTime = arrival;
-    
+
     // If these are full datetime strings, extract just the time part
     if (departure.includes('T') || departure.includes(' ')) {
         depTime = new Date(departure).toTimeString().slice(0, 5); // Extract HH:MM
         arrTime = new Date(arrival).toTimeString().slice(0, 5);   // Extract HH:MM
     }
-    
+
     // Construct Date objects for a fixed date with the given times
     const dep = new Date(`2024-01-01T${depTime}:00`);
     const arr = new Date(`2024-01-01T${arrTime}:00`);
@@ -33,19 +33,19 @@ function calculateDuration(departure, arrival) {
 function calculateDurationSimple(departureTime, arrivalTime) {
     const [depHours, depMinutes] = departureTime.split(':').map(Number);
     const [arrHours, arrMinutes] = arrivalTime.split(':').map(Number);
-    
+
     let depTotalMinutes = depHours * 60 + depMinutes;
     let arrTotalMinutes = arrHours * 60 + arrMinutes;
-    
+
     // If arrival is next day
     if (arrTotalMinutes < depTotalMinutes) {
         arrTotalMinutes += 24 * 60; // Add 24 hours
     }
-    
+
     const diffMinutes = arrTotalMinutes - depTotalMinutes;
     const hours = Math.floor(diffMinutes / 60);
     const minutes = diffMinutes % 60;
-    
+
     return `${hours}h ${minutes}m`;
 }
 
@@ -157,8 +157,8 @@ async function loadRoute() {
         </div>
     `;
 
-    routeContainer.innerHTML += cardHTML;
-});
+                routeContainer.innerHTML += cardHTML;
+            });
 
             console.log("Routes loaded successfully");
 

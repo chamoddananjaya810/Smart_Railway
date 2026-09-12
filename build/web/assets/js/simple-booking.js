@@ -65,3 +65,52 @@ function stationview(stationId) {
     console.log(stationId);
     window.location.href = `train-station-prices.html?id=${stationId}`;
 }
+
+
+async function Search(stName) {
+    if (!stName.trim()) {
+        console.log("ok");
+        loadSimpleBooking(); // Reload default booking list
+        return;
+    }
+
+    try {
+        const response = await fetch("LoadSimpleSearch?name=" + encodeURIComponent(stName));
+
+        if (response.ok) {
+            const json = await response.json();
+
+            if (json.status) {
+                const tbody = document.querySelector("#stationTable tbody");
+                tbody.innerHTML = "";
+
+                json.stationList.forEach(station => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td><span class="badge bg-primary fs-6">${station.id}</span></td>
+                        <td class="fw-semibold">${station.station_id.name}</td>
+                        <td><span class="badge bg-info text-dark">${station.stop_platform}</span></td>
+                        <td class="text-success fw-bold text-nowrap">${station.arrival_time}</td>
+                        <td class="text-danger fw-bold text-nowrap">${station.departure_time}</td>
+                        <td><span class="badge bg-secondary fs-6">${station.train_routes_id.id}</span></td>
+                        <td>
+                            <div class="btn-group btn-group-sm" role="group">
+                                <button class="btn btn-outline-primary" onclick="stationview(${station.id})">View</button>
+                            </div>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+
+            } else {
+                document.querySelector("#stationTable tbody").innerHTML = "";
+                console.log("No stations found.");
+            }
+        } else {
+            console.error("Error fetching data");
+        }
+    } catch (error) {
+        console.error("Fetch failed:", error);
+    }
+}
+

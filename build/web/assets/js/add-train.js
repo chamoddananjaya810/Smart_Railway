@@ -158,9 +158,7 @@ async function saveTrain() {
     const trainStatus = document.getElementById("trainStatus").value;
 
 
-    console.log(trainType);
-    console.log(daysOfTravel);
-    console.log(speedType);
+    
 
     const train = {
         trainNumber: trainNumber,
@@ -173,42 +171,38 @@ async function saveTrain() {
 
     };
 
-    try {
-        // Send request
 
-        const trainJson = JSON.stringify(train);
-        const response = await fetch("../AddTrainForm", {
-            method: "POST",
+    // Send request
 
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: trainJson,
-            credentials: "include",
-        });
+    const trainJson = JSON.stringify(train);
+    const response = await fetch("../AddTrainForm", {
+        method: "POST",
 
-        // Handle response
-        if (response.ok) {
-            const json = await response.json();
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: trainJson,
+        credentials: "include",
+    });
 
-            if (json.status) {
+    // Handle response
+    if (response.ok) {
+        const json = await response.json();
 
-                showToast('success', 'Successful', 'Train saved successfully!');
-                document.getElementById("trainForm").reset();
-            } else {
+        if (json.status) {
 
-                showToast('error', 'Failed to save train', json.message);
-            }
+            showToast('success', 'Successful', 'Train saved successfully!');
+            document.getElementById("trainForm").reset();
         } else {
 
-            showToast('error', 'Server error', 'Failed to communicate with server');
-
+            showToast('error', 'Failed to save train', json.message);
         }
-    } catch (error) {
+    } else {
 
+        showToast('error', 'Server error', 'Failed to communicate with server');
 
-        showToast('error', 'Network Error', 'An error occurred while saving the train');
     }
+
 }
 
 
@@ -305,19 +299,18 @@ async function editTrain(trainId) {
 }
 
 function resetTrain() {
-    // Clear input fields
-    // Clear text/number fields
+
     document.getElementById("trainNumber").value = "";
     document.getElementById("trainName").value = "";
     document.getElementById("totalCoaches").value = "";
 
-    // Reset selects to first option (e.g., "Select Type", "Select Speed", etc.)
+
     document.getElementById("trainType").selectedIndex = 0;
     document.getElementById("speedType").selectedIndex = 0;
     document.getElementById("daysOfTravel").selectedIndex = 0;
     document.getElementById("trainStatus").selectedIndex = 0;
 
-    // Reset modal title to "Add New Train"
+
     const modalTitle = document.querySelector('#addTrainModal .modal-title');
     if (modalTitle) {
         modalTitle.innerHTML = '<i class="bi bi-plus-circle me-2"></i>Add New Train';
@@ -353,9 +346,7 @@ async function updateTrain(trainId) {
     const trainStatus = document.getElementById("trainStatus").value;
 
 
-    console.log(trainType);
-    console.log(daysOfTravel);
-    console.log(speedType);
+  
 
     const train = {
         trainId: trainId,
@@ -369,42 +360,38 @@ async function updateTrain(trainId) {
 
     };
 
-    try {
-        // Send request
 
-        const trainJson = JSON.stringify(train);
-        const response = await fetch("../UpdateTrainForm", {
-            method: "POST",
+    // Send request
 
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: trainJson,
-            credentials: "include"
-        });
+    const trainJson = JSON.stringify(train);
+    const response = await fetch("../UpdateTrainForm", {
+        method: "POST",
 
-        // Handle response
-        if (response.ok) {
-            const json = await response.json();
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: trainJson,
+        credentials: "include"
+    });
 
-            if (json.status) {
+    // Handle response
+    if (response.ok) {
+        const json = await response.json();
 
-                showToast('success', 'Successful', 'Train saved successfully!');
-                document.getElementById("trainForm").reset();
-            } else {
+        if (json.status) {
 
-                showToast('error', 'Failed to save train', json.message);
-            }
+            showToast('success', 'Successful', 'Train saved successfully!');
+            document.getElementById("trainForm").reset();
         } else {
 
-            showToast('error', 'Server error', 'Failed to communicate with server');
-
+            showToast('error', 'Failed to save train', json.message);
         }
-    } catch (error) {
+    } else {
 
+        showToast('error', 'Server error', 'Failed to communicate with server');
 
-        showToast('error', 'Network Error', 'An error occurred while saving the train');
     }
+
 
 }
 

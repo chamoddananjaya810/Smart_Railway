@@ -55,4 +55,8 @@ public class TrainType implements Serializable{
 
     @Column(name = "name", length = 45, nullable = false)
     private String name;
+
+    public void setTypeName(String express) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

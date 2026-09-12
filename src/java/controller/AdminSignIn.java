@@ -40,8 +40,10 @@ public class AdminSignIn extends HttpServlet {
         JsonObject responseJson = new JsonObject();
 
         try {
-            String email = admin.get("email").getAsString();
-            String password = admin.get("password").getAsString();
+            String email = admin.get("email").getAsString().trim();
+            String password = admin.get("password").getAsString().trim();
+
+            System.out.println("AdminSignIn Attempt - Email: '" + email + "', Password: '" + password + "'");
 
             if (email.isEmpty()) {
 
@@ -64,6 +66,7 @@ public class AdminSignIn extends HttpServlet {
                 criteria.add(Restrictions.eq("password", password));
 
                 if (criteria.list().isEmpty()) {
+                    System.out.println("Admin login failed: No matching record found in DB.");
                     responseJson.addProperty("message", "Invalid Credetials!");
 
                 } else {

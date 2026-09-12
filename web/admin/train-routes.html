@@ -7,7 +7,7 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
     </head>
-    <body class="bg-light"  onload="dashboard();  loadRouteData();">
+    <body class="bg-light"  onload="dashboard();  loadRouteData();  loadRouteTable();">
         <div id="dashboard"></div>
         <!-- Header -->
         <div class="bg-danger text-white py-4 mb-4">
@@ -18,7 +18,7 @@
                         <p class="mb-0 opacity-75">Manage railway routes and schedules efficiently</p>
                     </div>
                     <div class="d-flex align-items-center gap-3 flex-wrap mt-3 mt-lg-0">
-                        <input type="text" class="form-control" placeholder="Search routes..." id="searchInput" style="min-width: 250px;">
+                        <input type="text" class="form-control" placeholder="Search routes..." id="searchInput"  onkeyup="routeTo(this.value)" style="min-width: 250px;">
                         <button class="btn btn-light" data-bs-toggle="modal" data-bs-target="#addRouteModal">
                             <i class="bi bi-plus-lg me-2"></i>Add New Route
                         </button>
@@ -119,60 +119,15 @@
                                 <th>Destination</th>
                                 <th>Departure</th>
                                 <th>Arrival</th>
-                                <th>Duration</th>
+
                                 <th>Admin</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td><span class="badge bg-primary">R001</span></td>
-                                <td>
-                                    <strong>Delhi to Mumbai Express</strong>
-                                    <small class="text-muted d-block">Premium Route</small>
-                                </td>
-                                <td>
-                                    <div>
-                                        <strong>12345</strong>
-                                        <small class="text-muted d-block">Rajdhani Express</small>
-                                    </div>
-                                </td>
-                                <td>
-                                    <i class="bi bi-geo-alt text-success me-1"></i>
-                                    New Delhi
-                                    <small class="text-muted d-block">NDLS</small>
-                                </td>
-                                <td>
-                                    <i class="bi bi-geo-alt-fill text-danger me-1"></i>
-                                    Mumbai Central
-                                    <small class="text-muted d-block">BCT</small>
-                                </td>
-                                <td>
-                                    <span class="badge bg-info">16:55</span>
-                                    <small class="text-muted d-block">Today</small>
-                                </td>
-                                <td>
-                                    <span class="badge bg-warning text-dark">08:35</span>
-                                    <small class="text-muted d-block">Next Day</small>
-                                </td>
-                                <td>
-                                    <span class="badge bg-secondary">15h 40m</span>
-                                </td>
-                                <td>
-                                    <span class="badge bg-outline-primary">Admin 1</span>
-                                </td>
-                                <td>
-                                    <button class="btn btn-sm btn-outline-primary me-1" data-bs-toggle="modal" data-bs-target="#addRouteModal">
-                                        <i class="bi bi-pencil"></i>
-                                    </button>
-                                    <button class="btn btn-sm btn-outline-danger">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
-                                    <button class="btn btn-sm btn-outline-info">
-                                        <i class="bi bi-eye"></i>
-                                    </button>
-                                </td>
-                            </tr>
+
+
+
 
                         </tbody>
                     </table>
@@ -221,7 +176,7 @@
                             </div>
                             <div class="col-md-8">
                                 <label class="form-label">Route Title</label>
-                                <input type="text" class="form-control" id="routeTitle" placeholder="e.g., Delhi to Mumbai Express" required>
+                                <input type="text" class="form-control" id="routeTitle" placeholder="" required>
                                 <div class="form-text">Give a descriptive name for this route</div>
                             </div>
                             <div class="col-md-4">
@@ -266,9 +221,26 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-danger">Save Route</button>
+                        <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal" onclick="resetRoute();">Cancel</button>
+                        <button type="button" class="btn btn-danger" onclick="saveRoute();">Save Route</button>
                     </div>
+                    <!--                    alert-->
+
+                    <div class="toast-container position-fixed top-0 end-0 p-3">
+                        <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                            <div class="toast-header">
+                                <i id="toastIcon" class="bi bi-info-circle-fill text-primary me-2"></i>
+                                <strong id="toastTitle" class="me-auto">Notification</strong>
+                                <small class="text-muted">now</small>
+                                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                            </div>
+                            <div id="toastBody" class="toast-body">
+                                Default toast message
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--                    alert-->
                 </div>
             </div>
         </div>

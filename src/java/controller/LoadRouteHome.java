@@ -64,6 +64,8 @@ public class LoadRouteHome extends HttpServlet {
                     .collect(Collectors.toList());
 
             Criteria c2 = s.createCriteria(Route.class);
+            
+            
             if (!trainIds.isEmpty()) {
                 c2.add(Restrictions.in("train_id.tarin_id", trainIds));
 

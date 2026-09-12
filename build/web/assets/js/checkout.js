@@ -1,3 +1,9 @@
+
+const stripe = Stripe("pk_test_51PLevYP1GdaOtmzhCdg6VzMZbcOzfYd6vN7rwgizmQHYW9o7zvENmheM5ANOLcfVScPoZRwAw5r6BkD5lkJ7R3YZ00LbT67G5y"); // Your Stripe Publishable Key here
+const elements = stripe.elements();
+const cardElement = elements.create("card");
+cardElement.mount("#card-element");
+
 async function checkout() {
     // Collect form values
     const travel_date = document.getElementById("travel_date").value;
@@ -24,15 +30,21 @@ async function checkout() {
         alert("Travel date cannot be in the past.");
         return;
     }
-  
+
     if (class_id === "0") {
         alert("Please select a travel class.");
         return;
     }
-    if (passengers.trim() === "" || isNaN(passengers) || Number(passengers) <= 0) {
-        alert("Please enter a valid passenger count.");
-        return;
-    }
+  if (
+    passengers.trim() === "" ||
+    isNaN(passengers) ||
+    Number(passengers) < 1 ||
+    Number(passengers) > 20
+) {
+    alert("Please enter a passenger count between 1 and 20.");
+    return;
+}
+
     if (!total_price || Number(total_price) <= 0) {
         alert("Total price is missing. Please select class and passengers first.");
         return;
@@ -54,7 +66,7 @@ async function checkout() {
         payment_method: payment_method
     };
 
-    try {
+   
         const response = await fetch("CheackOut", {
             method: "POST",
             headers: {"Content-Type": "application/json"},
@@ -63,62 +75,98 @@ async function checkout() {
 
         if (response.ok) {
             const json = await response.json();
-            if (json.status) {
-                console.log("Checkout success:", json);
-                alert("Proceeding to payment...");
-                // payhere.startPayment(json.payhereJson);
+            if (json.status && json.clientSecret) {
+                console.log("Client Secret:", json.clientSecret);
+
+                const {error, paymentIntent} = await stripe.confirmCardPayment(json.clientSecret, {
+                    payment_method: {
+                        card: cardElement,
+                        billing_details: {
+                            name: document.getElementById("customerName").value
+                        }
+                    }
+                });
+
+                if (error) {
+                    document.getElementById("card-errors").textContent = error.message;
+                } else if (paymentIntent && paymentIntent.status === "succeeded") {
+                    alert("Payment Successful!");
+                    console.log(json);
+                    console.log("order Id:::", json.orderId);
+                    window.location.reload();
+                }
             } else {
-                console.error("Checkout failed:", json.message);
-                alert("Error: " + json.message);
+                alert(json.message || json.error || "Checkout failed");
+                if (json.message === "1") {
+                    window.location = "login.html";
+                }
             }
         } else {
             alert("Server error: Unable to process checkout.");
         }
-    } catch (error) {
-        console.error("Network error:", error);
-        alert("Network error: Please check your connection.");
-    }
+   
 }
 
 
-async function checkout() {
 
-    const params = new URLSearchParams(window.location.search);
-    // Get routeID
-    let routeID = params.get("routeID");
-    let priceID = params.get("priceID");
-    console.log(routeID); // should log "1"
-    console.log(priceID); // should log "1"
-
-    let data = {
-        priceID:priceID,
-        routeID:routeID
-    };
-    let dataJSON = JSON.stringify(data);
-    const response = await fetch("CheackOut", {
-        method: "POST",
-        header: {
-            "Content-Type": "application/json"
-        },
-        body: dataJSON
-    });
-    if (response.ok) {
-        const json = await response.json();
-        if (json.status) {
-            console.log(json);
-            //PayHere Process
-//            payhere.startPayment(json.payhereJson);
-        } else {
-            console.log(json);
-//            popup.error({
-//                message: json.message
-//            });
-        }
-    } else {
-        console.log(json.message);
-//        popup.error({
-//            message: "Somthing went wrong. Please try again!"
+//async function checkout() {
+//    let total = document.getElementById("total").textContent.replace(/,/g, "").trim();
+//    let subTotal = document.getElementById("totalPrice1").textContent.replace(/,/g, "").trim();
+//    let tax = document.getElementById("tax").textContent.replace(/,/g, "").trim();
+//
+//    try {
+//        const response = await fetch("Checkout", {
+//            method: "POST",
+//            headers: {"Content-Type": "application/json"},
+//            body: JSON.stringify({subtotal: subTotal, tax: tax, total: total})
 //        });
-    }
-}
+//
+//        const json = await response.json();
+//
+//
+//    } catch (err) {
+//        console.error("Error:", err);
+//        alert("Something went wrong. Please try again.");
+//    }
+//}
+//async function checkout() {
+//
+//    const params = new URLSearchParams(window.location.search);
+//    // Get routeID
+//    let routeID = params.get("routeID");
+//    let priceID = params.get("priceID");
+//    console.log(routeID); // should log "1"
+//    console.log(priceID); // should log "1"
+//
+//    let data = {
+//        priceID:priceID,
+//        routeID:routeID
+//    };
+//    let dataJSON = JSON.stringify(data);
+//    const response = await fetch("CheackOut", {
+//        method: "POST",
+//        header: {
+//            "Content-Type": "application/json"
+//        },
+//        body: dataJSON
+//    });
+//    if (response.ok) {
+//        const json = await response.json();
+//        if (json.status) {
+//            console.log(json);
+//            //PayHere Process
+//            payhere.startPayment(json.payhereJson);
+//        } else {
+//            console.log(json);
+////            popup.error({
+////                message: json.message
+////            });
+//        }
+//    } else {
+//        console.log(json.message);
+////        popup.error({
+////            message: "Somthing went wrong. Please try again!"
+////        });
+//    }
+//}
 

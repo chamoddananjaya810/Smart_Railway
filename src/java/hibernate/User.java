@@ -149,19 +149,7 @@ public class User implements Serializable {
         this.role = role;
     }
 
-    /**
-     * @return the profile_pic
-     */
-    public String getProfile_pic() {
-        return profile_pic;
-    }
 
-    /**
-     * @param profile_pic the profile_pic to set
-     */
-    public void setProfile_pic(String profile_pic) {
-        this.profile_pic = profile_pic;
-    }
 
     /**
      * @return the email_verifyed
@@ -222,8 +210,7 @@ public class User implements Serializable {
     @Column(name = "role", length = 20, nullable = false)
     private String role;
 
-    @Column(name = "profile_pic", length = 100, nullable = false)
-    private String profile_pic;
+
 
     @Column(name = "email_verifyed", length = 20, nullable = false)
     private String email_verifyed;

@@ -87,7 +87,7 @@ async function simplePayment() {
             if (json.status) {
                 console.log("Payment success:", json);
                 alert("Proceeding to payment...");
-                // Example: payhere.startPayment(json.paymentDetails);
+
             } else {
                 console.error("Payment failed:", json.message);
                 alert("Error: " + json.message);

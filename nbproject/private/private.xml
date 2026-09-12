@@ -3,18 +3,8 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Chamod/Documents/NetBeansProjects/SmartRailway/web/admin/train-smart-booking.html</file>
-            <file>file:/C:/Users/Chamod/Documents/NetBeansProjects/SmartRailway/web/admin/train-routes-price.html</file>
-            <file>file:/C:/Users/Chamod/Documents/NetBeansProjects/SmartRailway/src/java/controller/Profile.java</file>
-            <file>file:/C:/Users/Chamod/Documents/NetBeansProjects/SmartRailway/src/java/controller/SignIn.java</file>
-            <file>file:/C:/Users/Chamod/Documents/NetBeansProjects/SmartRailway/web/assets/js/dashboard.js</file>
-            <file>file:/C:/Users/Chamod/Documents/NetBeansProjects/SmartRailway/web/admin/dashboard.html</file>
-            <file>file:/C:/Users/Chamod/Documents/NetBeansProjects/SmartRailway/web/assets/js/profile.js</file>
-            <file>file:/C:/Users/Chamod/Documents/NetBeansProjects/SmartRailway/web/admin/train-stations-price.html</file>
-            <file>file:/C:/Users/Chamod/Documents/NetBeansProjects/SmartRailway/web/admin/add-train.html</file>
-            <file>file:/C:/Users/Chamod/Documents/NetBeansProjects/SmartRailway/web/admin/train-simple-booking.html</file>
-            <file>file:/C:/Users/Chamod/Documents/NetBeansProjects/SmartRailway/web/profile.html</file>
-            <file>file:/C:/Users/Chamod/Documents/NetBeansProjects/SmartRailway/src/java/hibernate/User.java</file>
+            <file>file:/C:/Users/User/Documents/NetBeansProjects/SmartRailway/src/java/hibernate.cfg.xml</file>
+            <file>file:/C:/Users/User/Documents/NetBeansProjects/SmartRailway/web/admin-signin.html</file>
         </group>
     </open-files>
 </project-private>

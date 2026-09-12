@@ -1,207 +1,199 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Railway Booking System</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-</head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-danger fixed-top shadow">
-        <div class="container-fluid">
-            <!-- Brand -->
-            <a class="navbar-brand fw-bold d-flex align-items-center" href="/">
-                <i class="fas fa-train me-2 fs-4"></i>
-                <span class="d-none d-sm-inline">Railway Booking</span>
-            </a>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Railway Booking System</title>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-danger fixed-top shadow">
+            <div class="container-fluid">
+                <!-- Brand -->
+                <a class="navbar-brand fw-bold d-flex align-items-center" href="/">
+                    <i class="fas fa-train me-2 fs-4"></i>
+                    <span class="d-none d-sm-inline">Railway Booking</span>
+                </a>
 
-            <!-- Mobile Toggle Button -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+                <!-- Mobile Toggle Button -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-            <!-- Navigation Menu -->
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link active fw-semibold" href="/">
-                            <i class="fas fa-home me-1"></i>Home
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link fw-semibold" href="/booking">
-                            <i class="fas fa-ticket-alt me-1"></i>Booking
-                        </a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle fw-semibold" href="#" id="servicesDropdown" 
-                           role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-cogs me-1"></i>Services
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="servicesDropdown">
-                            <li><a class="dropdown-item" href="/services/tickets">
-                                <i class="fas fa-ticket-alt me-2"></i>Ticket Services
-                            </a></li>
-                            <li><a class="dropdown-item" href="/services/reservations">
-                                <i class="fas fa-calendar-check me-2"></i>Reservations
-                            </a></li>
-                            <li><a class="dropdown-item" href="/services/refunds">
-                                <i class="fas fa-money-bill-wave me-2"></i>Refunds
-                            </a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="/services/support">
-                                <i class="fas fa-headset me-2"></i>Customer Support
-                            </a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link fw-semibold" href="/schedule">
-                            <i class="fas fa-clock me-1"></i>Schedule
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link fw-semibold" href="/contact">
-                            <i class="fas fa-envelope me-1"></i>Contact
-                        </a>
-                    </li>
-                </ul>
+                <!-- Navigation Menu -->
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link active fw-semibold" href="/">
+                                <i class="fas fa-home me-1"></i>Home
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link fw-semibold" href="/SmartRailway/my-booking.html">
+                                <i class="fas fa-ticket-alt me-1"></i>Booking
+                            </a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle fw-semibold" href="#" id="servicesDropdown" 
+                               role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-cogs me-1"></i>Services
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="servicesDropdown">
+                                <li><a class="dropdown-item" href="/services/tickets">
+                                        <i class="fas fa-ticket-alt me-2"></i>Ticket Services
+                                    </a></li>
+                                <li><a class="dropdown-item" href="/services/reservations">
+                                        <i class="fas fa-calendar-check me-2"></i>Reservations
+                                    </a></li>
+                                <li><a class="dropdown-item" href="/services/refunds">
+                                        <i class="fas fa-money-bill-wave me-2"></i>Refunds
+                                    </a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="/services/support">
+                                        <i class="fas fa-headset me-2"></i>Customer Support
+                                    </a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link fw-semibold" href="/schedule">
+                                <i class="fas fa-clock me-1"></i>Schedule
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link fw-semibold" href="/contact">
+                                <i class="fas fa-envelope me-1"></i>Contact
+                            </a>
+                        </li>
+                    </ul>
 
-                <!-- Right Side Items -->
-                <div class="d-flex align-items-center">
-                    <!-- Theme Toggle -->
-                    <button class="btn btn-outline-light btn-sm me-2" id="themeToggle" title="Toggle theme">
-                        <i class="fas fa-moon" id="themeIcon"></i>
-                    </button>
-
-                    <!-- Notifications -->
-                    <div class="dropdown me-2">
-                        <button class="btn btn-outline-light btn-sm position-relative" type="button" 
-                                data-bs-toggle="dropdown" aria-expanded="false" title="Notifications">
-                            <i class="fas fa-bell"></i>
-                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning">
-                                3
-                                <span class="visually-hidden">unread messages</span>
-                            </span>
+                    <!-- Right Side Items -->
+                    <div class="d-flex align-items-center">
+                        <!-- Theme Toggle -->
+                        <button class="btn btn-outline-light btn-sm me-2" id="themeToggle" title="Toggle theme">
+                            <i class="fas fa-moon" id="themeIcon"></i>
                         </button>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><h6 class="dropdown-header">Notifications</h6></li>
-                            <li><a class="dropdown-item" href="#">
-                                <small class="text-muted">5 min ago</small><br>
-                                Your booking is confirmed
-                            </a></li>
-                            <li><a class="dropdown-item" href="#">
-                                <small class="text-muted">1 hour ago</small><br>
-                                Train schedule updated
-                            </a></li>
-                            <li><a class="dropdown-item" href="#">
-                                <small class="text-muted">2 hours ago</small><br>
-                                Payment successful
-                            </a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item text-center" href="/notifications">View all</a></li>
-                        </ul>
-                    </div>
 
-                    <!-- User Account Dropdown -->
-                    <div class="dropdown me-2 d-none d-lg-block">
-                        <button class="btn btn-outline-light btn-sm" type="button" 
-                                data-bs-toggle="dropdown" aria-expanded="false" title="Account">
-                            <i class="fas fa-user-circle"></i>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><h6 class="dropdown-header">My Account</h6></li>
-                            <li><a class="dropdown-item" href="/SmartRailway/profile.html">
-                                <i class="fas fa-user me-2"></i>Profile
-                            </a></li>
-                            <li><a class="dropdown-item" href="/bookings">
-                                <i class="fas fa-list me-2"></i>My Bookings
-                            </a></li>
-                            <li><a class="dropdown-item" href="/settings">
-                                <i class="fas fa-cog me-2"></i>Settings
-                            </a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="/logout">
-                                <i class="fas fa-sign-out-alt me-2"></i>Logout
-                            </a></li>
-                        </ul>
-                    </div>
+                        <!-- Notifications -->
+                        <div class="dropdown me-2">
+                            <button class="btn btn-outline-light btn-sm position-relative" type="button" 
+                                    data-bs-toggle="dropdown" aria-expanded="false" title="Notifications">
+                                <i class="fas fa-bell"></i>
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning">
+                                    3
+                                    <span class="visually-hidden">unread messages</span>
+                                </span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><h6 class="dropdown-header">Notifications</h6></li>
+                                <li><a class="dropdown-item" href="#">
+                                        <small class="text-muted">5 min ago</small><br>
+                                        Your booking is confirmed
+                                    </a></li>
+                                <li><a class="dropdown-item" href="#">
+                                        <small class="text-muted">1 hour ago</small><br>
+                                        Train schedule updated
+                                    </a></li>
+                                <li><a class="dropdown-item" href="#">
+                                        <small class="text-muted">2 hours ago</small><br>
+                                        Payment successful
+                                    </a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item text-center" href="/notifications">View all</a></li>
+                            </ul>
+                        </div>
 
-                    <!-- Login/Register Buttons -->
-                    <a href="/login" class="btn btn-outline-light btn-sm me-2">
-                        <i class="fas fa-sign-in-alt me-1"></i>Login
-                    </a>
-                    <a href="/register" class="btn btn-light btn-sm text-danger fw-semibold">
-                        <i class="fas fa-user-plus me-1"></i>Register
-                    </a>
-                </div>
-            </div>
-        </div>
-    </nav>
+                        <!-- User Account Dropdown -->
+                        <div class="dropdown me-2 d-none d-lg-block">
+                            <button class="btn btn-outline-light btn-sm" type="button" 
+                                    data-bs-toggle="dropdown" aria-expanded="false" title="Account">
+                                <i class="fas fa-user-circle"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><h6 class="dropdown-header">My Account</h6></li>
+                                <li><a class="dropdown-item" href="/SmartRailway/profile.html">
+                                        <i class="fas fa-user me-2"></i>Profile
+                                    </a></li>
+                                <li><a class="dropdown-item" href="/SmartRailway/bookings">
+                                        <i class="fas fa-list me-2"></i>My Bookings
+                                    </a></li>
+                                <li><a class="dropdown-item" href="/settings">
+                                        <i class="fas fa-cog me-2"></i>Settings
+                                    </a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="/logout">
+                                        <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                    </a></li>
+                            </ul>
+                        </div>
 
-<!--     Content spacer to account for fixed navbar 
-    <div style="margin-top: 76px;"></div>
-
-     Sample content 
-    <div class="container mt-5">
-        <div class="row">
-            <div class="col-12">
-                <div class="jumbotron bg-light p-5 rounded">
-                    <h1 class="display-4">Welcome to Railway Booking System</h1>
-                    <p class="lead">Book your train tickets easily and conveniently with our online booking system.</p>
-                    <hr class="my-4">
-                    <p class="mb-4">Experience comfortable and affordable train travel across the country.</p>
-                    <a class="btn btn-danger btn-lg" href="/booking" role="button">
-                        <i class="fas fa-ticket-alt me-2"></i>Book Now
-                    </a>
-                </div>
-            </div>
-        </div>
-
-         Features Section 
-        <div class="row mt-5">
-            <div class="col-md-4 mb-4">
-                <div class="card h-100 shadow-sm">
-                    <div class="card-body text-center">
-                        <i class="fas fa-clock text-danger fs-1 mb-3"></i>
-                        <h5 class="card-title">Real-time Schedule</h5>
-                        <p class="card-text">Get up-to-date train schedules and track your journey in real-time.</p>
+                        <!-- Login/Register Buttons -->
+                        <a href="/SmartRailway/my-booking.html" class="btn btn-outline-light btn-sm me-2">
+                            <i class="fas fa-sign-in-alt me-1"></i>Login
+                        </a>
+                        <a href="/SmartRailway/sign-up.html" class="btn btn-light btn-sm text-danger fw-semibold">
+                            <i class="fas fa-user-plus me-1"></i>Register
+                        </a>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4 mb-4">
-                <div class="card h-100 shadow-sm">
-                    <div class="card-body text-center">
-                        <i class="fas fa-mobile-alt text-danger fs-1 mb-3"></i>
-                        <h5 class="card-title">Mobile Friendly</h5>
-                        <p class="card-text">Book tickets on the go with our responsive mobile-friendly interface.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="card h-100 shadow-sm">
-                    <div class="card-body text-center">
-                        <i class="fas fa-shield-alt text-danger fs-1 mb-3"></i>
-                        <h5 class="card-title">Secure Payment</h5>
-                        <p class="card-text">Your transactions are protected with bank-level security measures.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>-->
+        </nav>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Theme toggle functionality
+        <!--     Content spacer to account for fixed navbar 
+            <div style="margin-top: 76px;"></div>
         
-        // Session storage check
-        const email = sessionStorage.getItem("email");
-        if (email) {
-            console.log("Email from session:", email);
-            // Hide login/register buttons if user is logged in
-            // Show user menu instead
-        }
-    </script>
-</body>
+             Sample content 
+            <div class="container mt-5">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="jumbotron bg-light p-5 rounded">
+                            <h1 class="display-4">Welcome to Railway Booking System</h1>
+                            <p class="lead">Book your train tickets easily and conveniently with our online booking system.</p>
+                            <hr class="my-4">
+                            <p class="mb-4">Experience comfortable and affordable train travel across the country.</p>
+                            <a class="btn btn-danger btn-lg" href="/booking" role="button">
+                                <i class="fas fa-ticket-alt me-2"></i>Book Now
+                            </a>
+                        </div>
+                    </div>
+                </div>
+        
+                 Features Section 
+                <div class="row mt-5">
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-body text-center">
+                                <i class="fas fa-clock text-danger fs-1 mb-3"></i>
+                                <h5 class="card-title">Real-time Schedule</h5>
+                                <p class="card-text">Get up-to-date train schedules and track your journey in real-time.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-body text-center">
+                                <i class="fas fa-mobile-alt text-danger fs-1 mb-3"></i>
+                                <h5 class="card-title">Mobile Friendly</h5>
+                                <p class="card-text">Book tickets on the go with our responsive mobile-friendly interface.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-body text-center">
+                                <i class="fas fa-shield-alt text-danger fs-1 mb-3"></i>
+                                <h5 class="card-title">Secure Payment</h5>
+                                <p class="card-text">Your transactions are protected with bank-level security measures.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>-->
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+        <script>
+     
+        </script>
+    </body>
 </html>

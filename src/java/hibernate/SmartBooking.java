@@ -112,14 +112,14 @@ public class SmartBooking implements Serializable {
     /**
      * @return the qr_code
      */
-    public double getQr_code() {
+    public String getQr_code() {
         return qr_code;
     }
 
     /**
      * @param qr_code the qr_code to set
      */
-    public void setQr_code(double qr_code) {
+    public void setQr_code(String qr_code) {
         this.qr_code = qr_code;
     }
 
@@ -179,6 +179,8 @@ public class SmartBooking implements Serializable {
         this.route_price_id = route_price_id;
     }
 
+    
+
 
   
 
@@ -206,7 +208,7 @@ public class SmartBooking implements Serializable {
     private double total_price;
 
     @Column(name = "qr_code", length = 45, nullable = true)
-    private double qr_code;
+    private String qr_code;
 
     @ManyToOne
     @JoinColumn(name = "class_id", nullable = false)

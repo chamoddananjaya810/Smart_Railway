@@ -37,26 +37,13 @@
                     <div class="row g-2 align-items-end">
                         <!-- Station ID input -->
                         <div class="col-md-4">
-                            <label for="stationId" class="form-label">Station ID</label>
-                            <input type="text" class="form-control" id="stationId" placeholder="ST007">
+                            <label for="stationName" class="form-label">Station Name</label>
+                            <input type="text" class="form-control" id="stationName" placeholder="search"  onkeyup="Search(this.value)">
                         </div>
 
-                        <!-- Platform select -->
-                        <div class="col-md-4">
-                            <label for="platformSelect" class="form-label">Platform</label>
-                            <select id="platformSelect" class="form-select form-select-sm">
-                                <option value="">Select Platform</option>
-                                <option value="Platform A">Platform A</option>
-                                <option value="Platform B">Platform B</option>
-                                <option value="Platform C">Platform C</option>
-                                <option value="Platform D">Platform D</option>
-                            </select>
-                        </div>
 
-                        <!-- Add button -->
-                        <div class="col-md-2">
-                            <button class="btn btn-success btn-sm w-100" onclick="addNewRow(this)">➕ Add</button>
-                        </div>
+
+
                     </div>
                 </div>
 
@@ -94,40 +81,40 @@
         </div>
 
         <!-- Statistics Cards -->
-        <div class="row mt-4">
-            <div class="col-md-3">
-                <div class="card text-white bg-danger">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">Total Stations</h5>
-                        <h2 class="mb-0">6</h2>
+        <!--        <div class="row mt-4">
+                    <div class="col-md-3">
+                        <div class="card text-white bg-danger">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">Total Stations</h5>
+                                <h2 class="mb-0">6</h2>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card border-danger">
-                    <div class="card-body text-center">
-                        <h5 class="card-title text-danger">Active Platforms</h5>
-                        <h2 class="mb-0 text-danger">4</h2>
+                    <div class="col-md-3">
+                        <div class="card border-danger">
+                            <div class="card-body text-center">
+                                <h5 class="card-title text-danger">Active Platforms</h5>
+                                <h2 class="mb-0 text-danger">4</h2>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card border-danger">
-                    <div class="card-body text-center">
-                        <h5 class="card-title text-danger">Routes</h5>
-                        <h2 class="mb-0 text-danger">6</h2>
+                    <div class="col-md-3">
+                        <div class="card border-danger">
+                            <div class="card-body text-center">
+                                <h5 class="card-title text-danger">Routes</h5>
+                                <h2 class="mb-0 text-danger">6</h2>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card border-danger">
-                    <div class="card-body text-center">
-                        <h5 class="card-title text-danger">On Time</h5>
-                        <h2 class="mb-0 text-success">98%</h2>
+                    <div class="col-md-3">
+                        <div class="card border-danger">
+                            <div class="card-body text-center">
+                                <h5 class="card-title text-danger">On Time</h5>
+                                <h2 class="mb-0 text-success">98%</h2>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-        </div>
+                </div>-->
 
         <script src="assets/js/simple-booking.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>

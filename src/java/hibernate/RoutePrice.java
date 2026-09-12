@@ -142,12 +142,12 @@ public class RoutePrice implements Serializable{
     private double second_class_price;
 
     @ManyToOne
-    @JoinColumn(name = "from", nullable = false)
+    @JoinColumn(name = "`from`", nullable = false)
     private Station from;
     
     
     @ManyToOne
-    @JoinColumn(name = "to", nullable = false)
+    @JoinColumn(name = "`to`", nullable = false)
     private Station to;
     
     @ManyToOne

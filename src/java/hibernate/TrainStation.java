@@ -114,9 +114,6 @@ public class TrainStation implements Serializable {
         this.departure_time = departure_time;
     }
 
-  
-
-   
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -135,11 +132,11 @@ public class TrainStation implements Serializable {
     private int stop_platform;
 
     @Column(name = "arrival_time", nullable = false)
-@Temporal(TemporalType.TIME)  // Use TIME instead of TIMESTAMP
-private Date arrival_time;
+    @Temporal(TemporalType.TIME)  // Use TIME instead of TIMESTAMP
+    private Date arrival_time;
 
-@Column(name = "departure_time", nullable = false)
-@Temporal(TemporalType.TIME)  // Use TIME instead of TIMESTAMP
-private Date departure_time;
+    @Column(name = "departure_time", nullable = false)
+    @Temporal(TemporalType.TIME)  // Use TIME instead of TIMESTAMP
+    private Date departure_time;
 
 }
